@@ -9,7 +9,7 @@ class Room extends Model
 {
     protected $table = 'room';
 
-    protected $fillable = ['room_id','admin_handle'];
+    protected $fillable = ['room_id'];
     public function player(){
         $this->hasMany(Player::class);
     }

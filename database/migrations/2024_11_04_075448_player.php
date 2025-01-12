@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('inventory')->nullable();
             $table->json('raw_items')->nullable();
             $table->json('items')->nullable();
+            $table->json('machine_capacity')->nullable();
             $table->double('revenue')->nullable();
             $table->integer('jatuh_tempo')->nullable();
             $table->double('debt')->nullable();

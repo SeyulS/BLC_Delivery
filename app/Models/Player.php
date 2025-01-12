@@ -12,19 +12,23 @@ class Player extends Authenticatable
 
     protected $table = 'players';
 
-    protected $fillable = ['player_username', 'password','room_id'];
+    protected $fillable = ['player_username', 'password', 'room_id'];
 
     protected $hidden = ['password', 'remember_token'];
 
-    public function room(){
+    
+    public function room()
+    {
         return $this->belongsTo(Room::class);
     }
 
-    public function pinjaman(){
+    public function pinjaman()
+    {
         return $this->belongsTo(Pinjaman::class);
     }
 
-    public function demand(){
+    public function demand()
+    {
         return $this->hasMany(Demand::class);
     }
 }

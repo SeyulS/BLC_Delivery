@@ -1,15 +1,15 @@
 @extends('layout.main_room')
 
 @section('script')
-    <!-- Load jQuery terlebih dahulu -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Load DataTables setelah jQuery -->
-    <script src="https://cdn.datatables.net/2.2.0/js/dataTables.min.js"></script>
+<!-- Load jQuery terlebih dahulu -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Load DataTables setelah jQuery -->
+<script src="https://cdn.datatables.net/2.2.0/js/dataTables.min.js"></script>
 @endsection
 
 @section('container')
 @section('room_id')
-    {{ $room_id }}
+{{ $room_id }}
 @endsection
 <div class="container mt-4">
     <h3>Players in Room {{ $room_id }}</h3>
@@ -32,7 +32,7 @@
                 console.log('player join');
                 datatable.ajax.reload();
             });
-            
+
         const roomId = "{{ $room_id }}";
         const datatable = $('#player-datatable').DataTable({
             processing: true,
@@ -76,21 +76,25 @@
 
             if (confirm('Are you sure you want to delete this user?')) {
                 $.ajax({
-                    url: 'kick-player',
+                    url: '/kick-player',
                     type: 'POST',
                     data: {
                         player_id: playerId,
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(response) {
-                        toastr.success(response.message); 
+                        toastr.success(response.message);
                         datatable.ajax.reload();
                     },
                     error: function(xhr) {
-                        toastr.error('Failed to delete user');
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            toastr.error(xhr.responseJSON.message);
+                        } else {
+                            toastr.error('Failed to delete user');
+                        }
                     },
-
                 });
+
             }
         });
 

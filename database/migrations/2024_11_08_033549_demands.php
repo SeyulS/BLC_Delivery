@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('item_index');
             $table->integer('quantity');
             $table->double('revenue');
-            $table->string('player_username');
             $table->timestamps();
         });
     }

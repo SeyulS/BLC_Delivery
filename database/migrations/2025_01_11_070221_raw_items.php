@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pinjaman', function (Blueprint $table) {
-            $table->string('pinjaman_id')->unique();
-            $table->double('pinjaman_value')->nullable();
-            $table->integer('pinjaman_length');
-            $table->decimal('bunga_pinjaman');
+        Schema::create('raw_items', function (Blueprint $table) {
+            $table->string('raw_item_id')->unique();
+            $table->string('raw_item_name')->nullable();
+            $table->double('raw_item_price')->nullable();
+
             $table->timestamps();
         });
     }
@@ -25,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('raw_items');
     }
+
 };

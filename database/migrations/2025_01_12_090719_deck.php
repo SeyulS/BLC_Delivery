@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pinjaman', function (Blueprint $table) {
-            $table->string('pinjaman_id')->unique();
-            $table->double('pinjaman_value')->nullable();
-            $table->integer('pinjaman_length');
-            $table->decimal('bunga_pinjaman');
+        Schema::create('deck', function (Blueprint $table) {
+            $table->string('deck_id');
+            $table->string('deck_name');
+            $table->json('deck_list')->nullable();
             $table->timestamps();
         });
     }
 
     /**
+     * 
      * Reverse the migrations.
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('deck');
     }
 };

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
-class LobbyRoomController extends Controller
+class RoomControllerPlayer extends Controller
 {
     public function index()
     {

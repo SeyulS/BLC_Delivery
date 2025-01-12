@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('jalur_pengiriman');
             $table->string('jenis_pengiriman')->nullable();
             $table->string('kapasitas_pengiriman');
-            $table->double('biaya_pengiriman')->nullable();
+            $table->double('biaya_LCL')->nullable();
             $table->double('biaya_FCL')->nullable();
+            $table->double('biaya_udara')->nullable();
             $table->string('lama_pengiriman');
             $table->timestamps();
         });

@@ -13,14 +13,14 @@ class DemandFactory extends Factory
 
     public function definition(): array
     {
+        $tujuan_pengiriman = ['BPP', 'MDN', 'SUB'];
         return [
             'demand_id' => self::$counter++,
-            'tujuan_pengiriman' => 'BPP',
+            'tujuan_pengiriman' => $tujuan_pengiriman[array_rand($tujuan_pengiriman)],
             'need_day' => mt_rand(4, 5),
             'item_index' => $this->faker->numberBetween(0, 2),
             'quantity' => $this->faker->numberBetween(1, 5),
             'revenue' => $this->faker->randomFloat(2, 100, 10000),
-            'player_username' => 'samuelado',
         ];
     }
 }

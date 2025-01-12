@@ -37,7 +37,7 @@ class SettingPinjamanController extends Controller
             // Hutang
             $debt = $pinjaman_value + ($pinjaman_value*$bunga_pinjaman);
 
-            $queryPlayer->pinjaman_id = $pinjaman;
+        $queryPlayer->pinjaman_id = $pinjaman;
             $queryPlayer->revenue = $queryPlayer->revenue + $pinjaman_value;
             $queryPlayer->jatuh_tempo = $queryRoom->day + $lama_pinjaman;
             $queryPlayer->debt = $debt;

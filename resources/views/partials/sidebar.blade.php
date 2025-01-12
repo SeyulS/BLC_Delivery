@@ -9,32 +9,24 @@
     </div>  
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="/lol" class="sidebar-link">
                 <i class="lni lni-user"></i>
-                <span>Profile</span>
+                <span>Admin Profile</span>
             </a>    
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="/homeAdmin" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>Task</span>
+                <span>Manage Room</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
-                <i class="lni lni-protection"></i>
-                <span>Auth</span>
+            <a href="/manageDeck" class="sidebar-link">
+                <i class="lni lni-agenda"></i>
+                <span>Manage Deck</span>
             </a>
-            <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                <li class="sidebar-item">
-                    <a href="/settingPengirimanLCL" class="sidebar-link">LCL</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="/settingPengirimanFCL" class="sidebar-link">FCL</a>
-                </li>
-            </ul>
         </li>
+        
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                 data-bs-target="#multi" aria-expanded="false" aria-controls="multi">

@@ -6,13 +6,13 @@
         <div class="sidebar-logo">
             <a href="#" class="mt-3">BLC Delivery</a>
         </div>
-    </div>  
+    </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
             <a href="/lobby/{{ $room_id }}" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Lobby</span>
-            </a>    
+            </a>
         </li>
         <li class="sidebar-item">
             <a href="/lobby/{{ $room_id }}/settingPinjaman" class="sidebar-link">
@@ -36,8 +36,8 @@
             </ul>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-                <i class="lni lni-popup"></i>
+            <a href="/lobby/{{ $room_id }}/settingBahanBaku" class="sidebar-link">
+                <i class="lni lni-user"></i>
                 <span>Bahan Baku</span>
             </a>
         </li>

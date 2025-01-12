@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Player;
+use App\Models\Room;
+use App\Http\Requests\StoreRoomRequest;
+use App\Http\Requests\UpdateRoomRequest;
 use Illuminate\Http\Request;
 use App\Events\PlayerRemove;
 
-class UtilityRoomController extends Controller
+use App\Models\Player;
+
+class RoomControllerAdmin extends Controller
 {
     public function index($room_id)
     {
@@ -59,6 +63,4 @@ class UtilityRoomController extends Controller
 
         return response()->json(['message' => 'Player successfully removed'], 200);
     }
-    
 }
-
