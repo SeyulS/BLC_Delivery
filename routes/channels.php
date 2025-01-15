@@ -24,3 +24,11 @@ Broadcast::channel('join-room', function(){
 Broadcast::channel('player-remove', function(){
     return true;
 });
+
+Broadcast::channel('start-simulation', function(){
+    return true;
+});
+
+Broadcast::channel('end-simulation', function(){
+    return true;
+});

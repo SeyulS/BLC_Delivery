@@ -17,9 +17,9 @@ class CreateRoomController extends Controller
             'numDays' => 'required|integer|min:1',
             'specialDays' => 'nullable|array',
             'specialDays.*' => 'integer|min:1',
-            'item1' => 'nullable|exists:items,item_id',
-            'item2' => 'nullable|exists:items,item_id',
-            'item3' => 'nullable|exists:items,item_id',
+            'item1' => 'nullable|exists:items,id',
+            'item2' => 'nullable|exists:items,id',
+            'item3' => 'nullable|exists:items,id',
             'deck' => 'nullable|exists:deck,deck_id',
             'warehouseSize' => 'required|integer',
             'warehousePrice' => 'required|numeric',
@@ -40,6 +40,7 @@ class CreateRoomController extends Controller
         $room->deck_id = $validatedData['deck'];
         $room->warehouse_size = $validatedData['warehouseSize'];
         $room->warehouse_price = $validatedData['warehousePrice'];
+        $room->status = 0;
         $room->save();
 
         return redirect()->back()->with('success', 'Room created successfully');

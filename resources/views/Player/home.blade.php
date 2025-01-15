@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.player_home')
 @section('container')
     <div class="container centered-form">
         <div class="row">
@@ -21,7 +21,7 @@
                         <input type="text" class="form-control room-code-input mx-auto" name="roomCode" id="roomCode" maxlength="3" placeholder="XXX">
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block">Join</button>
                 </form>
                 <br>
                 <form action='/logoutPlayer' method="POST">

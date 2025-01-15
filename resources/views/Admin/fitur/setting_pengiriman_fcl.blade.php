@@ -1,4 +1,4 @@
-@extends('layout.main_room')
+@extends('layout.admin_room')
 
 @section('script')
     <!-- Load jQuery terlebih dahulu -->

@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.player_room')
 
 @section('script')
 <!-- Load jQuery terlebih dahulu -->
@@ -11,7 +11,7 @@
 <div class="container mt-4">
     <h2>Name : {{ Auth::guard('player')->user()->player_username }}</h2>
     <br>
-    <h3>Players   in Room {{ $room_id }}</h3>
+    <h3>Players in Room {{ $roomCode }}</h3>
     <table class="table text-center w-100" id="player-datatable">
         <thead>
             <tr>
@@ -25,7 +25,7 @@
 
 <script>
     $(document).ready(() => {
-        const roomId = "{{ $room_id }}";
+        const roomId = "{{ $roomCode }}";
         const datatable = $('#player-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -56,6 +56,15 @@
                 window.location.href = "/homePlayer"
             });
 
+        window.Echo.channel('start-simulation')
+            .listen('StartSimulation', () => {
+                window.location.href = `/player-lobby/${roomId}`
+            });
+
+        window.Echo.channel('pause-simulation')
+            .listen('PauseSimulation', () => {
+                window.location.href = `/player-lobby/${roomId}`
+            });
     });
 </script>
 @endsection

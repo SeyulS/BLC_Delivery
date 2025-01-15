@@ -156,54 +156,53 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Raw_item::create([
-            'raw_item_id' => 'KAYU',
             'raw_item_name' => "Kayu",
             'raw_item_price' => 70,
         ]);
 
         Raw_item::create([
-            'raw_item_id' => 'BESI',
-            'raw_item_name' => "Besi",
+            'raw_item_name' => "Paku",
             'raw_item_price' => 50,
         ]);
 
         Raw_item::create([
-            'raw_item_id' => 'BETON',
-            'raw_item_name' => "Beton",
+            'raw_item_name' => "Lem",
             'raw_item_price' => 40,
         ]);
 
         Raw_item::create([
-            'raw_item_id' => 'ALUMINIUM',
-            'raw_item_name' => "Aluminium",
+            'raw_item_name' => "Bantal",
+            'raw_item_price' => 60,
+        ]);
+
+        
+        Raw_item::create([
+            'raw_item_name' => "Engsel",
             'raw_item_price' => 60,
         ]);
 
         Items::create([
-            'item_id' => 'CERMIN',
-            'item_name' => "Cermin",
+            'item_name' => "Meja",
             'item_price' => 200,
-            'raw_item_needed' => "ALUMINIUM",
-            'raw_quantity_needed' => 3,
+            'raw_item_needed' => json_encode(["1","2","3"]),
+            'raw_quantity_needed' => json_encode(["4","4","2"]),
             'item_size' => 2
         ]);
 
         Items::create([
-            'item_id' => 'LEMARI',
-            'item_name' => "Lemari",
-            'item_price' => 300,
-            'raw_item_needed' => "KAYU",
-            'raw_quantity_needed' => 2,
-            'item_size' => 4
+            'item_name' => "Meja",
+            'item_price' => 200,
+            'raw_item_needed' => json_encode(["1","2","4"]),
+            'raw_quantity_needed' => json_encode(["4","4","2"]),
+            'item_size' => 2
         ]);
 
         Items::create([
-            'item_id' => 'PAGAR',
-            'item_name' => "Pagar",
-            'item_price' => 500,
-            'raw_item_needed' => "BESI",
-            'raw_quantity_needed' => 2,
-            'item_size' => 4
+            'item_name' => "Meja",
+            'item_price' => 200,
+            'raw_item_needed' => json_encode(["1","2","5"]),
+            'raw_quantity_needed' => json_encode(["4","4","2"]),
+            'item_size' => 2
         ]);
 
         Decks::create([

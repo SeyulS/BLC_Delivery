@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.admin_home')
 
 @section('script')
 <!-- Bootstrap CSS (if not already loaded) -->

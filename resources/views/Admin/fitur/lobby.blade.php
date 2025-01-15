@@ -1,4 +1,4 @@
-@extends('layout.main_room')
+@extends('layout.admin_room')
 
 @section('script')
 <!-- Load jQuery terlebih dahulu -->
@@ -74,28 +74,39 @@
             const playerId = $(form).find('.kick-player').data('id');
             console.log(playerId);
 
-            if (confirm('Are you sure you want to delete this user?')) {
-                $.ajax({
-                    url: '/kick-player',
-                    type: 'POST',
-                    data: {
-                        player_id: playerId,
-                        _token: '{{ csrf_token() }}',
-                    },
-                    success: function(response) {
-                        toastr.success(response.message);
-                        datatable.ajax.reload();
-                    },
-                    error: function(xhr) {
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            toastr.error(xhr.responseJSON.message);
-                        } else {
-                            toastr.error('Failed to delete user');
-                        }
-                    },
-                });
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you really want to kick this player?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/kick-player',
+                        type: 'POST',
+                        data: {
+                            player_id: playerId,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            toastr.success(response.message);
+                            datatable.ajax.reload();
+                        },
+                        error: function(xhr) {
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                toastr.error(xhr.responseJSON.message);
+                            } else {
+                                toastr.error('Failed to delete user');
+                            }
+                        },
+                    });
+                }
+            });
 
-            }
         });
 
     });

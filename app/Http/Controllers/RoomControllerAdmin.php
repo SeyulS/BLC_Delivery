@@ -14,8 +14,10 @@ class RoomControllerAdmin extends Controller
 {
     public function index($room_id)
     {
+        
         return view('Admin.fitur.lobby', [
             'room_id' => $room_id,
+            
         ]);
     }
 

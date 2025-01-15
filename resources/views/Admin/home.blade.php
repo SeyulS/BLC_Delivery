@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout.admin_home')
 
 @section('script')
 <!-- Bootstrap CSS (if not already loaded) -->
@@ -61,7 +61,7 @@
                                     <select class="form-select" name="item1" id="item1" required>
                                         <option value="" selected disabled>Select Item 1</option>
                                         @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}">{{ $item->item_id }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->item_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -69,7 +69,7 @@
                                     <select class="form-select" name="item2" id="item2">
                                         <option value="" selected disabled>Select Item 2</option>
                                         @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}">{{ $item->item_id }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->item_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -77,7 +77,7 @@
                                     <select class="form-select" name="item3" id="item3">
                                         <option value="" selected disabled>Select Item 3</option>
                                         @foreach ($items as $item)
-                                        <option value="{{ $item->item_id }}">{{ $item->item_id }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->item_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

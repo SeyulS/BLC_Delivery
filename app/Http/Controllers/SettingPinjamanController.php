@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UpdateRevenue;
 use App\Models\Player;
 use App\Models\Pinjaman;
 use App\Models\Room;
@@ -43,6 +44,8 @@ class SettingPinjamanController extends Controller
             $queryPlayer->debt = $debt;
 
             $queryPlayer->save();
+
+            UpdateRevenue::dispatch();
 
             return back()->with('success', 'Setting Success');
 

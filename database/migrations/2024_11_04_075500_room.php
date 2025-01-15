@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('warehouse_size')->nullable();
             $table->integer('warehouse_price')->nullable();
             $table->foreignId('deck_id');
+            $table->integer('status');
             $table->timestamps();
         });
         

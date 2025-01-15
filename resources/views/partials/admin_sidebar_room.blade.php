@@ -11,7 +11,13 @@
         <li class="sidebar-item">
             <a href="/lobby/{{ $room_id }}" class="sidebar-link">
                 <i class="lni lni-user"></i>
-                <span>Lobby</span>
+                <span>Manage Player</span>
+            </a>
+        </li>
+        <li class="sidebar-item">
+            <a href="/lobby/{{ $room_id }}/utilityRoom" class="sidebar-link">
+                <i class="lni lni-user"></i>
+                <span>Room Controller</span>
             </a>
         </li>
         <li class="sidebar-item">
