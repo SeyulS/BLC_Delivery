@@ -12,8 +12,9 @@ class SettingPinjamanController extends Controller
 {
     public function index($room_id)
     {
+        $room = Room::where('room_id', $room_id)->first();
         return view('Admin.fitur.pinjaman', [
-            'room_id' => $room_id,
+            'room' => $room,
             'players' => Player::where('room_id', $room_id)->get(),
             'pinjaman' => Pinjaman::all()
         ]);
@@ -32,7 +33,7 @@ class SettingPinjamanController extends Controller
         if($queryPlayer->pinjaman_id == null){
             $pinjaman_value = $queryPinjaman->pinjaman_value;
             $bunga_pinjaman = $queryPinjaman->bunga_pinjaman;
-            $lama_pinjaman = $queryPinjaman->lama_pinjaman;
+            $lama_pinjaman = $queryPinjaman->pinjaman_length;
             
 
             // Hutang
@@ -40,7 +41,7 @@ class SettingPinjamanController extends Controller
 
         $queryPlayer->pinjaman_id = $pinjaman;
             $queryPlayer->revenue = $queryPlayer->revenue + $pinjaman_value;
-            $queryPlayer->jatuh_tempo = $queryRoom->day + $lama_pinjaman;
+            $queryPlayer->jatuh_tempo = $queryRoom->recent_day + $lama_pinjaman;
             $queryPlayer->debt = $debt;
 
             $queryPlayer->save();

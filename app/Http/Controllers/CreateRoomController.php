@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Machine;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -41,6 +42,17 @@ class CreateRoomController extends Controller
         $room->warehouse_size = $validatedData['warehouseSize'];
         $room->warehouse_price = $validatedData['warehousePrice'];
         $room->status = 0;
+
+        $machine1 = Machine::where('machine_item_index',$validatedData['item1'])->first();
+        $machine2 = Machine::where('machine_item_index',$validatedData['item2'])->first();
+        $machine3 = Machine::where('machine_item_index',$validatedData['item3'])->first();
+
+        $machineIndex = [
+            $machine1->machine_item_index,
+            $machine2->machine_item_index,
+            $machine3->machine_item_index
+        ];
+        $room->machine_chosen = json_encode($machineIndex); 
         $room->save();
 
         return redirect()->back()->with('success', 'Room created successfully');

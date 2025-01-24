@@ -12,9 +12,15 @@ class PlayerHomeController extends Controller
             return view('Player.home');
         }
         $room = Room::where('room_id', Auth::guard('player')->user()->room_id)->first();
-        return view('Player.fitur.lobby', [
-            'roomCode' => $room->room_id,
-            'roomStatus' => $room->status
-        ]);
+
+        if($room){
+            return view('Player.fitur.lobby', [
+                'room' => $room
+            ]);
+        }
+        else{
+            return view('Player.home');
+        }
+        
     }
 }

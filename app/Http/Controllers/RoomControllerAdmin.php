@@ -14,10 +14,9 @@ class RoomControllerAdmin extends Controller
 {
     public function index($room_id)
     {
-        
+        $room = Room::where('room_id', $room_id)->first();
         return view('Admin.fitur.lobby', [
-            'room_id' => $room_id,
-            
+            'room' => $room
         ]);
     }
 
@@ -60,6 +59,13 @@ class RoomControllerAdmin extends Controller
         }
 
         $player->room_id = null;
+        $player->pinjaman_id = null;
+        $player->inventory = null;
+        $player->raw_items = null;
+        $player->items = null;
+        $player->revenue = 0;
+        $player->jatuh_tempo = 0;
+        $player->debt = 0;
         $player->save();
         PlayerRemove::dispatch();
 

@@ -62,7 +62,7 @@
 
     <form id="bahan-baku-form" action="/setting_bahan_baku" method="POST">
         @csrf
-        <input type="hidden" name="room_id" value="{{ $room_id }}">
+        <input type="hidden" name="room_id" value="{{ $room->room_id }}">
 
         <!-- Pilih Tim -->
         <div class="select-container text-center">

@@ -1,13 +1,5 @@
 @extends('layout.admin_home')
 
-@section('script')
-<!-- Bootstrap CSS (if not already loaded) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-@endsection
-
 @section('container')
 <div class="container mt-5">
     <div class="d-flex justify-content-center mb-4">
@@ -122,7 +114,8 @@
                 <div class="card-header text-center">{{ $room->room_name }}</div>
                 <div class="card-body text-center">
                     <ul class="list-unstyled">Day : {{ $room->recent_day }}</ul>
-                    <ul class="list-unstyled">Status : </ul>
+                    <ul class="list-unstyled">Status : {{ $room->status == 0 ? 'Paused' : 'Ongoing' }}
+                    </ul>
                     <ul class="list-unstyled">Total Players : {{ $room->total_players }}</ul>
                     <div class="d-flex justify-content-center">
                         <a href="/lobby/{{ $room->room_id }}">
@@ -135,7 +128,6 @@
         @endforeach
     </div>
 </div>
-@endsection
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -175,4 +167,4 @@
         });
     });
 </script>
-
+@endsection

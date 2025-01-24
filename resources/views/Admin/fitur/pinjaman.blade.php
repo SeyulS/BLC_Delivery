@@ -31,7 +31,7 @@
     <div class="container">
         <form action="/set_pinjaman" method="POST" id="pinjaman-form">
             @csrf
-            <input type="hidden" name="room_id" value="{{ $room_id }}">
+            <input type="hidden" name="room_id" value="{{ $room->room_id }}">
             <div class="row">
                 <div class="col-md-4">
                     <select class="form-select form-select-lg mb-3" id="team-select" name="team" aria-label="Large select example">
@@ -45,7 +45,7 @@
                     <select class="form-select form-select-lg mb-3" id="pinjaman-select" name="pinjaman" aria-label="Large select example">
                         <option value="" selected disabled>Select Pinjaman</option>
                         @foreach($pinjaman as $p)
-                            <option value="{{ $p->pinjaman_id }}">{{ $p->pinjaman_id }} | {{ $p->pinjaman_value }} | {{ $p->lama_pinjaman }} days | {{ $p->bunga }}</option>
+                            <option value="{{ $p->pinjaman_id }}">{{ $p->pinjaman_id }} | {{ $p->pinjaman_value }} | {{ $p->lama_pinjaman }} days | {{ $p->bunga_pinjaman }}</option>
                         @endforeach
                     </select>
                 </div>

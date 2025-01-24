@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('revenue')->nullable();
             $table->integer('jatuh_tempo')->nullable();
             $table->double('debt')->nullable();
+            $table->integer('produce');
             $table->timestamps();
         });
     }

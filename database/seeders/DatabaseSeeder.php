@@ -10,6 +10,7 @@ use App\Models\Administrator;
 use App\Models\DeckDemand;
 use App\Models\Decks;
 use App\Models\Items;
+use App\Models\Machine;
 use App\Models\Raw_item;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -30,7 +31,8 @@ class DatabaseSeeder extends Seeder
         Player::create([
             'player_username' => 'samuelado',
             'password' => bcrypt('12345'),
-            'room_id' => 123
+            'room_id' => 123,
+            'produce' => 0
         ]);
         
         Player::factory(20)->create();
@@ -190,7 +192,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Items::create([
-            'item_name' => "Meja",
+            'item_name' => "Kursi",
             'item_price' => 200,
             'raw_item_needed' => json_encode(["1","2","4"]),
             'raw_quantity_needed' => json_encode(["4","4","2"]),
@@ -198,7 +200,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Items::create([
-            'item_name' => "Meja",
+            'item_name' => "Lemari",
             'item_price' => 200,
             'raw_item_needed' => json_encode(["1","2","5"]),
             'raw_quantity_needed' => json_encode(["4","4","2"]),
@@ -228,6 +230,32 @@ class DatabaseSeeder extends Seeder
         DeckDemand::create([
             'deck_id' => 1,
             'demand_id' => 104
+        ]);
+
+        Machine::create([
+            'machine_name' => "Mesin Pembuat Meja",
+            'production_capacity' => 10,
+            'machine_size' => 5,
+            'machine_item_index' => 1,
+            'machine_price' => 100
+        ]);
+
+        Machine::create([
+            'machine_name' => "Mesin Pembuat Kursi",
+            'production_capacity' => 10,
+            'machine_size' => 5,
+            'machine_item_index' => 2,
+            'machine_price' => 100
+
+        ]);
+
+        Machine::create([
+            'machine_name' => "Mesin Pembuat Lemari",
+            'production_capacity' => 10,
+            'machine_size' => 5,
+            'machine_item_index' => 3,
+            'machine_price' => 100
+
         ]);
 
         Demand::factory(20)->create();

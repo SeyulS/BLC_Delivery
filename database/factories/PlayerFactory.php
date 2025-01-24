@@ -33,6 +33,7 @@ class PlayerFactory extends Factory
             'jatuh_tempo' => 0,
             'debt' => 0,
             'revenue' => 0,
+            'produce' => 0
 
         ];
     }

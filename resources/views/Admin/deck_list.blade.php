@@ -1,13 +1,5 @@
 @extends('layout.admin_home')
 
-@section('script')
-<!-- Bootstrap CSS (if not already loaded) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-@endsection
-
 @section('container')
 
 

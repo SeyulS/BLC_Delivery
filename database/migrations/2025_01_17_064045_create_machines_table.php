@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('raw_items', function (Blueprint $table) {
+        Schema::create('machine', function (Blueprint $table) {
             $table->id();
-            $table->string('raw_item_name')->nullable();
-            $table->double('raw_item_price')->nullable();
+            $table->string('machine_name');
+            $table->integer('production_capacity');
+            $table->integer('machine_size');
+            $table->integer('machine_item_index')->unique();
+            $table->double('machine_price');
             $table->timestamps();
         });
     }
@@ -24,7 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('raw_items');
+        Schema::dropIfExists('machine');
     }
-
 };

@@ -9,19 +9,13 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room_id }}" class="sidebar-link">
+            <a href="/lobby/{{ $room->room_id }}" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Manage Player</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room_id }}/utilityRoom" class="sidebar-link">
-                <i class="lni lni-user"></i>
-                <span>Room Controller</span>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="/lobby/{{ $room_id }}/settingPinjaman" class="sidebar-link">
+            <a href="/lobby/{{ $room->room_id }}/settingPinjaman" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
                 <span>Pinjaman</span>
             </a>
@@ -34,15 +28,18 @@
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center">Pengiriman LCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center">Pengiriman LCL</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center">Pengiriman FCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center">Pengiriman FCL</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center">Pengiriman Udara</a>
                 </li>
             </ul>
         </li>
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room_id }}/settingBahanBaku" class="sidebar-link">
+            <a href="/lobby/{{ $room->room_id }}/settingBahanBaku" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Bahan Baku</span>
             </a>

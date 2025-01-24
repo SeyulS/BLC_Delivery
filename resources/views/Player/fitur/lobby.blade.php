@@ -1,17 +1,8 @@
 @extends('layout.player_room')
 
-@section('script')
-<!-- Load jQuery terlebih dahulu -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Load DataTables setelah jQuery -->
-<script src="https://cdn.datatables.net/2.2.0/js/dataTables.min.js"></script>
-@endsection
-
 @section('container')
 <div class="container mt-4">
-    <h2>Name : {{ Auth::guard('player')->user()->player_username }}</h2>
-    <br>
-    <h3>Players in Room {{ $roomCode }}</h3>
+
     <table class="table text-center w-100" id="player-datatable">
         <thead>
             <tr>
@@ -25,7 +16,7 @@
 
 <script>
     $(document).ready(() => {
-        const roomId = "{{ $roomCode }}";
+        const roomId = "{{ $room->room_id }}";
         const datatable = $('#player-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -45,9 +36,10 @@
             ],
         });
 
+        setupSimulationEvents(roomId);
+
         window.Echo.channel('join-room')
             .listen('PlayerJoin', () => {
-                console.log('player join');
                 datatable.ajax.reload();
             });
 
@@ -56,15 +48,6 @@
                 window.location.href = "/homePlayer"
             });
 
-        window.Echo.channel('start-simulation')
-            .listen('StartSimulation', () => {
-                window.location.href = `/player-lobby/${roomId}`
-            });
-
-        window.Echo.channel('pause-simulation')
-            .listen('PauseSimulation', () => {
-                window.location.href = `/player-lobby/${roomId}`
-            });
     });
 </script>
 @endsection

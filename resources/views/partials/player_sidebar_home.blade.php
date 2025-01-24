@@ -9,9 +9,9 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="/lol" class="sidebar-link">
+            <a href="/homePlayer" class="sidebar-link">
                 <i class="lni lni-user"></i>
-                <span>Room Profile</span>
+                <span>Join Room</span>
             </a>
         </li>
 
@@ -25,28 +25,28 @@
         <li class="sidebar-item">
         <a href="/lol" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>Warehouse & Machine</span>
+                <span>Test</span>
             </a>
         </li>
 
         <li class="sidebar-item">
         <a href="/lol" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>List Of Demands</span>
+                <span>Test</span>
             </a>
         </li>
 
         <li class="sidebar-item">
         <a href="/lol" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>Market Intelligence</span>
+                <span>Test</span>
             </a>
         </li>
 
         <li class="sidebar-item">
         <a href="/lol" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>Leaderboard</span>
+                <span>Information</span>
             </a>
         </li>
     </ul>

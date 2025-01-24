@@ -35,7 +35,7 @@ class SettingBahanBaku extends Controller
         $rawItemChosen = Raw_item::whereIn('id', $rawItem)->get();
 
         return view('Admin.fitur.bahan_baku', [
-            'room_id' => $room_id,
+            'room' => $room,
             'players' => Player::where('room_id', $room_id)->get(),
             'rawItems' => $rawItemChosen
         ]);

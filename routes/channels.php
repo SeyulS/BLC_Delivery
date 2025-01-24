@@ -32,3 +32,11 @@ Broadcast::channel('start-simulation', function(){
 Broadcast::channel('end-simulation', function(){
     return true;
 });
+
+Broadcast::channel('update-warehouse', function(){
+    return true;
+});
+
+Broadcast::channel('update-revenue', function(){
+    return true;
+});
