@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminHomeController;
 use App\Http\Controllers\CreateRoomController;
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\DemandController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LobbyRoomController;
 use App\Http\Controllers\LoginAdminController;
@@ -73,7 +74,7 @@ Route::get('/api/players/{room_id}', [RoomControllerAdmin::class, 'getPlayers'])
 Route::post('/kick-player', [RoomControllerAdmin::class, 'kickPlayer']);
 Route::post('/joinRoom', [RoomControllerPlayer::class,'join'])->middleware('auth.player');
 Route::post('/createRoom', [CreateRoomController::class,'createRoom'])->middleware('auth.administrator');
-Route::post('/set_pinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
+Route::post('/setPinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
 Route::post('/startSimulation', [UtilityRoomController::class, 'start']);
 Route::post('/pauseSimulation', [UtilityRoomController::class, 'pause']);
 Route::post('/resumeSimulation', [UtilityRoomController::class, 'resume']);
@@ -94,11 +95,15 @@ Route::get('/player-lobby/{roomCode}', [RoomControllerPlayer::class, 'index'])->
 Route::get('/player-lobby/{roomCode}/playerProfile', [RoomControllerPlayer::class, 'profile']);
 Route::get('/player-lobby/{roomCode}/warehouseMachine', [RoomControllerPlayer::class,'warehouseMachine']);
 Route::get('/player-lobby/{room_id}/production', [RoomControllerPlayer::class,'production']);
+Route::get('/player-lobby/{room_id}/listOfDemands', [RoomControllerPlayer::class,'showDemand']);
+Route::post('/take-demand', [DemandController::class,'takeDemand']);
+
 
 Route::post('/updateRevenue',[RoomControllerPlayer::class,'updateRevenue']);
-Route::get('/getDemand/{username}', [SettingPengirimanController::class, 'getDemand']);
 Route::post('/purchaseWarehouse',[PlayerPurchaseController::class,'purchaseWarehouse']);
 Route::post('/purchaseMachine',[PlayerPurchaseController::class,'purchaseMachine']);
 Route::post('/updateWarehouse',[PlayerPurchaseController::class,'updateWarehouse']);
 Route::post('/produceItem',[ProductionController::class,'produce']);
+Route::post('/getDemands', [DemandController::class, 'getDemands']);
+
 

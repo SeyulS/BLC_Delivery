@@ -13,47 +13,54 @@
 @endsection
 
 <div class="container mt-4">
-    <h3>Room {{ $room->room_id }}</h3>
-
-    <!-- Tabel Player -->
-    <table class="table text-center w-100" id="player-datatable">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Player Name</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="col-md-12 mt-4">
+        <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <h4>Room {{ $room->room_id }}</h4>
+            <hr>
+            <table class="table w-100" id="player-datatable">
+                <thead>
+                    <tr>
+                        <th scope="col">Player Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- Tombol Action -->
     <div class="mt-3">
-        <form action="/startSimulation" method="POST" class="d-inline-block">
-            @csrf
-            @if ($room->status == 1)
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary" disabled>Start Simulation</button>
-            @else
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Start Simulation</button>
-            @endif
-        </form>
-        <form action="/pauseSimulation" method="POST" class="d-inline-block">
-            @csrf
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Pause Simulation</button>
-        </form>
-        <form action="/resumeSimulation" method="POST" class="d-inline-block">
-            @csrf
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Resume Simulation</button>
-        </form>
-        <form action="/nextDaySimulation" method="POST" class="d-inline-block">
-            @csrf
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Next Day</button>
-        </form>
-        <form action="/endSimulation" method="POST" class="d-inline-block">
-            @csrf
-            <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">End Simulation</button>
-        </form>
+    <div class="col-md-12 mt-4">
+        <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <form action="/startSimulation" method="POST" class="d-inline-block">
+                @csrf
+                @if ($room->status == 1)
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary" disabled>Start Simulation</button>
+                @else
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Start Simulation</button>
+                @endif
+            </form>
+            <form action="/pauseSimulation" method="POST" class="d-inline-block">
+                @csrf
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Pause Simulation</button>
+            </form>
+            <form action="/resumeSimulation" method="POST" class="d-inline-block">
+                @csrf
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Resume Simulation</button>
+            </form>
+            <form action="/nextDaySimulation" method="POST" class="d-inline-block">
+                @csrf
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Next Day</button>
+            </form>
+            <form action="/endSimulation" method="POST" class="d-inline-block">
+                @csrf
+                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">End Simulation</button>
+            </form>
+        </div>
     </div>
+</div>
+
 </div>
 
 <script>
@@ -70,10 +77,6 @@
                 dataSrc: 'data',
             },
             columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
                     data: 'player_username',
                     name: 'player_username'
                 },

@@ -79,7 +79,9 @@ class UtilityRoomController extends Controller
                 ->update([
                     'raw_items' => json_encode($arr),
                     'items' => json_encode($arr2),
-                    'machine_capacity' => json_encode($arr3)
+                    'inventory' => 0,
+                    'machine_capacity' => json_encode($arr3),
+                    'produce' => 1
                 ]);
 
             StartSimulation::dispatch();
@@ -124,11 +126,23 @@ class UtilityRoomController extends Controller
     public function nextDay(Request $request)
     {
         $room = Room::where('room_id', $request->input('room_id'))->first();
-
         if ($room) {
 
-            // Hitung Denda (Apa saja yang ada di invetory)
 
+            // Tanyakan pak Heri
+            
+            // $players = Player::where('room_id', $room->room_id)->get();
+            // foreach ($players as $player){
+            //     $inventoryDebt = 0;
+            //     $currentItemCapacity = json_decode($player->items);
+            //     $roomItemIndex = json_decode($room->item_chosen);
+
+            //     for ($i = 0; $i < count($roomItemIndex); $i++) {
+            //         $queryItem = Items::where('id', $roomItemIndex[$i])->first();
+            //         $inventoryDebt = $inventoryDebt + ($currentItemCapacity[$i] * $queryItem->item_size);
+            //     }
+            // }
+            
             // Player bisa produce lagi
 
             // Cek apa ada player yang pinjaman jatuh tempo
@@ -136,9 +150,13 @@ class UtilityRoomController extends Controller
             // 
 
             // Ganti Hari
-            $room->recent_day = $room->recent_day + 1;
-            $room->save();
 
+            $room->recent_day = $room->recent_day + 1;
+            Player::where('room_id', $request->input('room_id'))
+                ->update([
+                    'produce' => 1
+                ]);
+            $room->save();
 
 
             NextDaySimulation::dispatch();

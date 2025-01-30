@@ -2,16 +2,18 @@
 
 @section('container')
 <div class="container mt-4">
-
-    <table class="table text-center w-100" id="player-datatable">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Player Name</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="col-md-12 mt-4">
+        <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <table class="table text-center w-75" id="player-datatable">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center align-middle">Player Name</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -26,14 +28,9 @@
                 dataSrc: 'data',
             },
             columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'player_username',
-                    name: 'player_username'
-                },
-            ],
+                data: 'player_username',
+                name: 'player_username'
+            }, ],
         });
 
         setupSimulationEvents(roomId);

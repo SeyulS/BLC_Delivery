@@ -16,11 +16,14 @@ return new class extends Migration
             $table->string('tujuan_pengiriman');
             $table->string('jalur_pengiriman');
             $table->string('jenis_pengiriman')->nullable();
-            $table->string('kapasitas_pengiriman');
-            $table->double('biaya_LCL')->nullable();
-            $table->double('biaya_FCL')->nullable();
-            $table->double('biaya_udara')->nullable();
-            $table->string('lama_pengiriman');
+            $table->double('pengiriman_volume_capacity');
+            $table->double('pengiriman_weight_capacity');
+            $table->double('current_volume');
+            $table->double('current_weight');
+            $table->double('LCL_price')->nullable();
+            $table->double('FCL_price')->nullable();
+            $table->double('udara_price')->nullable();
+            $table->string('pengiriman_duration');
             $table->timestamps();
         });
     }

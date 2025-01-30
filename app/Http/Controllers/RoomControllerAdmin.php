@@ -39,7 +39,7 @@ class RoomControllerAdmin extends Controller
 
         return response()->json([
             'data' => $players,
-            'recordsTotal' => $totalRecords,
+            'recordsTotal' => $totalRecords,    
             'recordsFiltered' => $totalFiltered,
         ]);
     }

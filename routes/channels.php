@@ -40,3 +40,7 @@ Broadcast::channel('update-warehouse', function(){
 Broadcast::channel('update-revenue', function(){
     return true;
 });
+
+Broadcast::channel('demand-taken', function(){
+    return true;
+});

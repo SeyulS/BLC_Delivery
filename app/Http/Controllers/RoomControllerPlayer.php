@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\PlayerJoin;
+use App\Models\DeckDemand;
+use App\Models\Demand;
 use App\Models\Items;
 use App\Models\Machine;
 use App\Models\Player;
@@ -22,14 +24,14 @@ class RoomControllerPlayer extends Controller
         return view('Player.fitur.lobby', [
             'room' => $room,
             'player' => $player
-            
+
         ]);
     }
 
     public function warehouseMachine($roomCode)
     {
         $room = Room::where('room_id', $roomCode)->first();
-        $player = Player::where('player_username',Auth::guard('player')->user()->player_username)->first();
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
         $machineChosen = [];
@@ -53,7 +55,7 @@ class RoomControllerPlayer extends Controller
         $playerMachineCapacity = [];
         $playerCapacity = json_decode(Auth::guard('player')->user()->machine_capacity);
 
-        for ($i = 0; $i < count($machineCapacity);$i++){
+        for ($i = 0; $i < count($machineCapacity); $i++) {
             $playerMachineCapacity[] = $machineCapacity[$i] * $playerCapacity[$i];
         }
 
@@ -66,7 +68,7 @@ class RoomControllerPlayer extends Controller
 
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
-            $queryItem = Items::where('id',$roomItemIndex[$i])->first();
+            $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 
@@ -112,7 +114,7 @@ class RoomControllerPlayer extends Controller
     {
 
         $room = Room::where('room_id', $roomCode)->first();
-        $player = Player::where('player_username',Auth::guard('player')->user()->player_username)->first();
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
         $rawItem = [];
@@ -154,7 +156,7 @@ class RoomControllerPlayer extends Controller
 
         // Kapasitas Produksi Mesin
         $machineCapacity = [];
-        foreach ($machineChosen as $machine){
+        foreach ($machineChosen as $machine) {
             $queryForMachine = Machine::where('id', $machine)->first();
             $machineCapacity[] = $queryForMachine->production_capacity;
         }
@@ -163,7 +165,7 @@ class RoomControllerPlayer extends Controller
         $playerCapacity = json_decode(Auth::guard('player')->user()->machine_capacity);
 
         // Kapasitas Produksi Player
-        for ($i = 0; $i < count($machineCapacity);$i++){
+        for ($i = 0; $i < count($machineCapacity); $i++) {
             $playerMachineCapacity[] = $machineCapacity[$i] * $playerCapacity[$i];
         }
 
@@ -176,12 +178,24 @@ class RoomControllerPlayer extends Controller
 
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
-            $queryItem = Items::where('id',$roomItemIndex[$i])->first();
+            $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 
+        // Demands
+        $demandIds = DeckDemand::where('room_id', $room->room_id)
+            ->where('deck_id', $room->deck_id)
+            ->where('player_username', $player->player_username)
+            ->pluck('demand_id');
+
+        $demandIdsArray = $demandIds->toArray();
+
+        $demands = Demand::whereIn('demand_id', $demandIdsArray)->get();
+
+        $jatuh_tempo = $player->jatuh_tempo - $room->recent_day;
         return view('Player.fitur.player_profile', [
             'player' => $player,
+            'jatuh_tempo' => $jatuh_tempo,
             'room' => $room,
             'roomRawItem' => $rawItemChosen,
             'playerRawItem' => json_decode(Auth::guard('player')->user()->raw_items),
@@ -191,14 +205,15 @@ class RoomControllerPlayer extends Controller
             'roomMachine' => $machineChosen,
             'roomMachineName' => $machineChosenName,
             'playerMachineCapacity' => $playerMachineCapacity,
-            'usedCapacity' => $totalCapacity
+            'usedCapacity' => $totalCapacity,
+            'demands' => $demands
         ]);
     }
 
     public function production($roomCode)
     {
         $room = Room::where('room_id', $roomCode)->first();
-        $player = Player::where('player_username',Auth::guard('player')->user()->player_username)->first();
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
         $rawItem = [];
@@ -240,7 +255,7 @@ class RoomControllerPlayer extends Controller
 
         // Kapasitas Produksi Mesin
         $machineCapacity = [];
-        foreach ($machineChosen as $machine){
+        foreach ($machineChosen as $machine) {
             $queryForMachine = Machine::where('id', $machine)->first();
             $machineCapacity[] = $queryForMachine->production_capacity;
         }
@@ -249,7 +264,7 @@ class RoomControllerPlayer extends Controller
         $playerCapacity = json_decode(Auth::guard('player')->user()->machine_capacity);
 
         // Kapasitas Produksi Player
-        for ($i = 0; $i < count($machineCapacity);$i++){
+        for ($i = 0; $i < count($machineCapacity); $i++) {
             $playerMachineCapacity[] = $machineCapacity[$i] * $playerCapacity[$i];
         }
 
@@ -262,12 +277,12 @@ class RoomControllerPlayer extends Controller
 
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
-            $queryItem = Items::where('id',$roomItemIndex[$i])->first();
+            $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 
-        return view('Player.fitur.production',[
-            'player' => $player ,
+        return view('Player.fitur.production', [
+            'player' => $player,
             'room' => $room,
             'roomRawItem' => $rawItemChosen,
             'playerRawItem' => json_decode(Auth::guard('player')->user()->raw_items),
@@ -280,6 +295,37 @@ class RoomControllerPlayer extends Controller
             'currentCapacity' => $totalCapacity
         ]);
     }
+
+    public function showDemand($roomCode)
+    {
+        $room = Room::where('room_id', $roomCode)->first();
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
+
+        $listOfDemand = [];
+        $query = DeckDemand::where('room_id', $room->room_id)->get();
+        foreach ($query as $q) {
+            $listOfDemand[] = $q->demand_id;
+        }
+
+        $demands = Demand::whereIn('demand_id', $listOfDemand)
+            ->where('day', $room->recent_day)
+            ->get();
+
+        $demands = $demands->map(function ($demand) use ($room) {
+            $demand->taken = DeckDemand::where('room_id', $room->room_id)
+                ->where('demand_id', $demand->demand_id)
+                ->whereNull('player_username')
+                ->exists() ? false : true;
+            return $demand;
+        });
+
+        return view('Player.fitur.list_of_demands', [
+            'player' => $player,
+            'room' => $room,
+            'demands' => $demands
+        ]);
+    }
+
 
     public function updateRevenue(Request $request)
     {

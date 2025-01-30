@@ -100,7 +100,7 @@
                 </div>
                 @endfor
         </div>
-        <button type="submit" class="btn btn-primary btn-produce">Produce</button>
+        <button type="submit" class="btn btn-dark btn-produce">Produce</button>
     </form>
 </div>
 
@@ -110,7 +110,7 @@
         toastr.success("{{ session('success') }}");
         @endif
 
-        @if(session('error'))
+        @if(session('fail'))
         toastr.error("{{ session('fail') }}");
         @endif
 
@@ -119,6 +119,25 @@
 
         setupSimulationEvents(roomId);
 
+        // SweetAlert Confirmation sebelum submit form Produce
+        $("form[action='/produceItem']").on("submit", function(event) {
+            event.preventDefault(); // Menghentikan default behavior form submit
+
+            // Konfirmasi dengan SweetAlert
+            Swal.fire({
+                title: 'Konfirmasi Produksi',
+                text: 'Apakah Anda yakin ingin memproduksi barang dengan jumlah yang telah dipilih?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Produksi!',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Jika user memilih "Ya, Produksi!", submit form
+                    this.submit(); // Submit form setelah konfirmasi
+                }
+            });
+        });
 
         window.Echo.channel('update-warehouse')
             .listen('UpdateWarehouse', () => {
@@ -143,5 +162,6 @@
             });
     });
 </script>
+
 
 @endsection

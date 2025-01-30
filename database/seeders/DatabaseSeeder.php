@@ -32,7 +32,6 @@ class DatabaseSeeder extends Seeder
             'player_username' => 'samuelado',
             'password' => bcrypt('12345'),
             'room_id' => 123,
-            'produce' => 0
         ]);
         
         Player::factory(20)->create();
@@ -41,120 +40,126 @@ class DatabaseSeeder extends Seeder
             'tujuan_pengiriman' => 'BPP',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'LCL',
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => 2000,
-            'biaya_FCL' => null,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 3
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => 2000,
+            'FCL_price' => null,
+            'udara_price' => null,
+            'pengiriman_duration' => 3
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MKS',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'LCL',
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => 3000,
-            'biaya_FCL' => null,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 4
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => 3000,
+            'FCL_price' => null,
+            'udara_price' => null,
+            'pengiriman_duration' => 4
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MND',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'LCL',
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => 4000,
-            'biaya_FCL' => null,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 4
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => 4000,
+            'FCL_price' => null,
+            'udara_price' => null,
+            'pengiriman_duration' => 4
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'BPP',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'FCL',
-            'kapasitas_pengiriman' => 25,
-            'biaya_LCL' => null,
-            'biaya_FCL' => 10000,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 3
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => 10000,
+            'udara_price' => null,
+            'pengiriman_duration' => 3
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MKS',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'LCL',
-            'kapasitas_pengiriman' => 25,
-            'biaya_LCL' => null,
-            'biaya_FCL' => 15000,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 4
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => 15000,
+            'udara_price' => null,
+            'pengiriman_duration' => 4
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MND',
             'jalur_pengiriman' => 'Laut',
             'jenis_pengiriman' => 'LCL',
-            'kapasitas_pengiriman' => 25,
-            'biaya_LCL' => null,
-            'biaya_FCL' => 20000,
-            'biaya_udara' => null,
-            'lama_pengiriman' => 4
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => 20000,
+            'udara_price' => null,
+            'pengiriman_duration' => 4
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'BPP',
             'jalur_pengiriman' => 'Udara',
             'jenis_pengiriman' => null,
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => null,
-            'biaya_FCL' => null,
-            'biaya_udara' => 4000,
-            'lama_pengiriman' => 2
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => null,
+            'udara_price' => 4000,
+            'pengiriman_duration' => 2
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MKS',
             'jalur_pengiriman' => 'Udara',
             'jenis_pengiriman' => null,
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => null,
-            'biaya_FCL' => null,
-            'biaya_udara' => 6000,
-            'lama_pengiriman' => 3
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => null,
+            'udara_price' => 6000,
+            'pengiriman_duration' => 3
         ]);
 
         Pengiriman::create([
             'tujuan_pengiriman' => 'MND',
             'jalur_pengiriman' => 'Udara',
             'jenis_pengiriman' => null,
-            'kapasitas_pengiriman' => 50,
-            'biaya_LCL' => null,
-            'biaya_FCL' => null,
-            'biaya_udara' => 8000,
-            'lama_pengiriman' => 3
-        ]);
-
-        Pinjaman::create([
-            'pinjaman_id' => 'type_1',
-            'pinjaman_value' => 50000,
-            'pinjaman_length' => 5,
-            'bunga_pinjaman' => 0.1,
-        ]);
-
-        Pinjaman::create([
-            'pinjaman_id' => 'type_2',
-            'pinjaman_value' => 70000,
-            'pinjaman_length' => 8,
-            'bunga_pinjaman' => 0.2,
-        ]);
-
-        Pinjaman::create([
-            'pinjaman_id' => 'type_3',
-            'pinjaman_value' => 60000,
-            'pinjaman_length' => 7,
-            'bunga_pinjaman' => 0.3,
+            'pengiriman_volume_capacity' => 50,
+            'pengiriman_weight_capacity' => 50,
+            'current_volume' => 0,
+            'current_weight' => 0,
+            'LCL_price' => null,
+            'FCL_price' => null,
+            'udara_price' => 8000,
+            'pengiriman_duration' => 3
         ]);
 
         Raw_item::create([
@@ -188,7 +193,10 @@ class DatabaseSeeder extends Seeder
             'item_price' => 200,
             'raw_item_needed' => json_encode(["1","2","3"]),
             'raw_quantity_needed' => json_encode(["4","4","2"]),
-            'item_size' => 2
+            'item_length' => 2,
+            'item_width' => 2,
+            'item_height' => 2,
+            'item_weight' => 2.5
         ]);
 
         Items::create([
@@ -196,7 +204,10 @@ class DatabaseSeeder extends Seeder
             'item_price' => 200,
             'raw_item_needed' => json_encode(["1","2","4"]),
             'raw_quantity_needed' => json_encode(["4","4","2"]),
-            'item_size' => 2
+            'item_length' => 2,
+            'item_width' => 2,
+            'item_height' => 2,
+            'item_weight' => 2.5
         ]);
 
         Items::create([
@@ -204,33 +215,36 @@ class DatabaseSeeder extends Seeder
             'item_price' => 200,
             'raw_item_needed' => json_encode(["1","2","5"]),
             'raw_quantity_needed' => json_encode(["4","4","2"]),
-            'item_size' => 2
+            'item_length' => 2,
+            'item_width' => 2,
+            'item_height' => 2,
+            'item_weight' => 2.5
         ]);
 
         Decks::create([
-            'deck_id' => '1',
-            'deck_name' => 'deck_lomba'
+            'deck_name' => 'deck_lomba',
+            'deck_list' => json_encode(["100","101","102","103","104","105","106","107"])
         ]);
 
-        DeckDemand::create([
-            'deck_id' => '1',
-            'demand_id' => '101'
-        ]);
+        // DeckDemand::create([
+        //     'deck_id' => '1',
+        //     'demand_id' => '101'
+        // ]);
 
-        DeckDemand::create([
-            'deck_id' => '1',
-            'demand_id' => '102'
-        ]);
+        // DeckDemand::create([
+        //     'deck_id' => '1',
+        //     'demand_id' => '102'
+        // ]);
 
-        DeckDemand::create([
-            'deck_id' => '1',
-            'demand_id' => '103'
-        ]);
+        // DeckDemand::create([
+        //     'deck_id' => '1',
+        //     'demand_id' => '103'
+        // ]);
 
-        DeckDemand::create([
-            'deck_id' => 1,
-            'demand_id' => 104
-        ]);
+        // DeckDemand::create([
+        //     'deck_id' => 1,
+        //     'demand_id' => 104
+        // ]);
 
         Machine::create([
             'machine_name' => "Mesin Pembuat Meja",
@@ -258,8 +272,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        Demand::factory(20)->create();
-
+        Demand::factory(40)->create();
 
     }
 }

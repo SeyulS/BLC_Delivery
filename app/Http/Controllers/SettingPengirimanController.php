@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 
 use App\Models\Player;
 use App\Models\Demand;
+use App\Models\Room;
 
 class SettingPengirimanController extends Controller
 {
     public function indexLCL($room_id){
+        $room = Room::where('room_id', $room_id)->first();
         return view('Admin.fitur.setting_pengiriman_lcl',[
-            'room_id' => $room_id,
+            'room' => $room,
             'players' => Player::where('room_id', $room_id)->get()
 
         ]);

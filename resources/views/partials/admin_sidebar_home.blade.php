@@ -16,14 +16,14 @@
         </li>
         <li class="sidebar-item">
             <a href="/homeAdmin" class="sidebar-link">
-                <i class="lni lni-agenda"></i>
-                <span>Manage Room</span>
-            </a>
+                <i class="lni lni-user"></i>
+                <span>Manage Player</span>
+            </a>    
         </li>
         <li class="sidebar-item">
-            <a href="/manageDeck" class="sidebar-link">
+            <a href="/homeAdmin" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
-                <span>Manage Deck</span>
+                <span>Manage Room</span>
             </a>
         </li>
         <li class="sidebar-item">

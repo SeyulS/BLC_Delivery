@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Player;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -12,10 +14,11 @@ class PlayerHomeController extends Controller
             return view('Player.home');
         }
         $room = Room::where('room_id', Auth::guard('player')->user()->room_id)->first();
-
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         if($room){
             return view('Player.fitur.lobby', [
-                'room' => $room
+                'room' => $room,
+                'player' => $player
             ]);
         }
         else{

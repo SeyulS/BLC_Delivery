@@ -17,6 +17,7 @@ class DemandFactory extends Factory
         return [
             'demand_id' => self::$counter++,
             'tujuan_pengiriman' => $tujuan_pengiriman[array_rand($tujuan_pengiriman)],
+            'day' => mt_rand(1,2),
             'need_day' => mt_rand(4, 5),
             'item_index' => $this->faker->numberBetween(0, 2),
             'quantity' => $this->faker->numberBetween(1, 5),

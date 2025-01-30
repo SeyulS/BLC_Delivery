@@ -4,70 +4,151 @@
 <div class="container mt-5">
     <div class="row">
         <!-- Kotak Pertama: Finance -->
-        <div class="col-md-4">
-            <div class="card border-primary mb-3">
-                <div class="card-header bg-primary text-white">Finance</div>
-                <div class="card-body">
-                    <h5 class="card-title">Informasi Keuangan</h5>
-                    <p id="revenue"><strong>Revenue:</strong> ${{ number_format($player->revenue, 2) }}</p>
-                    <p id="debt"><strong>Pinjaman:</strong> ${{ number_format($player->debt, 2) }}</p>
-                    <p id="jatuh_tempo"><strong>Jatuh Tempo:</strong> {{ $player->jatuh_tempo }} days</p>
+        <div class="col-md-3">
+            <div class="p-4 shadow-sm h-100" style="background-color: white; border-radius: 8px;">
+                <div class="text-start">
+                    <h5>Finance</h5>
+                    <hr>
                 </div>
-            </div>
-        </div>
-
-        <!-- Kotak Kedua: Warehouse -->
-        <div class="col-md-4">
-            <div class="card border-success mb-3">
-                <div class="card-header bg-success text-white">Warehouse</div>
-                <div class="card-body">
-                    <p id="warehouseCapacity"><strong>Warehouse Capacity:</strong> {{ $player->inventory }} m²</p>
-                    <p id="currentCapacity"><strong>Used Capacity:</strong> {{ $usedCapacity }} m² <strong>/ {{ $player->inventory }} m²</strong></p>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <p><strong>Raw Items:</strong></p>
-                            <ul>
-                                @for ($i = 0; $i < count($roomRawItem); $i++)
-                                    <li>{{ $roomRawItem[$i]->raw_item_name }} : {{ $playerRawItem[$i] }}</li>
-                                    @endfor
-                            </ul>
-                        </div>
-
-                        <!-- Finished Items -->
-                        <div class="col-6">
-                            <p><strong>Finished Items:</strong></p>
-                            <ul>
-                                @for ($i = 0; $i < count($roomItem); $i++)
-                                    <li>{{ $roomItemName[$i] }} : {{ $playerItemQty[$i] }}</li>
-                                    @endfor
-                            </ul>
-                        </div>
+                <div class="card-body mt-4">
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Revenue</strong></div>
+                        <div class="col-8 text-start" id="revenue">: ${{ number_format($player->revenue, 2) }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Pinjaman</strong></div>
+                        <div class="col-8 text-start" id="debt">: ${{ number_format($player->debt, 2) }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Jatuh Tempo</strong></div>
+                        <div class="col-8 text-start" id="jatuh_tempo">: <span style="color: red;">( {{ $jatuh_tempo }} more days )</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Kotak Kedua: Warehouse -->
+        <div class="col-md-6">
+            <div class="p-4 shadow-sm h-100" style="background-color: white; border-radius: 8px;">
+                <div class="text">
+                    <h5>Warehouse</h5>
+                    <hr>
+                </div>
+                <div class="card-body mt-4">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-4"><strong>Warehouse Capacity</strong></div>
+                                <div class="col-8 text-start" id="revenue">: {{ $player->inventory }} m²</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-4"><strong>Used Capacity</strong></div>
+                                <div class="col-8 text-start" id="revenue">: {{ $usedCapacity }} m² <strong>/ {{ $player->inventory }} m²</strong></div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Kotak Ketiga: Machine -->
-        <div class="col-md-4">
-            <div class="card border-warning mb-3">
-                <div class="card-header bg-warning text-dark">Machine</div>
-                <div class="card-body">
-                    @for ($i = 0; $i < count($roomMachine); $i++)
-                        <p><strong>{{ $roomMachineName[$i] }} Capacity:</strong> {{ $playerMachineCapacity[$i] }} units</p>
-                        @endfor
+                    <div class="row mt-4">
+                        <!-- Raw items -->
+                        <div class="col-8 text-start">
+                            <p><strong>Raw Items:</strong></p>
+                            <ul class="list-unstyled">
+                                <div class="row">
+                                    @for ($i = 0; $i < count($roomRawItem); $i++)
+                                        <div class="col-5 mb-1">
+                                        <div class="row">
+                                            <div class="col-6 text-start">{{ $roomRawItem[$i]->raw_item_name }}</div>
+                                            <div class="col-6 text-start" id="revenue">: {{ $playerRawItem[$i] }}</div>
+                                        </div>
+                                </div>
+                                @endfor
+                        </div>
+                        </ul>
+                    </div>
+
+                    <!-- Finished Items -->
+                    <div class="col-4 text-start">
+                        <p><strong>Finished Items:</strong></p>
+                        <ul class="list-unstyled">
+                            @for ($i = 0; $i < count($roomItem); $i++)
+                                <li class="d-flex justify-content-center mb-1">
+                                <div class="col-4 text-start">{{ $roomItemName[$i] }}</div>
+                                <div class="col-7 text-start" id="revenue">: {{ $playerItemQty[$i] }}</div>
+                                </li>
+                                @endfor
+                        </ul>
+                    </div>
 
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Kotak Ketiga: Machine -->
+    <div class="col-md-3">
+        <div class="p-4 shadow-sm h-100" style="background-color: white; border-radius: 8px;">
+            <div class="text">
+                <h5>Machine</h5>
+                <hr>
+            </div>
+            <div class="card-body mt-4">
+                @for ($i = 0; $i < count($roomMachine); $i++)
+                    <div class="row mb-3">
+                    <div class="col-8"><strong>{{ $roomMachineName[$i] }} Capacity</strong></div>
+                    <div class="col-4 text-start" id="revenue"> : {{ $playerMachineCapacity[$i] }} units</div>
+            </div>
+            @endfor
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Tabel List of Demand -->
+<div class="col-md-12 mt-4">
+    <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <div class="text-start">
+            <h5>List Of Demands</h5>
+            <hr>
+        </div>
+        <div class="mt-3">
+            <table id="demandTable" class="table table-striped table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Demand ID</th>
+                        <th>Tujuan</th>
+                        <th>Need Day</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($demands as $demand)
+                    <tr>
+                        <td>{{ $demand->demand_id }}</td>
+                        <td>{{ $demand->tujuan_pengiriman }}</td>
+                        <td>{{ $demand->need_day }}</td>
+                        <td>{{ $demand->item->item_name }}</td>
+                        <td>{{ $demand->quantity }}</td>
+                        <td>${{ number_format($demand->revenue, 2) }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
     $(document).ready(() => {
+        // Inisialisasi DataTables
+        $('#demandTable').DataTable();
+
         const playerId = "{{ $player->player_username }}";
         const roomId = "{{ $room->room_id }}";
+
         window.Echo.channel('player-remove')
             .listen('PlayerRemove', () => {
                 window.location.href = "/homePlayer";
@@ -86,10 +167,9 @@
                         _token: '{{ csrf_token() }}',
                     },
                     success: function(response) {
-                        console.log(response);
                         if (response.warehouseCapacity !== undefined) {
                             $('#warehouseCapacity').html(`<strong>Capacity:</strong> ${response.warehouseCapacity} m²`);
-                            $('#currentCapacity').html(`<strong>Capacity:</strong> ${response.currentCapacity} m² / ${response.warehouseCapacity} m²` );
+                            $('#currentCapacity').html(`<strong>Capacity:</strong> ${response.currentCapacity} m² / ${response.warehouseCapacity} m²`);
                         }
                     },
                     error: (xhr) => {
@@ -109,7 +189,6 @@
                     },
                     success: function(response) {
                         if (response.revenue !== undefined) {
-
                             const formatCurrency = (number) => {
                                 return new Intl.NumberFormat('en-US', {
                                     style: 'currency',
@@ -119,7 +198,6 @@
                             $('#revenue').html(`<strong>Revenue:</strong> ${formatCurrency(response.revenue)}`);
                             $('#debt').html(`<strong>Pinjaman:</strong> ${formatCurrency(response.debt)}`);
                             $('#jatuh_tempo').html(`<strong>Jatuh Tempo:</strong> ${response.jatuh_tempo} days`);
-
                         }
                     },
                     error: (xhr) => {
@@ -129,5 +207,4 @@
             });
     });
 </script>
-
 @endsection

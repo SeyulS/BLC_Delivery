@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('demand', function (Blueprint $table) {
             $table->string('demand_id')->unique();
             $table->string('tujuan_pengiriman');
+            $table->string('day');
             $table->integer('need_day')->nullable();
             $table->integer('item_index');
             $table->integer('quantity');

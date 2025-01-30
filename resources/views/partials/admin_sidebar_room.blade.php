@@ -28,13 +28,13 @@
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center">Pengiriman LCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: left">Pengiriman LCL</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center">Pengiriman FCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: left">Pengiriman FCL</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center">Pengiriman Udara</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: left">Pengiriman Udara</a>
                 </li>
             </ul>
         </li>

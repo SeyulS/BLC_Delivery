@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('player_username')->unique();
             $table->string('password');
             $table->foreignId('room_id')->nullable();
-            $table->string('pinjaman_id')->nullable();
             $table->integer('inventory')->nullable();
             $table->json('raw_items')->nullable();
             $table->json('items')->nullable();
@@ -24,7 +23,7 @@ return new class extends Migration
             $table->double('revenue')->nullable();
             $table->integer('jatuh_tempo')->nullable();
             $table->double('debt')->nullable();
-            $table->integer('produce');
+            $table->integer('produce')->nullable();
             $table->timestamps();
         });
     }

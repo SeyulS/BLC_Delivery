@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('deck_demand', function (Blueprint $table) {
+            $table->id();
             $table->string('deck_id');
             $table->string('demand_id');
             $table->string('room_id')->nullable();
