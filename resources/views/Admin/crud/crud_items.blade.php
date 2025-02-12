@@ -1,268 +1,307 @@
 @extends('layout.admin_home')
 
 @section('container')
-<div class="container mt-5">
-    <h1 class="text-center mb-4">Items</h1>
-    <button class="btn btn-primary mb-3" id="addNewItem">Add New Item</button>
-    <table id="itemsTable" class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="mb-4">
+        <h1 class="fw-bold text-dark mb-1">Item Management</h1>
+        <p class="text-muted mb-0">Create and manage finished products with their bill of materials</p>
+    </div>
 
-<!-- Modal -->
-<div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="itemForm">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="itemModalLabel">Add Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="itemId">
-                    <div class="mb-3">
-                        <label for="itemName" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="itemName" name="item_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="itemPrice" class="form-label">Price</label>
-                        <input type="number" class="form-control" id="itemPrice" name="item_price" required>
-                    </div>
-
-                    <div id="dynamicFields">
-                        <div class="mb-3 dynamic-row">
-                            <label for="rawItemNeeded" class="form-label">Raw Item Needed</label>
-                            <select class="form-control rawItemSelect" name="raw_item_needed[]">
-                                <option value="">Select Raw Item</option>
-                                @foreach($rawItems as $rawItem)
-                                <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
-                                @endforeach
-                            </select>
-                            <input type="number" class="form-control mt-2" name="raw_item_quantity_needed[]" placeholder="Quantity" required>
+    <div class="row g-4">
+        <!-- Form Section -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold mb-4">Create New Item</h5>
+                    <form id="itemForm">
+                        @csrf
+                        <input type="hidden" id="itemId">
+                        
+                        <!-- Basic Details Section -->
+                        <div class="mb-4">
+                            <label for="itemName" class="form-label fw-medium">Item Name</label>
+                            <input type="text" class="form-control form-control-lg" id="itemName" name="item_name" required>
                         </div>
-                        <!-- Button to add more fields -->
-                    </div>
-                    <button type="button" class="btn btn-secondary" id="addMoreFields">+</button>
-                    <div class="mb-3">
-                        <label for="itemSize" class="form-label">Item Size (m2)</label>
-                        <input type="number" class="form-control" id="itemSize" name="item_price" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="itemVolume" class="form-label">Item Volume</label>
-                        <input type="number" class="form-control" id="itemVolume" name="item_price" required>
-                    </div>
 
+                        <!-- Bill of Materials Section -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="form-label fw-medium mb-0">Bill of Materials</label>
+                                <button type="button" class="btn btn-primary btn-sm" id="addMoreFields">
+                                    <i class="fas fa-plus"></i> Add Material
+                                </button>
+                            </div>
+                            <div id="dynamicFields" class="border rounded-3 p-3 bg-light">
+                                <div class="dynamic-row mb-3">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <select class="form-select rawItemSelect" name="raw_item_needed[]">
+                                                <option value="">Select Raw Material</option>
+                                                @foreach($rawItems as $rawItem)
+                                                    <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="number" class="form-control" name="raw_item_quantity_needed[]" 
+                                                   placeholder="Qty" required min="1">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Dimensions Section -->
+                        <div class="mb-4">
+                            <label class="form-label fw-medium mb-3">Item Dimensions</label>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="item_length" 
+                                               name="item_length" required min="0" step="0.01" placeholder="Length">
+                                        <span class="input-group-text bg-light">cm</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="item_width" 
+                                               name="item_width" required min="0" step="0.01" placeholder="Width">
+                                        <span class="input-group-text bg-light">cm</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="item_height" 
+                                               name="item_height" required min="0" step="0.01" placeholder="Height">
+                                        <span class="input-group-text bg-light">cm</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weight Section -->
+                        <div class="mb-4">
+                            <label for="itemWeight" class="form-label fw-medium">Item Weight</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="itemWeight" 
+                                       name="item_weight" required min="0" step="0.01">
+                                <span class="input-group-text bg-light">kg</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Save Item
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <table id="itemsTable" class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3">Name</th>
+                                <th class="px-4 py-3">Bill Of Material</th>
+                                <th class="px-4 py-3">Dimensions (L×W×H)</th>
+                                <th class="px-4 py-3">Weight</th>
+                                <th class="px-4 py-3 text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($items as $item)
+                            <tr>
+                                <td class="px-4">{{ $item->item_name }}</td>
+                                <td class="px-4">{{ $item->BOM }}</td>
+                                <td class="px-4">
+                                    {{ $item->item_length }}×{{ $item->item_width }}×{{ $item->item_height }} cm
+                                </td>
+                                <td class="px-4">{{ $item->item_weight }} kg</td>
+                                <td class="px-4 text-end">
+                                    <button class="btn btn-action btn-delete deleteItem" data-id="{{ $item->id }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- DataTables and jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<!-- Styles -->
+<style>
+.btn-action {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    margin-left: 0.5rem;
+    transition: all 0.2s;
+}
 
+.btn-edit {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: none;
+}
+
+.btn-edit:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: none;
+}
+
+.btn-delete:hover {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.dynamic-row {
+    position: relative;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    background: white;
+}
+
+.remove-material {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ff5252;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
+}
+
+#dynamicFields {
+    max-height: 300px;
+    overflow-y: auto;
+}
+</style>
+
+<!-- Scripts -->
 <script>
+$(document).ready(function() {
+    // Initialize DataTable
+    $('#itemsTable').DataTable({
+        order: [[0, 'asc']],
+        pageLength: 10,
+        responsive: true,
+        dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center"ip>',
+        language: {
+            search: "",
+            searchPlaceholder: "Search items..."
+        }
+    });
+
+    // Add Material Field
+    $('#addMoreFields').on('click', function() {
+        const newField = `
+            <div class="dynamic-row">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <select class="form-select rawItemSelect" name="raw_item_needed[]" required>
+                            <option value="">Select Raw Material</option>
+                            @foreach($rawItems as $rawItem)
+                                <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" name="raw_item_quantity_needed[]" 
+                               placeholder="Qty" required min="1">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="remove-material">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#dynamicFields').append(newField);
+    });
+
+    // Remove Material Field
+    $(document).on('click', '.remove-material', function() {
+        $(this).closest('.dynamic-row').fadeOut(300, function() {
+            $(this).remove();
+        });
+    });
+
+    // Form Submission
     $('#itemForm').on('submit', function(e) {
         e.preventDefault();
-        var id = $('#itemId').val();
-        var url = id ? '/items/' + id : '/items';
-        var method = id ? 'PUT' : 'POST';
-
-        // Initialize arrays for raw item data
-        var rawItemNeeded = [];
-        var rawItemQuantityNeeded = [];
-
-        // Process dynamic fields
-        $('#dynamicFields .dynamic-row').each(function() {
-            var rawItemValue = $(this).find('select[name="raw_item_needed[]"]').val();
-            var quantityValue = $(this).find('input[name="raw_item_quantity_needed[]"]').val();
-
-            if (rawItemValue && quantityValue) {
-                rawItemNeeded.push(rawItemValue);
-                rawItemQuantityNeeded.push(quantityValue);
-            }
-        });
-
-        // Log the arrays to see the structured data
-        console.log('Raw Item Needed:', rawItemNeeded);
-        console.log('Raw Item Quantity Needed:', rawItemQuantityNeeded);
-
-        // Now serialize the rest of the form
-        var formData = $(this).serializeArray();
-
-        // Log the form data including the raw item arrays
-        console.log('Serialized Form Data:', formData);
-
-        // Add raw item arrays to formData manually
-        formData.push({
-            name: 'raw_item_needed[]',
-            value: rawItemNeeded
-        });
-        formData.push({
-            name: 'raw_item_quantity_needed[]',
-            value: rawItemQuantityNeeded
-        });
-
+        
+        const formData = new FormData(this);
+        
         $.ajax({
-            url: url,
-            method: method,
-            data: formData, // Send structured data
+            url: '/createItem',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
-                $('#itemModal').modal('hide');
-                table.ajax.reload();
-                toastr.success(response.message);
+                if (response.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: response.message
+                    });
+                }
             },
-            error: function(xhr, status, error) {
-                alert("Error: " + error); // Handle error if any
-            }
-        });
-    });
-
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var table = $('#itemsTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '/items/data',
-            columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'item_name',
-                    name: 'item_name'
-                },
-                {
-                    data: 'item_price',
-                    name: 'item_price'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
-
-        // Add New Item Modal
-        $('#addNewItem').on('click', function() {
-            $('#itemModal').modal('show');
-            $('#itemModalLabel').text('Add Item');
-            $('#itemForm').trigger('reset');
-            $('#itemId').val('');
-        });
-
-        // Edit Item Modal
-        $(document).on('click', '.editItem', function() {
-            var id = $(this).data('id');
-            $.get('/items/' + id + '/edit', function(data) {
-                $('#itemModal').modal('show');
-                $('#itemModalLabel').text('Edit Item');
-                $('#itemId').val(data.id);
-                $('#itemName').val(data.item_name);
-                $('#itemPrice').val(data.item_price);
-
-                // Reset and add dynamic fields based on existing data
-                $('#dynamicFields').empty();
-                data.raw_items.forEach(function(rawItem) {
-                    var newField = `
-                        <div class="mb-3 dynamic-row">
-                            <label for="rawItemNeeded" class="form-label">Raw Item Needed</label>
-                            <select class="form-control rawItemSelect" name="raw_item_needed[]">
-                                <option value="">Select Raw Item</option>
-                                @foreach($rawItems as $rawItem)
-                                    <option value="{{ $rawItem->id }}" ${rawItem.id == rawItem.id ? 'selected' : ''}>{{ $rawItem->name }}</option>
-                                @endforeach
-                            </select>
-                            <input type="number" class="form-control mt-2" name="raw_item_quantity_needed[]" placeholder="Quantity" value="${rawItem.pivot.quantity_needed}" required>
-                            <button type="button" class="btn btn-danger mt-2 removeField">Remove</button>
-                        </div>
-                    `;
-                    $('#dynamicFields').append(newField);
-                });
-            });
-        });
-
-        // Save Item (Add or Update)
-        $('#itemForm').on('submit', function(e) {
-            e.preventDefault();
-            var id = $('#itemId').val();
-            var url = id ? '/items/' + id : '/items';
-            var method = id ? 'PUT' : 'POST';
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: $(this).serialize(),
-                success: function(response) {
-                    $('#itemModal').modal('hide');
-                    table.ajax.reload();
-                    toastr.success(response.message);
-                },
-                error: function(xhr, status, error) {
-                    alert("Error: " + error); // Menangani error, jika ada
-                }
-            });
-        });
-
-        // Delete Item
-        $(document).on('click', '.deleteItem', function() {
-            var id = $(this).data('id');
-            if (confirm('Are you sure?')) {
-                $.ajax({
-                    url: '/items/delete/' + id,
-                    method: 'GET',
-                    success: function(response) {
-                        table.ajax.reload(); // Reload DataTable
-                        toastr.success(response.message);
-                    }
+            error: function(xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Something went wrong! Please try again.'
                 });
             }
         });
-
-        // Add more fields dynamically
-        $('#addMoreFields').on('click', function() {
-            var newField = `
-                <div class="mb-3 dynamic-row">
-                    <label for="rawItemNeeded" class="form-label">Raw Item Needed</label>
-                    <select class="form-control rawItemSelect" name="raw_item_needed[]">
-                        <option value="">Select Raw Item</option>
-                        @foreach($rawItems as $rawItem)
-                            <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
-                        @endforeach
-                    </select>
-                    <input type="number" class="form-control mt-2" name="raw_item_quantity_needed[]" placeholder="Quantity" required>
-                    <button type="button" class="btn btn-danger mt-2 removeField">Remove</button>
-                </div>
-            `;
-            $('#dynamicFields').append(newField);
-        });
-
-        // Remove field dynamically
-        $(document).on('click', '.removeField', function() {
-            $(this).closest('.dynamic-row').remove();
-        });
     });
+});
 </script>
-
 @endsection

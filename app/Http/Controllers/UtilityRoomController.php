@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Events\NextDaySimulation;
 use App\Events\PauseSimulation;
+use App\Events\ResumeSimulation;
 use App\Events\StartSimulation;
+use App\Models\AirplaneDelivery;
+use App\Models\FCLDelivery;
 use App\Models\Items;
+use App\Models\LCLDelivery;
 use App\Models\Machine;
 use App\Models\Player;
 use App\Models\Raw_item;
@@ -28,6 +32,7 @@ class UtilityRoomController extends Controller
         $room = Room::where('room_id', $request->input('room_id'))->first();
 
         if ($room) {
+            $room->start = 1;
             $room->status = 1;
             $room->recent_day = 1;
             $room->save();
@@ -79,12 +84,15 @@ class UtilityRoomController extends Controller
                 ->update([
                     'raw_items' => json_encode($arr),
                     'items' => json_encode($arr2),
+                    'revenue' => 0,
                     'inventory' => 0,
                     'machine_capacity' => json_encode($arr3),
-                    'produce' => 1
+                    'jatuh_tempo' => null,
+                    'debt' => null,
+                    'produce' => 1,
                 ]);
 
-            StartSimulation::dispatch();
+        StartSimulation::dispatch($room->room_id);
 
             return redirect()->back()->with('success', 'Simulation has started');
         } else {
@@ -100,7 +108,7 @@ class UtilityRoomController extends Controller
             $room->status = 0;
             $room->save();
 
-            PauseSimulation::dispatch();
+            PauseSimulation::dispatch($room->room_id);
             return redirect()->back()->with('success', 'Simulation has paused');
         } else {
             return redirect()->back()->with('error', 'Room not found');
@@ -115,8 +123,7 @@ class UtilityRoomController extends Controller
             $room->status = 1;
             $room->save();
 
-            StartSimulation::dispatch();
-
+            ResumeSimulation::dispatch($room->room_id);
             return redirect()->back()->with('success', 'Simulation has been resumed');
         } else {
             return redirect()->back()->with('error', 'Room not found');
@@ -126,43 +133,57 @@ class UtilityRoomController extends Controller
     public function nextDay(Request $request)
     {
         $room = Room::where('room_id', $request->input('room_id'))->first();
-        if ($room) {
+        if ($room->recent_day != $room->max_day) {
+            $players = Player::where('room_id', $room->room_id)->get();
+            foreach ($players as $player){
+                // Cek Jatuh Tempo
+                if($player->jatuh_tempo == $room->recent_day + 1){
+                    $player->revenue = $player->revenue - $player->debt;
+                    $player->debt = null;
+                    $player->jatuh_tempo = null;
+                    $player->save();
+                }
+                $totalInventory = 0;
+                $currentItemCapacity = json_decode($player->items);
+                $roomItemIndex = json_decode($room->item_chosen);
 
+                for ($i = 0; $i < count($roomItemIndex); $i++) {
+                    $queryItem = Items::where('id', $roomItemIndex[$i])->first();
+                    $totalInventory = $totalInventory + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
+                }
 
-            // Tanyakan pak Heri
-            
-            // $players = Player::where('room_id', $room->room_id)->get();
-            // foreach ($players as $player){
-            //     $inventoryDebt = 0;
-            //     $currentItemCapacity = json_decode($player->items);
-            //     $roomItemIndex = json_decode($room->item_chosen);
+                $inventoryDebt = $totalInventory * $room->inventory_cost;
+                $player->revenue = $player->revenue - $inventoryDebt;
+                $player->produce = 1;
+                $player->save();
+            }
 
-            //     for ($i = 0; $i < count($roomItemIndex); $i++) {
-            //         $queryItem = Items::where('id', $roomItemIndex[$i])->first();
-            //         $inventoryDebt = $inventoryDebt + ($currentItemCapacity[$i] * $queryItem->item_size);
-            //     }
-            // }
-            
-            // Player bisa produce lagi
+            $lcl = LCLDelivery::where('room_id', $room->room_id)->get();
+            foreach ($lcl as $l){
+                $l->current_volume_capacity = 0;
+                $l->current_weight_capacity = 0;
+                $l->save();
+            }
 
-            // Cek apa ada player yang pinjaman jatuh tempo
-            
-            // 
-
-            // Ganti Hari
+            $air = AirplaneDelivery::where('room_id', $room->room_id)->get();
+            foreach ($air as $a){
+                $a->current_volume_capacity = 0;
+                $a->current_weight_capacity = 0;
+                $a->save();
+            }
 
             $room->recent_day = $room->recent_day + 1;
-            Player::where('room_id', $request->input('room_id'))
-                ->update([
-                    'produce' => 1
-                ]);
             $room->save();
 
-
-            NextDaySimulation::dispatch();
+            NextDaySimulation::dispatch($room->room_id);
             return redirect()->back()->with('success', 'The day has changed');
+            
         } else {
-            return redirect()->back()->with('error', 'Room not found');
+            $room->status = 0;
+            $room->save();
+
+            PauseSimulation::dispatch($room->room_id);
+            return redirect()->back()->with('success', 'The game has ended');
         }
     }
 

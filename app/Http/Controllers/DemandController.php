@@ -12,11 +12,17 @@ use Illuminate\Http\Request;
 class DemandController extends Controller
 {
     public function takeDemand(Request $request)
-    {
+    {   
+        $player = Player::where('player_username', $request->input('player_id'))->first();
 
-        $query = DeckDemand::where('room_id', $request->input('room_id'))
+        $room = Room::where('room_id', $request->input('room_id'))->first();
+
+        if($room->status == 0){
+            return response()->json(['status' => 'fail', 'message' => 'The simulation was paused']);
+        }
+        $query = Demand::where('room_id', $request->input('room_id'))
             ->where('demand_id', $request->input('demand_id'))
-            ->where('deck_id', 1)->first();
+            ->where('day', $room->recent_day)->first();
 
         if ($query->player_username != null) {
             return response()->json(['status' => 'fail', 'message' => 'Demand has been taken']);
@@ -24,6 +30,7 @@ class DemandController extends Controller
             $query->player_username = $request->input('player_id');
             $query->save();
 
+            $player->save();
             DemandTaken::dispatch($request->input('demand_id'));
             return response()->json(['status' => 'success', 'message' => 'Successfully took the demand']);
         }
@@ -35,14 +42,21 @@ class DemandController extends Controller
         $player = Player::where('player_username', $playerUsername)->first();
         $room = Room::where('room_id', $player->room_id)->first();
 
-        $demandIds = DeckDemand::where('player_username', $playerUsername)
-            ->where('room_id', $room->room_id)
-            ->where('deck_id', $room->deck_id)
-            ->pluck('demand_id');
+        $demands = Demand::where('player_username', $playerUsername)
+            ->where('room_id', $room->room_id)->get();
 
-        $demandIdsArray = $demandIds->toArray();
-
-        $demands = Demand::whereIn('demand_id', $demandIdsArray)->get();
         return response()->json($demands);
+    }
+
+    public function getDemandsFCL(Request $request)
+    {
+        $demands = Demand::where('player_username', $request->input('player_username'))
+            ->where('tujuan_pengiriman', $request->input('destination'))
+            ->get();
+
+        if ($demands) {
+            return response()->json($demands);
+        }
+        return response()->json(['error' => 'No Demand'], 404);
     }
 }

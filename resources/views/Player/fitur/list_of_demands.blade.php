@@ -2,162 +2,349 @@
 
 @section('container')
 <style>
-    .card-hover {
-        transition: transform 0.3s ease, filter 0.3s ease;
+    :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --success: #2ea44f;
+        --info: #3498db;
+        --warning: #f7b731;
+        --danger: #e74c3c;
+        --dark: #2d3436;
+        --light: #f8fafc;
+        --border: #e2e8f0;
+    }
+
+    .demands-dashboard {
+        min-height: 100vh;
+        background-color: #f1f5f9;
+        padding: 2rem 0;
+    }
+
+    /* Header Section */
+    .dashboard-header {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    }
+
+    .header-content {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .datetime-display {
+        font-family: 'JetBrains Mono', monospace;
+        border-left: 4px solid var(--primary);
+        padding-left: 1rem;
+    }
+
+    .datetime-label {
+        font-size: 0.85rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .datetime-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    /* Filters Section */
+    .filters-container {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    }
+
+    .filter-group {
         position: relative;
     }
 
-    .card-hover:hover {
-        transform: scale(1.04);
-        filter: blur(0.3px);
+    .filter-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 0.5rem;
     }
 
-    .card-hover:hover .take-icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(0, 0, 0, 0.6);
+    .filter-select {
         width: 100%;
-        height: 100%;
-        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: var(--light);
     }
 
-    .take-icon {
-        z-index: 2;
-        color: #fff;
-        border-radius: 8px;
-        display: none;
-        font-size: 2rem;
+    .filter-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
     }
 
-    .disabled-card {
-        opacity: 0.5;
-        pointer-events: none;
+    /* Demands Grid */
+    .demands-grid {
+        display: grid;
+        grid-template-columns: repeat(5,1fr);
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
     }
 
-    .taken-stamp {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background: rgba(255, 0, 0, 0.8);
+    .demand-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+        position: relative;
+    }
+
+    .demand-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .demand-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .demand-id {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .demand-body {
+        padding: 1.5rem;
+    }
+
+    .demand-info {
+        margin-bottom: 1.1rem;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .info-label {
+        color: #64748b;
+        font-weight: 300;
+    }
+
+    .info-value {
+        font-weight: 600;
+        color: var(--dark);
         font-size: 0.9rem;
-        font-weight: bold;
-        transform: rotate(-30deg);
+    }
+
+    .demand-footer {
+        padding: 0.5rem;
+        text-align: center;
+        border-top: 1px solid var(--border);
+    }
+
+    .btn-take-demand {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-take-demand:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Modal Styling */
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border-radius: 16px 16px 0 0;
+        padding: 1.5rem;
+    }
+
+    .modal-title {
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 2rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid var(--border);
+        padding: 1.5rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .demands-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header-content {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
     }
 </style>
 
-<div class="container mt-4">
-    <div class="row g-3">
-        @foreach($demands as $demand)
-            @if($demand->taken == FALSE) <!-- Menampilkan hanya jika demand belum diambil -->
-                <div class="col-6 col-md-2 col-lg-2">
-                    <div class="card shadow-sm rounded-4 border-0 position-relative text-center card-hover" style="background: #ffffff;" data-bs-toggle="modal" data-bs-target="#cardModal{{ $demand->demand_id }}" id="card{{ $demand->demand_id }}">
+<div class="demands-dashboard">
+    <div class="container">
 
-                        <div class="take-icon position-absolute top-50 start-50 translate-middle text-center">
-                            <i class="bi bi-archive"></i>
-                        </div>
-
-                        <div class="card-body p-4 position-relative d-flex flex-column align-items-center" style="z-index: 1; font-size: 0.65rem;">
-                            <h5 class="fw-bold mb-1" style="font-size: 1rem;">{{ $demand->demand_id }}</h5>
-                            <hr style="width: 50%; border: 1px solid #ddd;">
-                            <table class="table table-borderless text-start mb-1" style="width: auto;">
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Tujuan</strong></td>
-                                        <td>: {{ $demand->tujuan_pengiriman }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Need Day</strong></td>
-                                        <td>: {{ $demand->need_day }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Item</strong></td>
-                                        <td>: {{ $demand->item->item_name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Quantity</strong></td>
-                                        <td>: {{ $demand->quantity }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Revenue</strong></td>
-                                        <td>: ${{ number_format($demand->revenue, 2) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="text-center">
-                            <img src="{{ asset('assets/BLC_Logo.png') }}" alt="BLC Delivery Logo" style="width: 30%; height: auto;" class="mb-1">
-                            <p class="text-muted mb-3" style="font-size: 0.75rem;">Managed by BLC Delivery</p>
-                        </div>
+        <!-- Filters -->
+        <div class="filters-container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-map-marker-alt me-2"></i>Destination
+                        </label>
+                        <select id="destination-filter" class="filter-select">
+                            <option value="">All Destinations</option>
+                            @foreach($uniqueDestinations as $destination)
+                            <option value="{{ $destination }}">{{ $destination }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-
-                <!-- Modal for each demand card -->
-                <div class="modal fade" id="cardModal{{ $demand->demand_id }}" tabindex="-1" aria-labelledby="cardModalLabel{{ $demand->demand_id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="cardModalLabel{{ $demand->demand_id }}">Demands Preview</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="card shadow-sm rounded-4 border-0 position-relative text-center" style="background: #ffffff;">
-                                    <div class="card-body p-4 position-relative d-flex flex-column align-items-center" style="z-index: 1; font-size: 0.8rem;">
-                                        <h5 class="fw-bold mb-1" style="font-size: 1rem;">{{ $demand->demand_id }}</h5>
-                                        <hr style="width: 80%; border: 1px solid #ddd;">
-                                        <table class="table table-borderless text-start mb-1" style="width: auto;">
-                                            <tbody>
-                                                <tr>
-                                                    <td><strong>Tujuan</strong></td>
-                                                    <td>: {{ $demand->tujuan_pengiriman }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Need Day</strong></td>
-                                                    <td>: {{ $demand->need_day }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Item</strong></td>
-                                                    <td>: {{ $demand->item->item_name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Quantity</strong></td>
-                                                    <td>: {{ $demand->quantity }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Revenue</strong></td>
-                                                    <td>: ${{ number_format($demand->revenue, 2) }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="text-center">
-                                        <img src="{{ asset('assets/BLC_Logo.png') }}" alt="BLC Delivery Logo" style="width: 30%; height: auto;" class="mb-1">
-                                        <p class="text-muted mb-3" style="font-size: 0.75rem;">Managed by BLC Delivery</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary take-demand" data-demand-id="{{ $demand->demand_id }}" data-bs-dismiss="modal">Take Demand</button>
-                            </div>
-                        </div>
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-hashtag me-2"></i>Demand ID
+                        </label>
+                        <input type="text" id="demand-id-filter" class="filter-select"
+                            placeholder="Search by ID...">
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-box me-2"></i>Item Type
+                        </label>
+                        <select id="item-filter" class="filter-select">
+                            <option value="">All Items</option>
+                            @foreach($uniqueItems as $item)
+                            <option value="{{ $item->item_name }}">{{ $item->item_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demands Grid -->
+        <div class="demands-grid" id="demand-container">
+            @foreach($demands as $demand)
+            @if(!$demand->taken)
+            <div class="demand-card"
+                data-destination="{{ $demand->tujuan_pengiriman }}"
+                data-demand-id="{{ $demand->demand_id }}"
+                data-item="{{ $demand->item->item_name }}" id="card{{$demand->demand_id}}">
+                <div class="demand-header">
+                    <h3 class="demand-id">{{ $demand->demand_id }}</h3>
+                </div>
+                <div class="demand-body">
+                    <div class="demand-info">
+                        <div class="info-row">
+                            <span class="info-label">Destination:</span>
+                            <span class="info-value">{{ $demand->tujuan_pengiriman }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Need Day:</span>
+                            <span class="info-value">Day {{ $demand->need_day }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Item:</span>
+                            <span class="info-value">{{ $demand->item->item_name }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Quantity:</span>
+                            <span class="info-value">{{ $demand->quantity }} units</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Revenue:</span>
+                            <span class="info-value">${{ number_format($demand->revenue, 2) }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center mb-3">
+                        <img src="{{ asset('assets/BLC_Logo.png') }}" alt="BLC Delivery Logo"
+                            style="width: 30%; height: auto;">
+                        <p class="text-muted mt-2" style="font-size: 0.875rem;">
+                            Managed by BLC Delivery
+                        </p>
+                    </div>
+                </div>
+                <div class="demand-footer">
+                    <button class="btn-take-demand take-demand"
+                        data-demand-id="{{ $demand->demand_id }}">
+                        <i class="fas fa-truck me-2"></i>Take Demand
+                    </button>
+                </div>
+            </div>
             @endif
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        window.Echo.channel('demand-taken')
-        .listen('.DemandTakenEvent', (event) => {
-            var demandId = event.demandId;
-            var card = $('#card' + demandId);
-            card.remove();
+        $('#destination-filter, #demand-id-filter, #item-filter').on('change input', function() {
+            console.log('Filtering demands...');
+            var selectedDestination = $('#destination-filter').val().toLowerCase() || '';
+            var selectedDemandId = $('#demand-id-filter').val().toLowerCase() || '';
+            var selectedItem = $('#item-filter').val().toLowerCase() || '';
+
+            $('#demand-container .demand-card').each(function() {
+                var cardDestination = String($(this).data('destination') || '').toLowerCase();
+                var cardDemandId = String($(this).data('demand-id') || '').toLowerCase();
+                var cardItem = String($(this).data('item') || '').toLowerCase();
+
+                var isMatch = true;
+
+                if (selectedDestination && cardDestination !== selectedDestination) {
+                    isMatch = false;
+                }
+                // Menggunakan includes() agar hasil filter tidak harus sama persis
+                if (selectedDemandId && !cardDemandId.includes(selectedDemandId)) {
+                    isMatch = false;
+                }
+                if (selectedItem && cardItem !== selectedItem) {
+                    isMatch = false;
+                }
+
+                if (isMatch) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
         });
 
         $(document).on('click', '.take-demand', function() {
@@ -166,29 +353,132 @@
             var roomId = "{{ $room->room_id }}";
             var playerId = "{{ $player->player_username }}";
 
-            $.ajax({
-                url: '/take-demand/',
-                method: 'POST',
-                data: {
-                    demand_id: demandId,
-                    room_id: roomId,
-                    player_id: playerId,
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function(response) {
-                    if(response.status == 'success'){
-                        toastr.success(response.message);
-                        card.remove();
-                    }
-                    else{
-                        toastr.error(response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('Error: ' + error); // Menampilkan error jika gagal
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Do you want to take this demand ( No. ${demandId} )?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Take It!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/take-demand/',
+                        method: 'POST',
+                        data: {
+                            demand_id: demandId,
+                            room_id: roomId,
+                            player_id: playerId,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Processing...',
+                                text: 'Please wait while we take the demand.',
+                                icon: 'info',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 3000,
+                                    showConfirmButton: false
+                                });
+                                card.remove();
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.message,
+                                    icon: 'error',
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Something went wrong. Please try again.',
+                                icon: 'error',
+                            });
+                        }
+                    });
                 }
             });
         });
+
+
+        window.Echo.channel('demand-taken')
+            .listen('.DemandTakenEvent', (event) => {
+                var demandId = event.demandId;
+                var card = $('#card' + demandId);
+                card.remove();
+            });
+        window.Echo.channel('start-simulation')
+            .listen('StartSimulation', () => {
+                Swal.fire({
+                    title: 'Loading...',
+                    text: 'The simulation has started',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timer: 5000,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                setTimeout(() => {
+                    window.location.href = `/player-lobby/${roomId}`;
+                }, 5000);
+            });
+
+        window.Echo.channel('pause-simulation')
+            .listen('PauseSimulation', () => {
+                Swal.fire({
+                    title: 'Loading...',
+                    text: 'The simulation was paused',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timer: 5000,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                setTimeout(() => {
+                    window.location.href = `/player-lobby/${roomId}`;
+                }, 5000);
+            });
+
+        window.Echo.channel('next-day')
+            .listen('NextDaySimulation', () => {
+                Swal.fire({
+                    title: 'Loading...',
+                    text: 'Moving to the next day. Please wait.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    timer: 5000,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        
+                    },
+                });
+
+                setTimeout(() => {
+                    window.location.href = `/player-lobby/${roomId}`;
+                }, 5000);
+            });
     });
 </script>
 

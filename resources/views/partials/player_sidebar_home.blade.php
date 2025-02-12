@@ -50,5 +50,11 @@
             </a>
         </li>
     </ul>
+    <div class="sidebar-footer">
+        <a href="/logoutPlayer" class="sidebar-link">
+            <i class="lni lni-exit"></i>
+            <span>Logout</span>
+        </a>
+    </div>
 
 </aside>

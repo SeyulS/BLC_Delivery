@@ -108,9 +108,16 @@ a.sidebar-link {
 
 
 a.sidebar-link:hover {
-    background-color: rgba(172, 120, 120, 0.075);
-    border-left: 3px solid #ff0800;
+    background-color: rgba(61, 65, 142, 0.075);
+    border-left: 3px solid #2563eb;
 }
+
+/* Menambahkan gaya untuk menu aktif */
+.sidebar-link.active {
+    background-color: rgba(61, 65, 142, 0.075);
+    border-left: 3px solid #2563eb;
+}
+
 
 .sidebar-item {
     position: relative;
@@ -162,7 +169,7 @@ a.sidebar-link:hover {
     width: 80%;
     border: none; /* Menghapus border default */
     height: 1px; /* Menentukan ketebalan garis */
-    background-color: #ff0800; /* Menentukan warna garis */
+    background-color: #2563eb; /* Menentukan warna garis */
     margin: 0 auto; /* Memusatkan elemen secara horizontal */
 }
 
@@ -170,5 +177,6 @@ a.sidebar-link:hover {
 #sidebar:not(.expand) .player-profile {
     display: none; /* Sembunyikan konten profil saat sidebar terkecil */
 }
+
 
 

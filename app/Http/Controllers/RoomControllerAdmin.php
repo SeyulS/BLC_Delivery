@@ -46,28 +46,28 @@ class RoomControllerAdmin extends Controller
 
     public function kickPlayer(Request $request)
     {
-        $playerId = $request->input('player_id');
-
-        if (!$playerId) {
+        
+        if (!$request->input('player_username')) {
             return response()->json(['message' => 'Player ID is required'], 400);
         }
 
-        $player = Player::find($playerId);
-
+        $player = Player::where('player_username',$request->input('player_username'))->first();
+        $roomId = $player->room_id;
         if (!$player) {
             return response()->json(['message' => 'Player not found'], 404);
         }
 
         $player->room_id = null;
-        $player->pinjaman_id = null;
         $player->inventory = null;
         $player->raw_items = null;
         $player->items = null;
-        $player->revenue = 0;
-        $player->jatuh_tempo = 0;
-        $player->debt = 0;
+        $player->machine_capacity = null;
+        $player->revenue = null;
+        $player->jatuh_tempo = null;
+        $player->debt = null;
+        $player->produce = null;
         $player->save();
-        PlayerRemove::dispatch();
+        PlayerRemove::dispatch($player->player_username, $roomId);
 
         return response()->json(['message' => 'Player successfully removed'], 200);
     }

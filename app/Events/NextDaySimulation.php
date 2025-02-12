@@ -17,9 +17,11 @@ class NextDaySimulation implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct()
+
+    public $roomId;
+    public function __construct($roomId)
     {
-        //
+        $this->roomId = $roomId;
     }
 
     /**
@@ -32,5 +34,10 @@ class NextDaySimulation implements ShouldBroadcastNow
         return [
             new Channel('next-day'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'NextDaySimulationEvent'; // Nama event untuk diterima di client
     }
 }

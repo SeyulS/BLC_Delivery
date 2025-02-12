@@ -16,7 +16,7 @@
         </li>
         <li class="sidebar-item">
             <a href="/lobby/{{ $room->room_id }}/settingPinjaman" class="sidebar-link">
-                <i class="lni lni-agenda"></i>
+                <i class="bi bi-credit-card"></i>
                 <span>Pinjaman</span>
             </a>
         </li>
@@ -28,19 +28,20 @@
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: left">Pengiriman LCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center"><i class="bi bi-water"></i>Less Container Load</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: left">Pengiriman FCL</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center"><i class="bi bi-box-fill"></i>Full Container Load</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: left">Pengiriman Udara</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanUdara" class="sidebar-link" style="text-align: center"><i class="bi bi-airplane-engines"></i>Pengiriman Udara</a>
                 </li>
             </ul>
         </li>
+
         <li class="sidebar-item">
             <a href="/lobby/{{ $room->room_id }}/settingBahanBaku" class="sidebar-link">
-                <i class="lni lni-user"></i>
+                <i class="bi bi-capsule"></i>
                 <span>Bahan Baku</span>
             </a>
         </li>

@@ -12,13 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('demand', function (Blueprint $table) {
-            $table->string('demand_id')->unique();
-            $table->string('tujuan_pengiriman');
+            $table->id();
+            $table->string('room_id');
+            $table->string('player_username')->nullable();
+            $table->string('demand_id');
+            $table->string('tujuan_pengiriman')->nullable();
             $table->string('day');
             $table->integer('need_day')->nullable();
             $table->integer('item_index');
             $table->integer('quantity');
             $table->double('revenue');
+            $table->double('cost');
+            $table->double('profit');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('demand');
     }
 };

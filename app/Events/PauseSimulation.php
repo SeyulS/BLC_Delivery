@@ -17,9 +17,11 @@ class PauseSimulation implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct()
+
+    public $roomId;
+    public function __construct($roomId)
     {
-        //
+        $this->roomId = $roomId;
     }
 
     /**
@@ -32,5 +34,10 @@ class PauseSimulation implements ShouldBroadcastNow
         return [
             new Channel('pause-simulation'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'PauseSimulationEvent'; // Nama event untuk diterima di client
     }
 }

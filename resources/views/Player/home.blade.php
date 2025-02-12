@@ -1,9 +1,8 @@
 @extends('layout.player_home')
 @section('container')
     <div class="container centered-form">
-        <div class="row">
+        <div class="row justify-content-center align-items-center"> <!-- Add justify-content-center and align-items-center classes -->
             <div class="col-md-4">
-                <h1 class="text-center mb-4">Welcome, {{ Auth::guard('player')->user()->player_username }}</h1>
                 @if (session()->has('error'))
                     <div class="alert alert-danger">
                         {{ session('error') }}
@@ -25,10 +24,6 @@
                     <button type="submit" class="btn btn-primary btn-block">Join</button>
                 </form>
                 <br>
-                <form action='/logoutPlayer' method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger btn-block">Logout</button>
-                </form>
             </div>
         </div>
     </div>

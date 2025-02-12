@@ -17,8 +17,5 @@ protected $table = 'room';
         $this->hasMany(Player::class);
     }
 
-    public function administrator(){
-        $this->belongsTo(Administrator::class);
-    }
     
 }

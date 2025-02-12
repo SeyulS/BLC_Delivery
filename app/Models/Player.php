@@ -22,13 +22,6 @@ class Player extends Authenticatable
         return $this->belongsTo(Room::class);
     }
 
-    public function pinjaman()
-    {
-        return $this->belongsTo(Pinjaman::class);
-    }
 
-    public function demand()
-    {
-        return $this->hasMany(Demand::class);
-    }
+    
 }

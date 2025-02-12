@@ -1,141 +1,227 @@
 @extends('layout.admin_room')
 
-@section('script')
-<!-- Load jQuery terlebih dahulu -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Load Select2 setelah jQuery -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-@endsection
-
 @section('container')
-<div class="container mt-4">
-    @if(session('success'))
-    <script>
-        $(document).ready(function() {
-            toastr.success('{{ session("success") }}');
-        });
-    </script>
-    @endif
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #2ea44f;
+        --warning-color: #f7b731;
+        --danger-color: #dc3545;
+        --dark-color: #1e2a35;
+        --light-color: #f8f9fa;
+        --border-color: #e2e8f0;
+    }
 
-    @if(session('fail'))
-    <script>
-        $(document).ready(function() {
-            toastr.error('{{ session("fail") }}');
-        });
-    </script>
-    @endif
+    .dashboard-container {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .loan-type-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .loan-type-card:hover {
+        background: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    }
+
+    .loan-stat {
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .loan-value {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .loan-interest {
+        color: var(--danger-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .loan-due {
+        color: var(--success-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: 45px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 45px;
+        padding-left: 15px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 45px;
+    }
+
+    .btn-loan {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-loan:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+    }
+
+    .loan-history-table thead th {
+        background: #f8f9fa;
+        color: var(--dark-color);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="dashboard-container">
     <div class="container">
+
         <div class="row">
-            <!-- Column 1: Form Input Pinjaman -->
+            <!-- Loan Form Column -->
             <div class="col-md-4">
-                <div class="p-4 shadow-sm" style="background-color: white; border-radius: 8px;">
-                    <h4>Form Pinjaman</h4>
-                    <hr>
+                <div class="card p-4 mb-4">
+                    <h5 class="mb-3">Loan</h5>
                     <form id="pinjaman-form">
                         @csrf
                         <input type="hidden" name="room_id" value="{{ $room->room_id }}">
-                        <!-- Select Player -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="player-select" class="form-label">Player</label>
-                                <select class="form-select form-select-lg" id="player-select" name="player" aria-label="Select Player">
-                                    <option value="" selected disabled>Select Player</option>
-                                    @foreach($players as $player)
-                                    <option value="{{ $player->player_username }}">{{ $player->player_username }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Select Player</label>
+                            <select class="form-select" id="player-select" name="player">
+                                <option value="" disabled selected>Choose a player</option>
+                                @foreach($players as $player)
+                                    <option value="{{ $player->player_username }}">
+                                        {{ $player->player_username }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- Nominal Pinjaman -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="loan-amount" class="form-label">Nominal Pinjaman</label>
-                                <input type="number" class="form-control" id="loan-amount" name="loan_amount" min="1" required placeholder="Enter loan amount">
-                            </div>
+                        <div class="mb-4">
+                            <label class="form-label">Loan Type</label>
+                            <select class="form-select" name="loan_select" id="loan_select" required>
+                                <option value="" disabled selected>Select loan type</option>
+                                @foreach ($loans as $loan)
+                                    <option value="{{ $loan->id }}"
+                                            data-value="{{ $loan->loan_value }}"
+                                            data-interest="{{ $loan->loan_interest }}"
+                                            data-due="{{ $loan->loan_due }}">
+                                        ${{ number_format($loan->loan_value) }} - {{ $loan->loan_interest }}% - {{ $loan->loan_due }} Days
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- Bunga Pinjaman -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="loan-interest" class="form-label">Bunga Pinjaman (%)</label>
-                                <input type="number" class="form-control" id="loan-interest" name="loan_interest" min="0" step="0.1" required placeholder="Enter loan interest rate">
-                            </div>
-                        </div>
-
-                        <!-- Durasi Pinjaman -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="loan-duration" class="form-label">Durasi Pinjaman (Hari)</label>
-                                <input type="number" class="form-control" id="loan-duration" name="loan_duration" min="1" required placeholder="Enter loan duration in days">
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-danger w-100">Set Pinjaman</button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-loan w-100">
+                            <i class="fas fa-check-circle me-2"></i>Set Loan
+                        </button>
                     </form>
                 </div>
 
-                <div class="p-4 shadow-sm mt-4" style="background-color: white; border-radius: 8px;">
-                <h4>Rule Base Pinjaman</h4>
-                    <hr>
-
+                <!-- Available Loans -->
+                <div class="card p-4">
+                    <h5 class="mb-3">Available Loan Types</h5>
+                    @foreach($loans as $loan)
+                        <div class="loan-type-card">
+                            <div class="row g-2">
+                                <div class="col-md-5">
+                                    <div class="loan-stat bg-light">
+                                        <small class="d-block text-muted mb-1">Value</small>
+                                        <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="loan-stat bg-light">
+                                        <small class="d-block text-muted mb-1">Interest</small>
+                                        <span class="loan-interest">{{ $loan->loan_interest }}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="loan-stat bg-light">
+                                        <small class="d-block text-muted mb-1">Duration</small>
+                                        <span class="loan-due">{{ $loan->loan_due }} Days</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-
             </div>
 
-            <!-- Column 2: History Set Pinjaman -->
+            <!-- Loan History Column -->
             <div class="col-md-8">
-                <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-                    <h4>History Pinjaman</h4>
-                    <hr>
-                    <table class="table table-bordered mt-3" id="pinjamanHistory">
-                        <thead>
-                            <tr>
-                                <th>Player</th>
-                                <th>Day</th>
-                                <th>Nominal Pinjaman</th>
-                                <th>Bunga Pinjaman (%)</th>
-                                <th>Durasi Pinjaman (Hari)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Example Hardcoded Data -->
-                            <tr>
-                                <td>Player1</td>
-                                <td>1</td>
-                                <td>1000000</td>
-                                <td>5</td>
-                                <td>30</td>
-                            </tr>
-                            <tr>
-                                <td>Player1</td>
-                                <td>2</td>
-                                <td>2000000</td>
-                                <td>10</td>
-                                <td>60</td>
-                            </tr>
-                            <tr>
-                                <td>Player1</td>
-                                <td>4</td>
-                                <td>2000000</td>
-                                <td>10</td>
-                                <td>60</td>
-                            </tr>
-                            <tr>
-                                <td>Player2</td>
-                                <td>2</td>
-                                <td>2000000</td>
-                                <td>10</td>
-                                <td>60</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card p-4">
+                    <h5 class="mb-3">Loan History</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover loan-history-table" id="loanHistory">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Day</th>
+                                    <th>Amount</th>
+                                    <th>Interest</th>
+                                    <th>Duration</th>
+                                    <th>Revenue Before</th>
+                                    <th>Revenue After</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($history as $h)
+                                    <tr>
+                                        <td>{{ $h->player_username }}</td>  
+                                        <td>{{ $h->day }}</td>
+                                        <td>{{ $h->loan_value }}</td>
+                                        <td>{{ $h->loan_interest }}%</td>
+                                        <td>{{ $h->loan_due }} days</td>
+                                        <td>{{ $h->before_loan }}</td>
+                                        <td>{{ $h->after_loan }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,120 +229,100 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        // Inisialisasi DataTables
-        const table = $('#pinjamanHistory').DataTable();
+$(document).ready(function() {
+    // Initialize Select2
+    $('#player-select').select2({
+        theme: 'classic',
+        placeholder: 'Select a player',
+        allowClear: true,
+        width: '100%'
+    });
 
-        // Inisialisasi Select2
-        $('#player-select').select2({
-            placeholder: "Select Player",
-            allowClear: true,
-            width: '100%'
-        });
+    // Initialize DataTable
+    const table = $('#loanHistory').DataTable({
+        pageLength: 10,
+        order: [[1, 'desc']], // Sort by day descending
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search Player"
+        }
+    });
 
-        // Validasi dan pengiriman data dengan Swal konfirmasi
-        $('#pinjaman-form').on('submit', function(event) {
-            event.preventDefault(); // Mencegah reload halaman
+    // Form Submission
+    $('#pinjaman-form').on('submit', function(e) {
+        e.preventDefault();
 
-            // Ambil data input dari form
-            const selectedPlayer = $('#player-select').val();
-            const loanAmount = $('#loan-amount').val();
-            const loanInterest = $('#loan-interest').val();
-            const loanDuration = $('#loan-duration').val();
+        const selectedPlayer = $('#player-select').val();
+        const selectedOption = $('#loan_select').find(':selected');
+        const loanValue = selectedOption.data('value');
+        const loanInterest = selectedOption.data('interest');
+        const loanDue = selectedOption.data('due');
 
-            // Validasi data input
-            if (!selectedPlayer || !loanAmount || !loanInterest || !loanDuration) {
-                toastr.error('Harap isi semua kolom.');
-                return;
-            }
-
-            // Tampilkan swal konfirmasi
-            Swal.fire({
-                title: 'Konfirmasi Ke Player',
-                html: `
-                <div class="row mb-3">
-    <div class="col-md-12 d-flex justify-content-center">
-        <div class="d-flex w-50">
-            <div class="fw-bold text-start" style="width: 40%;">
-                Pinjaman
-            </div>
-            <div class="text-start" style="width: 60%;">
-                <span class="text-danger"> : Rp. ${loanAmount}</span>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-md-12 d-flex justify-content-center">
-        <div class="d-flex w-50">
-            <div class="fw-bold text-start" style="width: 40%;">
-                Bunga
-            </div>
-            <div class="text-start" style="width: 60%;">
-                <span class="text-warning"> : ${loanInterest}%</span>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mb-3">
-    <div class="col-md-12 d-flex justify-content-center">
-        <div class="d-flex w-50">
-            <div class="fw-bold text-start" style="width: 40%;">
-                Durasi
-            </div>
-            <div class="text-start" style="width: 60%;">
-                <span class="text-info"> : ${loanDuration} Hari</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Set Pinjaman!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Lakukan aksi setelah konfirmasi
-                    $.ajax({
-                        url: '/setPinjaman',
-                        method: 'POST',
-                        data: {
-                            player_username: selectedPlayer,
-                            loanAmount: loanAmount,
-                            loanInterest: loanInterest,
-                            loanDuration: loanDuration,
-                            _token: '{{ csrf_token() }}',
-                        },
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                toastr.success(response.message);
-                                table.row.add([
-                                    response.player_username,
-                                    response.day,
-                                    response.loanAmount,
-                                    response.loanInterest + '%',
-                                    response.loanDuration + ' Hari'
-                                ]).draw(false);
-
-                                $('#pinjaman-form')[0].reset();
-                                $('#player-select').val(null).trigger('change');
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function(xhr) {
-                            toastr.error('Gagal menambahkan pinjaman. Silakan coba lagi.');
+        Swal.fire({
+            title: 'Confirm Loan Details',
+            html: `
+                <div class="text-start">
+                    <p><i class="fas fa-user me-2"></i><strong>Player:</strong> ${selectedPlayer}</p>
+                    <p><i class="fas fa-money-bill me-2"></i><strong>Amount:</strong> $${loanValue.toLocaleString()}</p>
+                    <p><i class="fas fa-percentage me-2"></i><strong>Interest:</strong> ${loanInterest}%</p>
+                    <p><i class="fas fa-calendar me-2"></i><strong>Duration:</strong> ${loanDue} Days</p>
+                </div>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#4361ee',
+            cancelButtonColor: '#718096'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/setPinjaman',
+                    method: 'POST',
+                    data: {
+                        player_username: selectedPlayer,
+                        loanAmount: loanValue,
+                        loanInterest: loanInterest,
+                        loanDuration: loanDue,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            
+                            $('#loanHistory tbody').append(
+                                `
+                    <tr>
+                        <td>${response.player_username}</td>
+                        <td>${response.day}</td>
+                        <td>${response.loan_value}</td>
+                        <td>${response.loan_interest} %</td>
+                        <td>${response.loan_due}</td>
+                        <td>${response.before_loan}</td>
+                        <td>${response.after_loan}</td>
+                    </tr>
+                `
+                            )
+                        } else {
+                            toastr.error(response.message);
                         }
-                    });
-                }
-            });
-
+                        // Reset form and refresh table
+                        $('#pinjaman-form')[0].reset();
+                            $('#player-select').val(null).trigger('change');
+                    },
+                    error: function(xhr) {
+                        toastr.error('Failed to process loan. Please try again.');
+                    }
+                });
+            }
         });
     });
+});
 </script>
-
 @endsection

@@ -17,9 +17,12 @@ class PlayerRemove implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $playerUsername;
+    public $roomId;
+    public function __construct($playerUsername, $roomId)
     {
-        //
+        $this->playerUsername = $playerUsername;
+        $this->roomId = $roomId;
     }
 
     /**
@@ -32,5 +35,10 @@ class PlayerRemove implements ShouldBroadcastNow
         return [
             new Channel('player-remove'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'PlayerRemoveEvent'; // Nama event untuk diterima di client
     }
 }

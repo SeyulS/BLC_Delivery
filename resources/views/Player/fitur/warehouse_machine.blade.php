@@ -1,72 +1,290 @@
 @extends('layout.player_room')
 
 @section('container')
-<div class="container mt-4">
+<style>
+    :root {
+        /* Enhanced color palette with better contrast */
+        --primary: #2563eb;
+        --primary-light: #3b82f6;
+        --primary-dark: #1d4ed8;
+        --secondary: #475569;
+        --success: #059669;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --border: #e2e8f0;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --shadow: rgba(0, 0, 0, 0.05);
+    }
 
+    /* Layout */
+    .dashboard-container {
+        background-color: var(--background);
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
 
-    <!-- Warehouse Section -->
-    <div class="card mb-4">
-        <div class="card-header bg-light text-dark">
-            <h5>Warehouse</h5>
-        </div>
-        <div class="card-body">
-            <p id="warehouseCapacity"><strong>Warehouse Capacity:</strong> {{ $player->inventory }} m²</p>
-            <p id="currentCapacity"><strong>Current Capacity:</strong> {{ $usedCapacity }} m² / {{ $player->inventory }} m²</p>
-            <p><strong>Warehouse Price: </strong>{{ $room->warehouse_size }} m² - ${{ $room->warehouse_price }}</p>
-            <form>
-                @csrf
-                <!-- Input Hidden untuk warehouse_id -->
-                <input type="hidden" name="warehouse_id">
-                <!-- Button dengan room_id -->
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-dark" id="purchase">
-                    Purchase Warehouse
-                </button>
-            </form>
-        </div>
-    </div>
+    /* Cards */
+    .info-card {
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: 0 1px 2px var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
 
-    <!-- Machines Section -->
-    <div class="card">
-        <div class="card-header bg-light text-dark">
-            <h5>Machines</h5>
-        </div>
-        <div class="card-body">
-            <p><strong>Current Machine Capacities:</strong></p>
-            <ul>
-                @for ($i = 0; $i < count($playerMachineCapacity); $i++)
-                    <p>{{ $machineName[$i] }} : {{ $playerMachineCapacity[$i]}} Units</p>
-                    @endfor
-            </ul>
-            <form action="/purchaseMachine" method="POST">
-                <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+    .card-header {
+        background: var(--surface);
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
 
-                @csrf
-                <div class="form-group">
-                    <label for="machineType">Select Machine Type:</label>
-                    <select name="machineType" id="machineType" class="form-control" required>
-                        <option value="" disabled selected>Select Machine Type</option>
-                        @for ($i = 0; $i < count($machine); $i++)
-                            <option value="{{ $machine[$i] }}">{{ $machineName[$i] }} - ${{ $machinePrice[$i] }}</option>
-                            @endfor
-                    </select>
+    .card-header h5 {
+        color: var(--text-primary);
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .card-header i {
+        color: var(--primary);
+        font-size: 1.25rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Statistics Grid */
+    .warehouse-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+        background: var(--background);
+        padding: 1.25rem;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid var(--border);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary-light);
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    /* Machine Grid */
+    .machine-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .machine-card {
+        background: var(--background);
+        padding: 1.25rem;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .machine-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary-light);
+    }
+
+    .machine-card h6 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    /* Form Elements */
+    .form-control, .form-select {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        background-color: var(--surface);
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+    /* Buttons */
+    .btn-purchase {
+        background: var(--primary);
+        color: var(--surface);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-purchase:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    }
+
+    /* Helper Classes */
+    .text-muted {
+        color: var(--text-secondary) !important;
+    }
+
+    .fw-bold {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    /* Custom tooltip */
+    .tooltip-icon {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        transition: color 0.2s ease;
+    }
+
+    .tooltip-icon:hover {
+        color: var(--primary);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .warehouse-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .machine-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="container">
+        <!-- Warehouse Section -->
+        <div class="info-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Warehouse Management</h5>
+                <i class="fas fa-warehouse"></i>
+            </div>
+            <div class="card-body">
+                <div class="warehouse-stats">
+                    <div class="stat-box">
+                        <div class="stat-value" id="warehouseCapacity">{{ $player->inventory }} m²</div>
+                        <div class="stat-label">Total Capacity</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">{{ $usedCapacity }} m²</div>
+                        <div class="stat-label">Used Capacity</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">${{ number_format($room->warehouse_price) }}</div>
+                        <div class="stat-label">Price per {{ $room->warehouse_size }}m²</div>
+                    </div>
                 </div>
-                <script>
-                    document.querySelector("form").addEventListener("submit", function(event) {
-                        const machineType = document.getElementById("machineType").value;
-                        if (!machineType) {
-                            event.preventDefault();
-                            // toastr.error("Choose 1 Machine");
-                        }
-                    });
-                </script>
 
-                <br>
-                <button type="submit" class="btn btn-dark">Purchase Machine</button>
-            </form>
+                <form id="purchaseWarehouse">
+                    @csrf
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="number" 
+                                       class="form-control"
+                                       name="quantityPurchase" 
+                                       id="quantityPurchase"
+                                       placeholder="Enter purchase quantity" 
+                                       required>
+                                <span class="ms-2 d-flex align-items-center">
+                                    <i class="fas fa-question-circle tooltip-icon" 
+                                       data-bs-toggle="tooltip" 
+                                       title="Enter the number of warehouse units to purchase"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-purchase w-100" id="purchase">
+                                <i class="fas fa-plus-circle me-2"></i>Purchase Warehouse
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Machines Section -->
+        <div class="info-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>Machine Management</h5>
+                <i class="fas fa-cogs"></i>
+            </div>
+            <div class="card-body">
+                <div class="machine-grid" id="machineCapacities">
+                    @foreach($playerMachineCapacity as $index => $capacity)
+                        <div class="machine-card">
+                            <h6>{{ $machineName[$index] }}</h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">Production Capacity:</span>
+                                <span class="fw-bold">{{ $capacity }} Units</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <form id="purchaseMachine" action="/purchaseMachine" method="POST">
+                    @csrf
+                    <input type="hidden" name="room_id" value="{{ $room->room_id }}">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-8">
+                            <select name="machineType" id="machineType" class="form-select" required>
+                                <option value="" disabled selected>Select Machine Type</option>
+                                @foreach($machine as $index => $type)
+                                    <option value="{{ $type }}">
+                                        {{ $machineName[$index] }} - ${{ number_format($machinePrice[$index]) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-purchase w-100">
+                                <i class="fas fa-plus-circle me-2"></i>Purchase Machine
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(() => {
@@ -78,49 +296,52 @@
         toastr.error("{{ session('error') }}");
         @endif
 
-        const playerId = "{{ $player->player_username }}";
         const roomId = "{{ $room->room_id }}";
 
-        setupSimulationEvents(roomId);
-
-        // Event listener untuk pembelian warehouse
         $("#purchase").on("click", function(event) {
             event.preventDefault(); // Menghentikan default behavior tombol
 
+            var quantity = $('#quantityPurchase').val();
+            var warehouseSize = "{{ $room->warehouse_size }}";
+            var warehousePrice = "{{ $room->warehouse_price }}";
+            var roomId = "{{ $room->room_id }}";
+
+
             // Konfirmasi dengan SweetAlert
             Swal.fire({
-                title: 'Konfirmasi Pembelian Warehouse',
-                text: `Apakah Anda yakin ingin membeli warehouse dengan kapasitas ${{{ $room->warehouse_size }}} m² seharga ${{ $room->warehouse_price }}?`,
+                title: 'Warehouse Purchase Confirmation',
+                text: `You sure you want to buy warehouse with size ${quantity * warehouseSize} m² and price $${quantity * warehousePrice}?`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, beli!',
-                cancelButtonText: 'Batal',
+                confirmButtonText: 'Yes, BUY!',
+                cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Mencetak data yang dikirim pada form
                     console.log("Tombol Purchase ditekan");
-                    console.log("Player ID:", playerId);
                     console.log("Room ID:", roomId);
+                    console.log("Hello",quantity);
 
                     // Kirim form menggunakan AJAX jika konfirmasi
                     $.ajax({
                         url: '/purchaseWarehouse',
                         method: 'POST',
                         data: {
+                            quantityPurchase: quantity,
                             room_id: roomId,
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(response) {
                             console.log('Success Response:', response);
                             if (response.success) {
-                                $('#warehouseCapacity').html(`<strong>Warehouse Capacity:</strong> ${response.currentWarehouse} m²`);
-                                $('#currentCapacity').html(`<strong>Current Capacity:</strong> ${response.currentCapacity} m² / ${response.currentWarehouse} m²`);
-                                $('#player_inventory').html(`<p class="me-7">${response.player_inventory}</p>`);
+                                $('#warehouseCapacity').html(`${response.currentWarehouse} m²`);
+                                $('#currentCapacity').html(`${response.currentCapacity} m²`);
                                 $('#player_revenue').html(`<p class="me-7">${response.player_revenue}</p>`)
                                 toastr.success(response.message);
                             } else {
                                 toastr.error(response.message);
                             }
+                            $('#purchaseWarehouse')[0].reset();
                         },
                         error: function(xhr, status, error) {
                             console.log('Error Response:', xhr.responseText);
@@ -131,14 +352,13 @@
             });
         });
 
+
         // Event listener untuk pembelian mesin
         $("form[action='/purchaseMachine']").on("submit", function(event) {
             event.preventDefault(); // Menghentikan default behavior form submit
 
-            // Ambil data yang diperlukan
             const machineType = $('#machineType').val();
 
-            // Konfirmasi dengan SweetAlert
             Swal.fire({
                 title: 'Konfirmasi Pembelian Mesin',
                 text: `Apakah Anda yakin ingin membeli mesin ${machineType}?`,
@@ -148,7 +368,6 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Kirim form menggunakan AJAX jika konfirmasi
                     $.ajax({
                         url: '/purchaseMachine',
                         method: 'POST',
@@ -158,25 +377,37 @@
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(response) {
-                            console.log('Success Response:', response.message);
-                            if (response.status == 'fail') {
+                            console.log('Success Response:', response);
+
+                            if (response.status === 'fail') {
                                 toastr.error(response.message);
                             } else {
                                 toastr.success(response.message);
+                                let machineCapacityHtml = ""; // Tambahkan deklarasi variabel
+                                for (let i = 0; i < response.currentCapacity.length; i++) {
+                                    machineCapacityHtml += `<div class="machine-card">
+                                                                <h6 class="mb-2">${response.machineName[i]}</h6>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <span class="text-muted">Current Production Capacity:</span>
+                                                                    <span class="fw-bold">${response.currentCapacity[i]} Units</span>
+                                                                </div>
+                                                            </div>`;
+                                }
+                                $("#machineCapacities").html(machineCapacityHtml);
+                                $("#player_revenue").html(response.revenue);
+                                $('#purchaseMachine')[0].reset();
+
+
                             }
                         },
-                        error: function(xhr, status, error) {
-                            console.log('Error Response:', xhr.responseText);
+                        error: function(xhr) {
                             toastr.error('Error: ' + xhr.responseText);
                         }
                     });
                 }
             });
         });
-
     });
 </script>
-
-
 
 @endsection

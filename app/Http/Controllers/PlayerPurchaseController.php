@@ -18,22 +18,21 @@ class PlayerPurchaseController extends Controller
         $room = Room::where('room_id', $request->input('room_id'))->first();
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
-
-        $price = $room->warehouse_price;
-
-        if ($player->revenue - $price < 0) {
-            // Jika gagal
-        return response()->json([
-            'success' => false,
-            'message' => 'Pembelian Warehouse Gagal, Saldo Tidak Mencukupi',
-        ]);
+        if ($room->status == 0){
+            return response()->json([
+                'success' => false,
+                'message' => 'The simulation was paused',
+            ]);
+        }
+        if ($player->revenue - ($request->input('quantityPurchase') * $room->warehouse_price) < 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pembelian Warehouse Gagal, Saldo Tidak Mencukupi',
+            ]);
         }
 
-        
-        $revenue = $player->revenue - $room->warehouse_price;
-        $inventory = $player->inventory + $room->warehouse_size;
-        $player->revenue = $revenue;
-        $player->inventory = $inventory;
+        $player->revenue = $player->revenue - ($request->input('quantityPurchase') * $room->warehouse_price);
+        $player->inventory = $player->inventory + ($request->input('quantityPurchase')*$room->warehouse_size);
 
         $totalCapacity = 0;
 
@@ -54,21 +53,26 @@ class PlayerPurchaseController extends Controller
         $player->save();
         return response()->json([
             'success' => true,
-            'player_revenue' => $revenue,
-            'player_inventory' => $inventory,
+            'player_revenue' => $player->revenue,
+            'player_inventory' => $player->inventory,
             'currentWarehouse' => $player->inventory,
             'currentCapacity' => $totalCapacity,
-            'message' => 'Pembelian Warehouse Berhasil',
+            'quantity' => $request->input('quantityPurchase'),
+            'message' => 'Warehouse Purchase Success',
         ]);
-    
     }
 
     public function purchaseMachine(Request $request)
     {
         $room = Room::where('room_id', $request->input('room_id'))->first();
+        if($room->status == 0){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'The simulation was paused'
+            ]);
+        }
         $machine = Machine::where('id', $request->input('machineType'))->first();
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
-
 
         $price = $machine->machine_price;
         $capacity = $machine->machine_size;
@@ -76,7 +80,7 @@ class PlayerPurchaseController extends Controller
         if ($player->revenue - $price < 0) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Saldo tidak cukup !!'
+                'message' => 'Dont have enough money !!'
             ]);
         }
 
@@ -89,7 +93,7 @@ class PlayerPurchaseController extends Controller
 
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
-            $queryItem = Items::where('id',$roomItemIndex[$i])->first();
+            $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
         }
 
@@ -97,13 +101,11 @@ class PlayerPurchaseController extends Controller
         if ($totalCapacity + $capacity > $player->inventory) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Warehouse tidak cukup !!'
+                'message' => 'Warehouse doesnt fit !!'
             ]);
         }
 
-
         $player->revenue = $player->revenue - $price;
-
         $index = 0;
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             if ($roomMachineIndex[$i] != $request->input('machineType')) {
@@ -114,12 +116,23 @@ class PlayerPurchaseController extends Controller
         }
 
         $currentMachineCapacity[$index] = $currentMachineCapacity[$index] + 1;
+        $currentProductionCapacity = [];
+        $machineName = [];
+
+        for ($i = 0; $i < count($roomMachineIndex); $i++) {
+            $machineName[] = Machine::where('id', $roomMachineIndex[$i])->first()->machine_name;
+            $currentProductionCapacity[] = $currentMachineCapacity[$i] * Machine::where('id', $roomMachineIndex[$i])->first()->production_capacity;
+        }
+
         $player->machine_capacity = json_encode($currentMachineCapacity);
         $player->save();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Pembelian Mesin Berhasil !!'
+            'message' => 'Machine Purchase Success !!',
+            'machineName' => $machineName,
+            'currentCapacity' => $currentProductionCapacity,
+            'revenue' => $player->revenue
         ]);
     }
 
@@ -136,7 +149,7 @@ class PlayerPurchaseController extends Controller
 
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
-            $queryItem = Items::where('id',$roomItemIndex[$i])->first();
+            $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 

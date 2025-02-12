@@ -10,6 +10,10 @@ class Demand extends Model
     use HasFactory;
     protected $table = 'demand';
 
+    protected $fillable = ['player_username', 'room_id', 'demand_id', 'day'];
+    protected $primaryKey = 'id';
+
+
     public function player()
     {
         $this->belongsTo(Player::class);

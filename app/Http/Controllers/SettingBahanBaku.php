@@ -54,7 +54,10 @@ class SettingBahanBaku extends Controller
         $query = Player::where('player_username', $request->player_id)->first();
 
         if ($query->revenue < $price) {
-            return response()->json(['fail', "Saldo Player tidak mencukupi"]);
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Saldo Player Tidak Mencukupi !!!'
+            ]);
         } else {
             
             // Update Inventory Raw Items
@@ -78,7 +81,11 @@ class SettingBahanBaku extends Controller
 
             UpdateRevenue::dispatch();
             
-            return response()->json("Pembelian Player Berhasil");
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Pembelian Berhasil',
+                'price' => $price
+            ]);
         }
     }
 }

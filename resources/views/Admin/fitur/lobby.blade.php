@@ -1,10 +1,9 @@
 @extends('layout.admin_room')
 
 @section('script')
-<!-- Load jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Load DataTables -->
 <script src="https://cdn.datatables.net/2.2.0/js/dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 
 @section('container')
@@ -12,56 +11,183 @@
 {{ $room->room_id }}
 @endsection
 
-<div class="container mt-4">
-    <div class="col-md-12 mt-4">
-        <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <h4>Room {{ $room->room_id }}</h4>
-            <hr>
-            <table class="table w-100" id="player-datatable">
-                <thead>
-                    <tr>
-                        <th scope="col">Player Name</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Tombol Action -->
-    <div class="mt-3">
-    <div class="col-md-12 mt-4">
-        <div class="p-4" style="background-color: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-            <form action="/startSimulation" method="POST" class="d-inline-block">
-                @csrf
-                @if ($room->status == 1)
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary" disabled>Start Simulation</button>
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="lobby-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">Room #{{ $room->room_id }}</h2>
+            </div>
+            <div class="lobby-status">
+                @if ($room->start == 1)
+                <span class="badge bg-success px-3 py-2">
+                    <i class="fas fa-play-circle me-2"></i>Simulation Running
+                </span>
                 @else
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Start Simulation</button>
+                <span class="badge bg-warning px-3 py-2">
+                    <i class="fas fa-clock me-2"></i>Waiting to Start
+                </span>
                 @endif
-            </form>
-            <form action="/pauseSimulation" method="POST" class="d-inline-block">
-                @csrf
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Pause Simulation</button>
-            </form>
-            <form action="/resumeSimulation" method="POST" class="d-inline-block">
-                @csrf
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Resume Simulation</button>
-            </form>
-            <form action="/nextDaySimulation" method="POST" class="d-inline-block">
-                @csrf
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">Next Day</button>
-            </form>
-            <form action="/endSimulation" method="POST" class="d-inline-block">
-                @csrf
-                <button type="submit" name="room_id" value="{{ $room->room_id }}" class="btn btn-primary">End Simulation</button>
-            </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Players List Section -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fas fa-users me-2 text-primary"></i>Players in Room
+                            </h5>
+                            <span class="badge bg-light text-dark px-3 py-2" id="player-count">
+                                Loading players...
+                            </span>
+                        </div>
+                        <table class="table table-hover mb-0" id="player-datatable">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="px-4 py-3">Player Name</th>
+                                    <th class="px-4 py-3 text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel Section -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fas fa-gamepad me-2 text-primary"></i>Simulation Controls
+                    </h5>
+                    <div class="d-grid gap-3">
+                        <form action="/startSimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
+                                {{ $room->start == 1 ? 'disabled' : '' }}>
+                                <i class="fas fa-play me-2"></i>Start Simulation
+                            </button>
+                        </form>
+
+                        <div class="btn-group w-100">
+                            <form action="/pauseSimulation" method="POST" class="w-50">
+                                @csrf
+                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                    class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-pause me-2"></i>Pause
+                                </button>
+                            </form>
+                            <form action="/resumeSimulation" method="POST" class="w-50">
+                                @csrf
+                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                    class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-play me-2"></i>Resume
+                                </button>
+                            </form>
+                        </div>
+
+                        <form action="/nextDaySimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-success w-100">
+                                <i class="fas fa-forward me-2"></i>Next Day
+                            </button>
+                        </form>
+
+                        <form action="/endSimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-danger w-100">
+                                <i class="fas fa-stop-circle me-2"></i>End Simulation
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-</div>
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --danger-color: #dc2626;
+        --success-color: #16a34a;
+        --warning-color: #d97706;
+    }
+
+    .card {
+        border-radius: 12px;
+        transition: transform 0.2s;
+    }
+
+    .btn {
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+
+    .btn-danger {
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+
+    .btn-outline-primary {
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 1rem 1.5rem;
+        vertical-align: middle;
+    }
+
+    .table>tbody>tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
+
+    .kick-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        background-color: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+    }
+
+    .kick-btn:hover {
+        background-color: #b91c1c;
+        border-color: #b91c1c;
+    }
+</style>
 
 <script>
     $(document).ready(() => {
@@ -81,28 +207,32 @@
                     name: 'player_username'
                 },
                 {
-                    data: 'id',
+                    data: 'player_username', // Menggunakan player_username bukan id
                     name: 'action',
                     orderable: false,
                     searchable: false,
                     render: (data) => {
                         return `
-                        <form action='kick-player' method='POST' class='form-delete'>
-                            @csrf
-                            <button class="btn btn-danger btn-sm kick-player" data-id="${data}">
-                                Kick
-                            </button>
-                        </form>`;
+            <form action='kick-player' method='POST' class='form-delete'>
+                @csrf
+                <button type="submit" class="btn kick-btn" data-username="${data}">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </form>`;
                     },
                 },
             ],
+
         });
 
         // Listen for player join event and reload table
         window.Echo.channel('join-room')
-            .listen('PlayerJoin', () => {
-                console.log('Player joined');
-                datatable.ajax.reload();
+            .listen('.JoinRoomEvent', (event) => {
+                var roomIdEvent = event.roomId;
+                if (roomId == roomIdEvent) {
+                    datatable.ajax.reload();
+                    toastr.success('Player Joined');
+                }
             });
 
         // Handle player kick
@@ -110,11 +240,11 @@
             e.preventDefault();
 
             const form = this;
-            const playerId = $(form).find('.kick-player').data('id');
-
+            const playerUsername = $(form).find('.kick-btn').data('username'); // Ambil player_username
+            console.log(playerUsername);
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'Do you really want to kick this player?',
+                text: `Do you really want to kick ${playerUsername}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -127,12 +257,13 @@
                         url: '/kick-player',
                         type: 'POST',
                         data: {
-                            player_id: playerId,
+                            player_username: playerUsername,
                             _token: '{{ csrf_token() }}',
                         },
                         success: (response) => {
+                            console.log(response);
                             toastr.success(response.message);
-                            datatable.ajax.reload();
+                            $('#player-datatable').DataTable().ajax.reload();
                         },
                         error: (xhr) => {
                             const errorMsg = xhr.responseJSON?.message || 'Failed to kick player';
@@ -142,6 +273,7 @@
                 }
             });
         });
+
     });
 </script>
 @endsection

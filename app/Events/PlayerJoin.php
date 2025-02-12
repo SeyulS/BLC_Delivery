@@ -17,20 +17,26 @@ class PlayerJoin implements ShouldBroadcastNow
 /*
      * Create a new event instance.
      */
-    public function __construct()
+    public $roomId;
+
+    public function __construct($roomId)
     {
-        //
+        $this->roomId = $roomId;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>k
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     public function broadcastOn(): array
     {
         return [
             new Channel('join-room'),
         ];
+    }
+    public function broadcastAs()
+    {
+        return 'JoinRoomEvent'; // Nama event untuk diterima di client
     }
 }

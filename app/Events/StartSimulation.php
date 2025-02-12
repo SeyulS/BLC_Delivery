@@ -18,9 +18,11 @@ class StartSimulation implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct()
+
+    public $roomId;
+    public function __construct($roomId)
     {
-        //
+        $this->roomId = $roomId;
     }
 
     /**
@@ -33,5 +35,10 @@ class StartSimulation implements ShouldBroadcastNow
         return [
             new Channel('start-simulation'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'StartSimulationEvent'; // Nama event untuk diterima di client
     }
 }

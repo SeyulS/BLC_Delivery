@@ -15,9 +15,9 @@
             </a>    
         </li>
         <li class="sidebar-item">
-            <a href="/homeAdmin" class="sidebar-link">
+            <a href="/manageAccount" class="sidebar-link">
                 <i class="lni lni-user"></i>
-                <span>Manage Player</span>
+                <span>Manage Account</span>
             </a>    
         </li>
         <li class="sidebar-item">
@@ -30,20 +30,6 @@
             <a href="/manageData" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
                 <span>Manage Data</span>
-            </a>
-        </li>
-        
-        
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-                <i class="lni lni-popup"></i>
-                <span>Notification</span>
-            </a>
-        </li>
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-                <i class="lni lni-cog"></i>
-                <span>Setting</span>
             </a>
         </li>
     </ul>

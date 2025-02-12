@@ -1,11 +1,111 @@
 @extends('layout.player_room')
 
 @section('container')
-
 <style>
-    .locked-image {
-        opacity: 0.5;
-        pointer-events: none;
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #2ea44f;
+        --warning-color: #f7b731;
+        --danger-color: #dc3545;
+        --dark-color: #1e2a35;
+        --light-color: #f8f9fa;
+        --border-color: #e2e8f0;
+    }
+
+    .production-dashboard {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        background: white;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+
+    .machine-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .machine-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .machine-image {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .machine-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+
+    .machine-content {
+        padding: 1.5rem;
+    }
+
+    .machine-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 1rem;
+    }
+
+    .machine-stats {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .production-input {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .quantity-input {
+        width: 100px;
+        text-align: center;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .quantity-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .capacity-badge {
+        background: var(--dark-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .locked-machine {
+        position: relative;
     }
 
     .locked-overlay {
@@ -14,98 +114,105 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.7);
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         color: white;
-        font-size: 2rem;
-        font-weight: bold;
-        z-index: 1;
-        pointer-events: none;
+        z-index: 2;
     }
 
-    .card {
-        border: none;
-        border-radius: 10px;
-        overflow: hidden;
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card img {
-        height: 150px;
-        object-fit: cover;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .card-title {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .machine-input {
-        width: 60px;
-        margin-right: 10px;
-    }
-
-    .badge {
-        font-size: 0.9rem;
-        padding: 5px 10px;
+    .lock-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
     }
 
     .btn-produce {
-        width: 100%;
-        margin-top: 20px;
-        font-size: 1rem;
+        background: var(--dark-color);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-produce:hover {
+        background: var(--light-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
     }
 </style>
 
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Production Page</h2>
-    <form action="/produceItem" method="POST">
-        @csrf
-        <div class="row g-4">
-            @for ($i = 0; $i < count($roomMachine); $i++)
-                <input type="hidden" name="machine_id[]" value="{{ $roomMachine[$i] }}">
-                <div class="col-md-4">
-                    <div class="card shadow-sm position-relative">
-                        @if($playerMachineCapacity[$i] == 0)
-                        <div class="locked-overlay">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        @endif
-                        <!-- Menggunakan Lorem Picsum untuk gambar acak -->
-                        <img src="https://picsum.photos/300/150?random={{ $i }}" alt="Random Image"
-                            class="img-fluid {{ $playerMachineCapacity[$i] == 0 ? 'locked-image' : '' }}">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $roomMachineName[$i] }}</h5>
-                            <div class="d-flex justify-content-center align-items-center mt-2">
-                                <input type="number"
-                                    class="form-control text-center machine-input"
-                                    min="0"
-                                    max="{{ $playerMachineCapacity[$i] }}"
-                                    name="quantityProduce[]"
-                                    value="{{ old('quantityProduce.' . $i, 0) }}"
-                                    {{ $playerMachineCapacity[$i] == 0 ? 'readonly' : '' }}>
-                                <span class="badge bg-secondary">Max: {{ $playerMachineCapacity[$i] }}</span>
+<div class="production-dashboard">
+    <div class="container">
+
+        <!-- Production Form -->
+        <form action="/produceItem" method="POST">
+            @csrf
+            <div class="row g-4 mb-4">
+                @for ($i = 0; $i < count($roomMachine); $i++)
+                    <input type="hidden" name="machine_id[]" value="{{ $roomMachine[$i] }}">
+                    <div class="col-md-4">
+                        <div class="machine-card {{ $playerMachineCapacity[$i] == 0 ? 'locked-machine' : '' }}">
+                            @if($playerMachineCapacity[$i] == 0)
+                            <div class="locked-overlay">
+                                <i class="fas fa-lock lock-icon"></i>
+                                <input type="hidden" name="quantityProduce[]" value="0">
+                                <p>Machine Locked</p>
+                            </div>
+                            @endif
+
+                            <div class="machine-image">
+                                <img src="https://picsum.photos/400/300?random={{ $i }}"
+                                    alt="{{ $roomMachineName[$i] }}"
+                                    class="{{ $playerMachineCapacity[$i] == 0 ? 'locked-image' : '' }}">
+                            </div>
+
+                            <div class="machine-content">
+                                <h5 class="machine-title">
+                                    <i class="fas fa-industry me-2"></i>
+                                    {{ $roomMachineName[$i] }}
+                                </h5>
+
+                                <div class="machine-stats">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted">Max Production Capacity</span>
+                                        <span class="capacity-badge">
+                                            {{ $playerMachineCapacity[$i] }} units
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="production-input">
+                                    <input type="number"
+                                        class="quantity-input"
+                                        min="0"
+                                        max="{{ $playerMachineCapacity[$i] }}"
+                                        name="quantityProduce[]"
+                                        value="{{ old('quantityProduce.' . $i, 0) }}"
+                                        {{ $playerMachineCapacity[$i] == 0 ? 'disabled' : '' }}
+                                        placeholder="0">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                @endfor
-        </div>
-        <button type="submit" class="btn btn-dark btn-produce">Produce</button>
-    </form>
+                    @endfor
+            </div>
+
+            <button type="submit" class="btn btn-produce w-100">
+                <i class="fas fa-play-circle me-2"></i>
+                Start Production
+            </button>
+        </form>
+    </div>
 </div>
 
 <script>
     $(document).ready(() => {
+        // Toast notifications
         @if(session('success'))
         toastr.success("{{ session('success') }}");
         @endif
@@ -114,54 +221,44 @@
         toastr.error("{{ session('fail') }}");
         @endif
 
-        const playerId = "{{ $player->player_username }}";
-        const roomId = "{{ $room->room_id }}";
+        // Form submission handling
+        $("form[action='/produceItem']").on("submit", function(e) {
+            e.preventDefault();
 
-        setupSimulationEvents(roomId);
+            let hasProduction = false;
+            $("input[name='quantityProduce[]']").each(function() {
+                if (parseInt($(this).val()) > 0) {
+                    hasProduction = true;
+                }
+            });
 
-        // SweetAlert Confirmation sebelum submit form Produce
-        $("form[action='/produceItem']").on("submit", function(event) {
-            event.preventDefault(); // Menghentikan default behavior form submit
+            if (!hasProduction) {
+                toastr.warning('Please set production quantity for at least one machine');
+                return;
+            }
 
-            // Konfirmasi dengan SweetAlert
             Swal.fire({
-                title: 'Konfirmasi Produksi',
-                text: 'Apakah Anda yakin ingin memproduksi barang dengan jumlah yang telah dipilih?',
-                icon: 'warning',
+                title: 'Confirm Production',
+                html: `
+                <div class="text-start">
+                    <p>Are you sure you want to start production with these quantities?</p>
+                    <small class="text-muted">This action cannot be undone</small>
+                </div>
+            `,
+                icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Produksi!',
-                cancelButtonText: 'Batal',
+                confirmButtonText: 'Start Production',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#4361ee',
+                cancelButtonColor: '#718096'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Jika user memilih "Ya, Produksi!", submit form
-                    this.submit(); // Submit form setelah konfirmasi
+                    this.submit();
                 }
             });
         });
 
-        window.Echo.channel('update-warehouse')
-            .listen('UpdateWarehouse', () => {
-                $.ajax({
-                    url: '/updateWarehouse',
-                    method: 'POST',
-                    data: {
-                        player_id: playerId,
-                        room_id: roomId,
-                        _token: '{{ csrf_token() }}',
-                    },
-                    success: function(response) {
-                        if (response.revenue !== undefined) {
-                            $('#warehouseCapacity').text(`Revenue: ${response.warehouseCapacity}`);
-                            $('#currentCapacity').text(`Revenue: ${response.currentCapacity}`);
-                        }
-                    },
-                    error: (xhr) => {
-                        toastr.error('Failed to fetch revenue:', xhr.responseText);
-                    }
-                });
-            });
+        // Your existing Echo listeners...
     });
 </script>
-
-
 @endsection

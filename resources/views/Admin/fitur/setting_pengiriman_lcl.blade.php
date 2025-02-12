@@ -3,19 +3,18 @@
 @section('container')
 <div class="container">
     <div class="row">
-        <!-- Column 1: Form Input Pinjaman -->
         <div class="col-md-4">
             <div class="p-4 shadow-sm h-100" style="background-color: white; border-radius: 8px;">
                 <h4>Less Container Load</h4>
                 <hr>
-                <form id="pinjaman-form">
+                <form id="pengiriman-form">
                     @csrf
                     <input type="hidden" name="room_id" value="{{ $room->room_id }}">
                     <!-- Select Player -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="team-select" class="form-label mt-3">Player</label>
-                            <select class="form-select form-select-lg mb-3" id="team-select" aria-label="Large select example" name="player_username">
+                            <select class="form-select form-select-lg mb-3" id="team-select" aria-label="Large select example" name="player_username" required>
                                 <option value="" selected disabled>Select Team</option>
                                 @foreach($players as $player)
                                 <option value="{{ $player->player_username }}">{{ $player->player_username }}</option>
@@ -26,7 +25,7 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="demand-select" class="form-label mt-3">Demand</label>
-                            <select class="form-select form-select-lg mb-3" id="demand-select" aria-label="Large select example">
+                            <select class="form-select form-select-lg mb-3" id="demand-select" aria-label="Large select example" required>
                                 <option value="" selected disabled>Select Demand</option>
                             </select>
                         </div>
@@ -108,82 +107,97 @@
     <div class="row">
         <div class="col-md-4">
             <div class="p-4 shadow-sm mt-4" style="background-color: white; border-radius: 8px;">
-                <h6>Balikpapan</h6>
+                <h6>{{ $bjm->destination }}</h6>
                 <hr>
                 <!-- Kapasitas Volume -->
                 <div class="mb-3">
                     <label for="kapasitas-volume" class="form-label"><strong>Kapasitas Volume</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 42.85%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="70"></div>
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{ ($bjm->current_volume_capacity / $bjm->max_volume_capacity) * 100 }}%"
+                            aria-valuenow="{{ $bjm->current_volume_capacity }}"
+                            aria-valuemin="0"
+                            aria-valuemax="{{ $bjm->max_volume_capacity }}"></div>
+
                     </div>
-                    <small class="text-muted">30/70 m³</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $bjm->current_volume_capacity }}/{{ $bjm->max_volume_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Kapasitas Berat -->
                 <div class="mb-3">
                     <label for="kapasitas-berat" class="form-label"><strong>Kapasitas Berat</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ($bjm->current_weight_capacity / $bjm->max_weight_capacity) * 100 }}%" aria-valuenow="{{ $bjm->current_weight_capacity }}" aria-valuemin="0" aria-valuemax="{{ $bjm->max_weight_capacity}}"></div>
                     </div>
-                    <small class="text-muted">50/100 kg</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $bjm->current_weight_capacity }}/{{ $bjm->max_weight_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Harga -->
                 <div class="mb-3">
                     <label for="harga" class="form-label"><strong>Harga</strong></label>
-                    <p>Rp. 500.000 / m3</p>
+                    <p>{{ $bjm->price }} / m3</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="p-4 shadow-sm mt-4" style="background-color: white; border-radius: 8px;">
-                <h6>Manado</h6>
+                <h6>{{ $mnd->destination }}</h6>
                 <hr>
                 <!-- Kapasitas Volume -->
                 <div class="mb-3">
                     <label for="kapasitas-volume" class="form-label"><strong>Kapasitas Volume</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 42.85%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="70"></div>
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{ ($mnd->current_volume_capacity / $mnd->max_volume_capacity) * 100 }}%"
+                            aria-valuenow="{{ $mnd->current_volume_capacity }}"
+                            aria-valuemin="0"
+                            aria-valuemax="{{ $mnd->max_volume_capacity }}"></div>
+
                     </div>
-                    <small class="text-muted">30/70 m³</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $mnd->current_volume_capacity }}/{{ $mnd->max_volume_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Kapasitas Berat -->
                 <div class="mb-3">
                     <label for="kapasitas-berat" class="form-label"><strong>Kapasitas Berat</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ($mnd->current_weight_capacity / $mnd->max_weight_capacity) * 100 }}%" aria-valuenow="{{ $mnd->current_weight_capacity }}" aria-valuemin="0" aria-valuemax="{{ $mnd->max_weight_capacity}}"></div>
                     </div>
-                    <small class="text-muted">50/100 kg</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $mnd->current_weight_capacity }}/{{ $mnd->max_weight_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Harga -->
                 <div class="mb-3">
                     <label for="harga" class="form-label"><strong>Harga</strong></label>
-                    <p>Rp. 500.000 / m3</p>
+                    <p>{{ $mnd->price }} / m3</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="p-4 shadow-sm mt-4" style="background-color: white; border-radius: 8px;">
-                <h6>Madiun</h6>
+                <h6>{{ $mks->destination }}</h6>
                 <hr>
                 <!-- Kapasitas Volume -->
                 <div class="mb-3">
                     <label for="kapasitas-volume" class="form-label"><strong>Kapasitas Volume</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 42.85%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="70"></div>
+                        <div class="progress-bar" role="progressbar"
+                            style="width: {{ ($mks->current_volume_capacity / $mks->max_volume_capacity) * 100 }}%"
+                            aria-valuenow="{{ $mks->current_volume_capacity }}"
+                            aria-valuemin="0"
+                            aria-valuemax="{{ $mks->max_volume_capacity }}"></div>
+
                     </div>
-                    <small class="text-muted">30/70 m³</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $mks->current_volume_capacity }}/{{ $mks->max_volume_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Kapasitas Berat -->
                 <div class="mb-3">
                     <label for="kapasitas-berat" class="form-label"><strong>Kapasitas Berat</strong></label>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ ($mks->current_weight_capacity / $mks->max_weight_capacity) * 100 }}%" aria-valuenow="{{ $mks->current_weight_capacity }}" aria-valuemin="0" aria-valuemax="{{ $mks->max_weight_capacity}}"></div>
                     </div>
-                    <small class="text-muted">50/100 kg</small> <!-- Current / Max -->
+                    <small class="text-muted">{{ $mks->current_weight_capacity }}/{{ $mks->max_weight_capacity}}</small> <!-- Current / Max -->
                 </div>
                 <!-- Harga -->
                 <div class="mb-3">
                     <label for="harga" class="form-label"><strong>Harga</strong></label>
-                    <p>Rp. 500.000 / m3</p>
+                    <p>{{ $mks->price }} / m3</p>
                 </div>
             </div>
         </div>
@@ -223,7 +237,6 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        console.log(response);
                         $('#demand-select').empty();
                         $('#demand-select').append('<option value="" selected disabled>Select Demand</option>');
 
@@ -242,6 +255,65 @@
                 $('#demand-select').append('<option value="" selected disabled>Select Demand</option>');
             }
         });
+        $('#pengiriman-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var playerUsername = $('#team-select').val();
+            var demandId = $('#demand-select').val();
+            var demandText = $('#demand-select option:selected').text();
+
+            if (!playerUsername || !demandId) {
+                toastr.error('Please select both Team and Demand.');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                html: `
+            <strong>Player : </strong> ${playerUsername} <br>
+            <strong>Demand : </strong> ${demandText} <br>
+            Konfirmasi ulang kepada Player
+        `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log(playerUsername, demandId);
+
+                    $.ajax({
+                        url: '/kirimLCL',
+                        method: 'POST',
+                        data: {
+                            player_username: playerUsername,
+                            demand_id: demandId,
+                            room_id: '{{ $room->room_id }}',
+                            current_day: '{{ $room->recent_day }}',
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == 'fail') {
+                                toastr.error(response.message);
+                            } else {
+                                toastr.success(response.message);
+                            }
+                            $('#pengiriman-form')[0].reset();
+                            $('#demand-select').empty();
+                            $('#demand-select').append('<option value="" selected disabled>Select Demand</option>');
+                        },
+                        error: function(xhr) {
+                            console.log('Failed to send data:', xhr.responseText);
+                        }
+                    });
+                } else {
+                    console.log('Submission canceled');
+                }
+            });
+        });
+
     });
 </script>
 

@@ -17,10 +17,13 @@ class ProductionController extends Controller
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
         $room = Room::where('room_id', $player->room_id)->first();
-
+        if ($room->status == 0){
+            return back()->with('fail', 'The simulation was paused !');
+        }
         if ($player->produce == 1) {
             $machineList = $request->input('machine_id', []);
             $inputProduce = $request->input('quantityProduce', []);
+
 
             $inputProduce = array_map(function ($quantity) {
                 return $quantity === null || $quantity === '' ? 0 : (int)$quantity;
@@ -66,20 +69,13 @@ class ProductionController extends Controller
                 }
             }
 
-            // Cari harga material
-            $price = 0;
-            for ($i = 0; $i < count($rawItem); $i++) {
-                $query = Raw_Item::where('id', $rawItem[$i])->first();
-                $price = $price + ($query->raw_item_price * $BOM[$i]);
-            }
-
             $playerRawItems = json_decode($player->raw_items);
             $playerItems = json_decode($player->items);
 
             // Cek Apakah Raw Item Player Cukup ???
             for ($i = 0; $i < count($playerRawItems); $i++) {
                 if ($playerRawItems[$i] < $BOM[$i]) {
-                    return back()->with('fail', 'Bahan Tidak Mencukupi');
+                    return back()->with('fail', 'You need more raw items !');
                 }
             }
 
@@ -104,15 +100,9 @@ class ProductionController extends Controller
 
             // Cek Inventory Cukup ?
             if ($currentCapacity + $sizeItemProduce > $player->inventory) {
-                return back()->with('fail', 'Warehouse Tidak Mencukupi');
+                return back()->with('fail', 'You need larger warehouse !');
             }
-
-            // Cek Saldo Player
-            if ($player->revenue - $price < 0) {
-                return back()->with('fail', 'Saldo Tidak Mencukupi');
-            }
-
-
+    
             for ($i = 0; $i < count($playerRawItems); $i++) {
                 $playerRawItems[$i] = $playerRawItems[$i] - $BOM[$i];
             }
@@ -123,15 +113,14 @@ class ProductionController extends Controller
 
 
             $player->raw_items = json_encode($playerRawItems);
-            $player->revenue = $player->revenue - $price;
             $player->items = json_encode($playerItems);
             $player->produce = 0;
             $player->save();
 
 
-            return back()->with('success', 'Berhasil Diproduksi !');
+            return back()->with('success', 'Successfully Produce !');
         } else {
-            return back()->with('fail', 'Hanya bisa memproduksi 1 kali !');
+            return back()->with('fail', 'You can only produce once !');
         }
     }
 }

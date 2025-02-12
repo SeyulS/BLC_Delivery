@@ -19,7 +19,7 @@ class DemandFactory extends Factory
             'tujuan_pengiriman' => $tujuan_pengiriman[array_rand($tujuan_pengiriman)],
             'day' => mt_rand(1,2),
             'need_day' => mt_rand(4, 5),
-            'item_index' => $this->faker->numberBetween(0, 2),
+            'item_index' => $this->faker->numberBetween(1, 2),
             'quantity' => $this->faker->numberBetween(1, 5),
             'revenue' => $this->faker->randomFloat(2, 100, 10000),
         ];

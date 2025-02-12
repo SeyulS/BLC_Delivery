@@ -21,10 +21,11 @@ return new class extends Migration
             $table->json('machine_chosen')->nullable();
             $table->integer('warehouse_size')->nullable();
             $table->integer('warehouse_price')->nullable();
-            $table->foreignId('deck_id');
+            $table->double('early_delivery_charge')->nullable();
             $table->double('late_delivery_charge')->nullable();
             $table->double('inventory_cost')->nullable();
             $table->integer('status');
+            $table->integer('start');
             $table->timestamps();
         });
         

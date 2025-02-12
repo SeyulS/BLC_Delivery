@@ -19,6 +19,7 @@
 <script>
     $(document).ready(() => {
         const roomId = "{{ $room->room_id }}";
+        const playerUsername = "{{ $player->player_username }}";
         const datatable = $('#player-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -33,16 +34,107 @@
             }, ],
         });
 
-        setupSimulationEvents(roomId);
-
         window.Echo.channel('join-room')
-            .listen('PlayerJoin', () => {
-                datatable.ajax.reload();
+            .listen('.JoinRoomEvent', (event) => {
+                if (event.roomId == roomId) {
+                    window.location.href = "/homePlayer"
+                }
             });
 
         window.Echo.channel('player-remove')
-            .listen('PlayerRemove', () => {
-                window.location.href = "/homePlayer"
+            .listen('.PlayerRemoveEvent', (event) => {
+                if (event.playerUsername == playerUsername) {
+                    window.location.href = '/homePlayer'
+                }
+                if (event.roomId == roomId) {
+                    datatable.ajax.reload();
+                }
+
+            });
+
+        window.Echo.channel('start-simulation')
+            .listen('.StartSimulationEvent', (event) => {
+                if (event.roomId = roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation has started',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('pause-simulation')
+            .listen('.PauseSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was paused',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('resume-simulation')
+            .listen('.ResumeSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was resumed',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('next-day')
+            .listen('.NextDaySimulationEvent', (event) => {
+                console.log(event.roomId, roomId);
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'Moving to the next day. Please wait.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
             });
 
     });

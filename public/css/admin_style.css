@@ -113,6 +113,23 @@ a.sidebar-link:hover {
     position: relative;
 }
 
+/* Make sure dropdowns are hidden by default */
+#sidebar .sidebar-dropdown {
+    display: none;
+}
+
+/* When the sidebar is expanded, display the dropdown */
+#sidebar.expand .sidebar-dropdown {
+    display: block !important;
+}
+
+/* Ensuring the collapse class is correctly applied */
+.sidebar-link.collapsed + .sidebar-dropdown {
+    display: none !important;
+}
+
+
+
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
     position: absolute;
     top: 0;
@@ -124,7 +141,6 @@ a.sidebar-link:hover {
 }
 
 #sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
-    display: block;
     max-height: 15em;
     width: 100%;
     opacity: 1;

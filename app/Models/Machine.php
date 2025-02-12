@@ -9,4 +9,9 @@ class Machine extends Model
 {
     public $table = 'machine';
     use HasFactory;
+
+    public function item()
+    {
+        return $this->belongsTo(Items::class, 'machine_item_index', 'id');
+    }
 }
