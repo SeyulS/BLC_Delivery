@@ -21,7 +21,6 @@ class AdminHomeController extends Controller
         return view('Admin.home', [
             'rooms' => $rooms,
             'items' => Items::all(),
-            'decks' => Decks::all()
         ]);
     }
 }

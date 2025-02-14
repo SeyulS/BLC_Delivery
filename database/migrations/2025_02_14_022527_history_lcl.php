@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deck_demand', function (Blueprint $table) {
+        Schema::create('LCLHistory', function (Blueprint $table) {
             $table->id();
-            $table->string('deck_id');
+            $table->string('room_id');
+            $table->string('player_username');
+            $table->integer('day');
+            $table->string('destination');
             $table->string('demand_id');
-            $table->string('room_id')->nullable();
-            $table->string('player_username')->nullable();
+            $table->double('delivery_cost');
+            $table->double('revenue');
             $table->timestamps();
-
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deck_demand');
+        Schema::dropIfExists('LCLHistory');
     }
 };

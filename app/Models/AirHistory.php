@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Decks extends Model
+class AirHistory extends Model
 {
     use HasFactory;
-
-    protected $table = 'deck';
+    protected $table = 'AirHistory';
 }

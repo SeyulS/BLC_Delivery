@@ -95,11 +95,6 @@ class DatabaseSeeder extends Seeder
             'item_weight' => 2.5
         ]);
 
-        Decks::create([
-            'deck_name' => 'deck_lomba',
-            'deck_list' => json_encode(["100","101","102","103","104","105","106","107"])
-        ]);
-
         // DeckDemand::create([
         //     'deck_id' => '1',
         //     'demand_id' => '101'

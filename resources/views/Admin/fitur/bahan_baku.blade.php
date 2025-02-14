@@ -113,7 +113,8 @@
                             <input type="number" class="form-control quantity-input mt-3"
                                 name="quantity[{{ $rawItem->id }}]"
                                 placeholder="Quantity"
-                                data-item-id="{{ $rawItem->id }}">
+                                data-item-id="{{ $rawItem->id }}"
+                                min = 0>
                         </div>
                     </div>
                 </div>
@@ -138,11 +139,11 @@
 
         $('#submit-button').click(function(e) {
             e.preventDefault();
-
             const playerId = $('#team-select').val();
             const playerName = $('#team-select option:selected').text();
             const roomId = $('input[name="room_id"]').val();
             let quantities = [];
+            console.log(quantities);
             let itemTable = `<table style="width:100%; text-align:center; border-collapse: collapse;">
                             <tr>
                                 <th style="border-bottom: 1px solid #ddd; padding: 8px;">Barang</th>
@@ -154,13 +155,12 @@
                 const quantity = $(this).val();
                 const itemName = $(this).closest('.card-body').find('.card-title').text();
 
+                quantities.push({
+                    item_id: itemId,
+                    quantity: isNaN(parseInt(quantity)) ? 0 : parseInt(quantity),
+                    item_name: itemName
+                });
                 if (quantity && parseInt(quantity) > 0) {
-                    quantities.push({
-                        item_id: itemId,
-                        quantity: parseInt(quantity),
-                        item_name: itemName
-                    });
-
                     itemTable += `<tr>
                                 <td style="padding: 8px;">${itemName}</td>
                                 <td style="padding: 8px;">${quantity}</td>
@@ -212,7 +212,7 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            console.log(response);  
+                            console.log(response);
                             if (response.status == "success") {
                                 Swal.fire({
                                     title: 'Success!',

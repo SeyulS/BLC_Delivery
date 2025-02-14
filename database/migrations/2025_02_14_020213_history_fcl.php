@@ -11,20 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deck', function (Blueprint $table) {
+        Schema::create('FCLHistory', function (Blueprint $table) {
             $table->id();
-            $table->string('deck_name');
-            $table->json('deck_list')->nullable();
+            $table->string('room_id');
+            $table->string('player_username');
+            $table->integer('day');
+            $table->string('destination');
+            $table->json('list_of_demands');
+            $table->double('delivery_cost');
+            $table->double('revenue');
             $table->timestamps();
         });
     }
 
     /**
-     * 
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('deck');
+        Schema::dropIfExists('FCLHistory');
     }
 };

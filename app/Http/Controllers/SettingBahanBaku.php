@@ -44,13 +44,12 @@ class SettingBahanBaku extends Controller
 
     public function setting(Request $request)
     {
-
         $price = 0;
-        for ($i = 0; $i < count($request->items); $i++) {
-            $query = Raw_item::where('id', $request->items[$i]['item_id'])->first();
-            $price = $price + ($query->raw_item_price * $request->items[$i]['quantity']);
+        for ($i = 0; $i < count($request->input('items')); $i++) {
+            $query = Raw_item::where('id', $request->input('items')[$i]['item_id'])->first();
+            $price = $price + ($query->raw_item_price * $request->input('items')[$i]['quantity']);
         }
-
+        
         $query = Player::where('player_username', $request->player_id)->first();
 
         if ($query->revenue < $price) {
@@ -61,18 +60,11 @@ class SettingBahanBaku extends Controller
         } else {
             
             // Update Inventory Raw Items
-            $rawItems = [];
-
-            for ($i = 0; $i < count($request->items); $i++) {
-                $rawItems[] = $request->items[$i]['quantity'];
-            }
-
             $currentRawItems = json_decode($query->raw_items);
-            for ($i = 0; $i < count($rawItems); $i++) {
-                $currentRawItems[$i] = $currentRawItems[$i] + $rawItems[$i];
+            for ($i = 0; $i < count($currentRawItems); $i++) {
+                $currentRawItems[$i] = $currentRawItems[$i] + $request->input('items')[$i]['quantity'];
             }
 
-            // Update
             $query->raw_items = json_encode($currentRawItems);
             
             // Potong saldo

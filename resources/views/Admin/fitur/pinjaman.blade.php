@@ -126,15 +126,15 @@
                     <form id="pinjaman-form">
                         @csrf
                         <input type="hidden" name="room_id" value="{{ $room->room_id }}">
-                        
+
                         <div class="mb-3">
                             <label class="form-label">Select Player</label>
                             <select class="form-select" id="player-select" name="player">
                                 <option value="" disabled selected>Choose a player</option>
                                 @foreach($players as $player)
-                                    <option value="{{ $player->player_username }}">
-                                        {{ $player->player_username }}
-                                    </option>
+                                <option value="{{ $player->player_username }}">
+                                    {{ $player->player_username }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -144,12 +144,12 @@
                             <select class="form-select" name="loan_select" id="loan_select" required>
                                 <option value="" disabled selected>Select loan type</option>
                                 @foreach ($loans as $loan)
-                                    <option value="{{ $loan->id }}"
-                                            data-value="{{ $loan->loan_value }}"
-                                            data-interest="{{ $loan->loan_interest }}"
-                                            data-due="{{ $loan->loan_due }}">
-                                        ${{ number_format($loan->loan_value) }} - {{ $loan->loan_interest }}% - {{ $loan->loan_due }} Days
-                                    </option>
+                                <option value="{{ $loan->id }}"
+                                    data-value="{{ $loan->loan_value }}"
+                                    data-interest="{{ $loan->loan_interest }}"
+                                    data-due="{{ $loan->loan_due }}">
+                                    ${{ number_format($loan->loan_value) }} - {{ $loan->loan_interest }}% - {{ $loan->loan_due }} Days
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -164,28 +164,28 @@
                 <div class="card p-4">
                     <h5 class="mb-3">Available Loan Types</h5>
                     @foreach($loans as $loan)
-                        <div class="loan-type-card">
-                            <div class="row g-2">
-                                <div class="col-md-5">
-                                    <div class="loan-stat bg-light">
-                                        <small class="d-block text-muted mb-1">Value</small>
-                                        <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
-                                    </div>
+                    <div class="loan-type-card">
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <div class="loan-stat bg-light">
+                                    <small class="d-block text-muted mb-1">Value</small>
+                                    <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="loan-stat bg-light">
-                                        <small class="d-block text-muted mb-1">Interest</small>
-                                        <span class="loan-interest">{{ $loan->loan_interest }}%</span>
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="loan-stat bg-light">
+                                    <small class="d-block text-muted mb-1">Interest</small>
+                                    <span class="loan-interest">{{ $loan->loan_interest }}%</span>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="loan-stat bg-light">
-                                        <small class="d-block text-muted mb-1">Duration</small>
-                                        <span class="loan-due">{{ $loan->loan_due }} Days</span>
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="loan-stat bg-light">
+                                    <small class="d-block text-muted mb-1">Duration</small>
+                                    <span class="loan-due">{{ $loan->loan_due }} Days</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </div>
             </div>
@@ -209,15 +209,15 @@
                             </thead>
                             <tbody>
                                 @foreach($history as $h)
-                                    <tr>
-                                        <td>{{ $h->player_username }}</td>  
-                                        <td>{{ $h->day }}</td>
-                                        <td>{{ $h->loan_value }}</td>
-                                        <td>{{ $h->loan_interest }}%</td>
-                                        <td>{{ $h->loan_due }} days</td>
-                                        <td>{{ $h->before_loan }}</td>
-                                        <td>{{ $h->after_loan }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $h->player_username }}</td>
+                                    <td>{{ $h->day }}</td>
+                                    <td>{{ $h->loan_value }}</td>
+                                    <td>{{ $h->loan_interest }}%</td>
+                                    <td>{{ $h->loan_due }} days</td>
+                                    <td>{{ $h->before_loan }}</td>
+                                    <td>{{ $h->after_loan }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -229,100 +229,87 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Initialize Select2
-    $('#player-select').select2({
-        theme: 'classic',
-        placeholder: 'Select a player',
-        allowClear: true,
-        width: '100%'
-    });
+    $(document).ready(function() {
+        // Initialize Select2
+        $('#player-select').select2({
+            theme: 'classic',
+            placeholder: 'Select a player',
+            allowClear: true,
+            width: '100%'
+        });
 
-    // Initialize DataTable
-    const table = $('#loanHistory').DataTable({
-        pageLength: 10,
-        order: [[1, 'desc']], // Sort by day descending
-        language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search Player"
-        }
-    });
+        // Initialize DataTable
+        const table = $('#loanHistory').DataTable({
+            pageLength: 10,
+            order: [
+                [1, 'desc']
+            ], // Sort by day descending
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search Player"
+            }
+        });
 
-    // Form Submission
-    $('#pinjaman-form').on('submit', function(e) {
-        e.preventDefault();
+        // Form Submission
+        $('#pinjaman-form').on('submit', function(e) {
+            e.preventDefault();
 
-        const selectedPlayer = $('#player-select').val();
-        const selectedOption = $('#loan_select').find(':selected');
-        const loanValue = selectedOption.data('value');
-        const loanInterest = selectedOption.data('interest');
-        const loanDue = selectedOption.data('due');
+            const selectedPlayer = $('#player-select').val();
+            const selectedOption = $('#loan_select').find(':selected');
+            const loanValue = selectedOption.data('value');
+            const loanInterest = selectedOption.data('interest');
+            const loanDue = selectedOption.data('due');
 
-        Swal.fire({
-            title: 'Confirm Loan Details',
-            html: `
-                <div class="text-start">
+            Swal.fire({
+                title: 'Confirm Loan Details',
+                html: `
+                <div class="text-center">
                     <p><i class="fas fa-user me-2"></i><strong>Player:</strong> ${selectedPlayer}</p>
                     <p><i class="fas fa-money-bill me-2"></i><strong>Amount:</strong> $${loanValue.toLocaleString()}</p>
                     <p><i class="fas fa-percentage me-2"></i><strong>Interest:</strong> ${loanInterest}%</p>
                     <p><i class="fas fa-calendar me-2"></i><strong>Duration:</strong> ${loanDue} Days</p>
                 </div>
             `,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#4361ee',
-            cancelButtonColor: '#718096'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/setPinjaman',
-                    method: 'POST',
-                    data: {
-                        player_username: selectedPlayer,
-                        loanAmount: loanValue,
-                        loanInterest: loanInterest,
-                        loanDuration: loanDue,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: response.message,
-                                icon: 'success',
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-                            
-                            $('#loanHistory tbody').append(
-                                `
-                    <tr>
-                        <td>${response.player_username}</td>
-                        <td>${response.day}</td>
-                        <td>${response.loan_value}</td>
-                        <td>${response.loan_interest} %</td>
-                        <td>${response.loan_due}</td>
-                        <td>${response.before_loan}</td>
-                        <td>${response.after_loan}</td>
-                    </tr>
-                `
-                            )
-                        } else {
-                            toastr.error(response.message);
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#4361ee',
+                cancelButtonColor: '#718096'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/setPinjaman',
+                        method: 'POST',
+                        data: {
+                            player_username: selectedPlayer,
+                            loanAmount: loanValue,
+                            loanInterest: loanInterest,
+                            loanDuration: loanDue,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            toastr.error('Failed to process loan. Please try again.');
                         }
-                        // Reset form and refresh table
-                        $('#pinjaman-form')[0].reset();
-                            $('#player-select').val(null).trigger('change');
-                    },
-                    error: function(xhr) {
-                        toastr.error('Failed to process loan. Please try again.');
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
     });
-});
 </script>
 @endsection

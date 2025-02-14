@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Events\UpdateRevenue;
+use App\Models\AirHistory;
 use App\Models\AirplaneDelivery;
 use Illuminate\Http\Request;
 
 use App\Models\Player;
 use App\Models\Demand;
 use App\Models\FCLDelivery;
+use App\Models\FCLHistory;
 use App\Models\Items;
 use App\Models\LCLDelivery;
+use App\Models\LCLHistory;
 use App\Models\Room;
 
 class SettingPengirimanController extends Controller
@@ -31,7 +34,8 @@ class SettingPengirimanController extends Controller
             'players' => Player::where('room_id', $room_id)->get(),
             'mnd' => $mnd,
             'bjm' => $bjm,
-            'mks' => $mks
+            'mks' => $mks,
+            'history' => LCLHistory::where('room_id', $room->room_id)->get()
         ]);
     }
 
@@ -43,6 +47,7 @@ class SettingPengirimanController extends Controller
             'room' => $room,
             'players' => Player::where('room_id', $room_id)->get(),
             'destination' => ['Manado', 'Banjarmasin', 'Makassar'],
+            'history' => FCLHistory::where('room_id', $room->room_id)->get()
         ]);
     }
 
@@ -61,7 +66,8 @@ class SettingPengirimanController extends Controller
             'players' => Player::where('room_id', $room_id)->get(),
             'mnd' => $mnd,
             'bjm' => $bjm,
-            'mks' => $mks
+            'mks' => $mks,
+            'history' => AirHistory::where('room_id', $room->room_id)->get()
         ]);
 
     }
@@ -152,6 +158,17 @@ class SettingPengirimanController extends Controller
 
         $lcl->save();
         
+        // History
+        $history = new LCLHistory();
+        $history->room_id = $room->room_id;
+        $history->player_username = $player->player_username;
+        $history->day = $room->recent_day;
+        $history->destination = $demand->tujuan_pengiriman;
+        $history->demand_id = $demand->demand_id;
+        $history->delivery_cost = $deliveryPrice;
+        $history->revenue = $demand->revenue;
+        $history->save();
+
         $demand->delete();
 
         UpdateRevenue::dispatch();
@@ -189,7 +206,7 @@ class SettingPengirimanController extends Controller
             if($playerItems[$i] < $itemNeeded[$i]){
                 return response()->json([
                     'status' => 'fail', 
-                    'message' => 'Item Player Tidak Mencukupi'
+                    'message' => 'Player doesnt have enough items'
                 ]);
             }
         }
@@ -213,12 +230,13 @@ class SettingPengirimanController extends Controller
         if($currentVolume > $max_volume_capacity || $currentWeight > $max_weight_capacity){
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Over Kapasitas !'
+                'message' => 'Over Capacity !'
             ]);
         }
 
         $lateDeliveryCost = 0;
         $earlyDeliveryCost = 0;
+        $revenue = 0;
         foreach($demand as $d){
             $needDay = $room->recent_day + $fcl->pengiriman_duration;
             if( $needDay < $d->need_day){
@@ -227,23 +245,34 @@ class SettingPengirimanController extends Controller
             if($needDay > $d->need_day){
                 $lateDeliveryCost = $lateDeliveryCost + (($needDay - $d->need_day)*$room->late_delivery_charge);
             }
+            $revenue = $revenue + $d->revenue;
         }
 
         if($player->revenue < ($price + $lateDeliveryCost + $earlyDeliveryCost)){
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Saldo tidak mencukupi !'
+                'message' => 'Player doesnt have enough money !'
             ]);
         }
 
         for($i = 0; $i < count($itemIndex); $i++){
             $playerItems[$i] = $playerItems[$i] - $itemNeeded[$i];
         }
-        $player->revenue = $player->revenue - ($price+$lateDeliveryCost);
+        $player->revenue = $player->revenue + $revenue - ($price + $lateDeliveryCost + $earlyDeliveryCost);
         $player->items = json_encode($playerItems);
         $player->save();
 
         // Nanti kalau mau update history disini
+        $history = new FCLHistory();
+        $history->room_id = $room->room_id;
+        $history->player_username = $request->input('player_username');
+        $history->day = $room->recent_day;
+        $history->destination = $request->input('destination');
+        $history->list_of_demands = json_encode($request->input('demands'));
+        $history->delivery_cost = $price;
+        $history->revenue = $revenue;
+        $history->save();
+
         foreach($demand as $d){
             $d->delete();
         }
@@ -252,7 +281,7 @@ class SettingPengirimanController extends Controller
         
         return response()->json([
             'status' => 'success', 
-            'message' => 'Pengiriman Berhasil !'
+            'message' => 'Delivery Success !'
         ]);
     }
 
@@ -282,12 +311,10 @@ class SettingPengirimanController extends Controller
         if ($quantity < $demand->quantity) {
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Item Player tidak mencukupi !'
+                'message' => 'Player doesnt have enough items !'
             ]);
         }
 
-        // Cek Saldo ( melibatkan apakah ada keterlambatan pengiriman )
-        return response($demand->item_index);
 
         // Volume atau Berat yang Hit Duluan
         $item = Items::where('id', $demand->item_index)->first();
@@ -312,6 +339,7 @@ class SettingPengirimanController extends Controller
         $earlyPrice = 0;
 
         // Jika terlalu cepat
+                // Cek Saldo ( melibatkan apakah ada keterlambatan pengiriman )
         if ($needDay < $demand->need_day){
             $earlyDayTotal = $demand->need_day - $needDay;
             $earlyPrice = $earlyDayTotal * $room->early_delivery_charge;
@@ -336,13 +364,25 @@ class SettingPengirimanController extends Controller
         $player->revenue = $player->revenue + $demand->revenue - $deliveryPrice - $latePrice;
         $player->save();
 
-        $lcl = LCLDelivery::where('room_id', $request->input('room_id'))
+        $air = AirplaneDelivery::where('room_id', $request->input('room_id'))
             ->where('destination', $demand->tujuan_pengiriman)->first();
         
-        $lcl->current_volume_capacity = $lcl->current_volume_capacity + $volume;
-        $lcl->current_weight_capacity = $lcl->current_weight_capacity + $weight;
+        $air->current_volume_capacity = $air->current_volume_capacity + $volume;
+        $air->current_weight_capacity = $air->current_weight_capacity + $weight;
 
-        $lcl->save();
+        $air->save();
+
+        // History
+        $history = new AirHistory();
+        $history->room_id = $room->room_id;
+        $history->player_username = $player->player_username;
+        $history->day = $room->recent_day;
+        $history->destination = $demand->tujuan_pengiriman;
+        $history->demand_id = $demand->demand_id;
+        $history->delivery_cost = $deliveryPrice;
+        $history->revenue = $demand->revenue;
+        $history->save();
+
         $demand->delete();
 
         UpdateRevenue::dispatch();

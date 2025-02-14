@@ -143,21 +143,25 @@
                         <table class="table table-hover shipping-history-table" id="pengirimanLCLHistory">
                             <thead>
                                 <tr>
+                                    <th>Day</th>
+                                    <th>Destination</th>
                                     <th>Player</th>
                                     <th>Demand ID</th>
-                                    <th>Biaya</th>
-                                    <th>Denda</th>
-                                    <th>Jenis</th>
+                                    <th>Delivery Cost</th>
+                                    <th>Revenue</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Player1</td>
-                                    <td>1</td>
-                                    <td>1000000</td>
-                                    <td>5</td>
-                                    <td>30</td>
-                                </tr>
+                                @foreach ($history as $h)
+                                    <tr>
+                                        <td>{{ $h->day }}</td>
+                                        <td>{{ $h->destination }}</td>
+                                        <td>{{ $h->player_username }}</td>
+                                        <td>{{ $h->list_of_demands }}</td>
+                                        <td>{{ $h->delivery_cost }}</td>
+                                        <td>{{ $h->revenue }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -266,6 +270,7 @@
             const selectedDestination = $('#destination-select').val();
             const selectedDemands = selectedValues;
 
+
             Swal.fire({
                 title: 'Confirm Shipping Details',
                 html: `
@@ -301,16 +306,13 @@
                                     icon: 'success',
                                     timer: 2000,
                                     showConfirmButton: false
+                                }).then(()=>{
+                                    location.reload();
                                 });
                             } else {
                                 toastr.error(response.message);
                             }
-                            // Reset form
-                            $('#pengiriman-form')[0].reset();
-                            $('#player-select').val('').trigger('change');
-                            $('#destination-select').val('').trigger('change');
-                            $('#demand-select').empty();
-                            $('#demand-container').hide();
+                            
                         },
                         error: function(xhr) {
                             toastr.error('Failed to set pengiriman:', xhr.responseText);

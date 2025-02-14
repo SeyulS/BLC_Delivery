@@ -63,9 +63,9 @@ class CreateRoomController extends Controller
         $machine3 = Machine::where('machine_item_index', $validatedData['item3'])->first();
 
         $machineIndex = [
-            $machine1->machine_item_index,
-            $machine2->machine_item_index,
-            $machine3->machine_item_index
+            $machine1->id,
+            $machine2->id,
+            $machine3->id
         ];
         $room->machine_chosen = json_encode($machineIndex);
         $room->start = 0;
