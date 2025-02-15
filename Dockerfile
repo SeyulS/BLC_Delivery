@@ -10,21 +10,34 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nodejs \
-    npm \
-    nginx
+    npm
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd xml dom
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Configure PHP-FPM
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/;listen.owner = www-data/listen.owner = www-data/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/;listen.group = www-data/listen.group = www-data/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /usr/local/etc/php-fpm.d/www.conf
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# ...rest of your existing Dockerfile...
+# Set working directory
+WORKDIR /var/www
 
-# Update start script to ensure PHP-FPM starts
+# Copy existing application directory
+COPY . .
+
+# Install PHP dependencies
+RUN composer install
+
+# Install Node dependencies
+RUN npm install
+
+# Generate key
+RUN php artisan key:generate
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www
 COPY start.sh /var/www/start.sh
 RUN chmod +x /var/www/start.sh
 

@@ -17,9 +17,6 @@ services:
             - "8080:8080"
         depends_on:
             - db
-        environment:
-            - PHP_FPM_LISTEN=127.0.0.1:9000
-
     db:
         image: mysql:8.0
         container_name: laravel_db
@@ -34,7 +31,6 @@ services:
             - dbdata:/var/lib/mysql
         networks:
             - app-network
-
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: laravel_phpmyadmin
@@ -48,10 +44,8 @@ services:
             - app-network
         depends_on:
             - db
-
 networks:
     app-network:
         driver: bridge
-
 volumes:
     dbdata:
