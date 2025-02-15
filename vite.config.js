@@ -11,7 +11,12 @@ export default defineConfig({
     server: {
         host: "0.0.0.0",
         hmr: {
+            // TODO: Change into ip public
             host: "0.0.0.0",
+            protocol: "http",
+        },
+        watch: {
+            usePolling: true,
         },
     },
 });

@@ -17,6 +17,8 @@ services:
             - "8080:8080"
         depends_on:
             - db
+        environment:
+            - PHP_FPM_LISTEN=127.0.0.1:9000
 
     db:
         image: mysql:8.0
