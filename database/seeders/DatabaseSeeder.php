@@ -129,7 +129,6 @@ class DatabaseSeeder extends Seeder
             'machine_size' => 5,
             'machine_item_index' => 2,
             'machine_price' => 100
-
         ]);
 
         Machine::create([

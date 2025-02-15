@@ -7,6 +7,7 @@ use App\Events\PauseSimulation;
 use App\Events\ResumeSimulation;
 use App\Events\StartSimulation;
 use App\Models\AirplaneDelivery;
+use App\Models\Demand;
 use App\Models\FCLDelivery;
 use App\Models\Items;
 use App\Models\LCLDelivery;
@@ -190,5 +191,36 @@ class UtilityRoomController extends Controller
     public function end(Request $request)
     {
         $room = Room::where('room_id', $request->input('room_id'))->first();
+        $player = Player::where('room_id', $room->room_id)->get();
+
+        foreach($player as $p){
+            $evaluatedMachineValue = 0;
+            $undeliveredDemandCharge = 0; // Akan mengurangi revenue peserta jika masih ada sisa demand di akhir permainan
+
+            $machineChosen = json_decode($room->machine_chosen);
+            $playerQuantityMachine = json_decode($p->machine_capacity);
+
+            for($i = 0; $i < count($machineChosen); $i++){
+                $machinePrice = Machine::where('id', $machineChosen[$i])->first()->machine_price;
+                $evaluatedMachineValue = $evaluatedMachineValue + ( $machinePrice * $playerQuantityMachine[$i] * 0.1);
+            }
+
+            $demand = Demand::where('player_username', $p->player_username)->get();
+            foreach($demand as $d){
+                $lateCharge = ($room->recent_day - $d->day) * $room->late_delivery_charge;
+                $undeliveredDemandCharge = $undeliveredDemandCharge + ($d->revenue + $lateCharge);
+            }
+
+            $debt = $p->debt;
+            if($debt == null){
+                $debt = 0;
+            }
+            // Score = Revenue - Debt + evaluasi mesin - Value demand yang bellum terkirim
+            $p->score = $p->revenue + $evaluatedMachineValue - ($debt + $undeliveredDemandCharge);
+            $p->save();
+        }
+
+        return redirect()->back()->with('success', 'Calculation Finished');
+
     }
 }

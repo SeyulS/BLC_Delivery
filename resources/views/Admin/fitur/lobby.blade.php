@@ -1,121 +1,6 @@
 @extends('layout.admin_room')
 
-@section('script')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/2.2.0/js/dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endsection
-
 @section('container')
-@section('room_id')
-{{ $room->room_id }}
-@endsection
-
-<div class="container py-4">
-    <!-- Header Section -->
-    <div class="lobby-header mb-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h2 class="fw-bold mb-1">Room #{{ $room->room_id }}</h2>
-            </div>
-            <div class="lobby-status">
-                @if ($room->start == 1)
-                <span class="badge bg-success px-3 py-2">
-                    <i class="fas fa-play-circle me-2"></i>Simulation Running
-                </span>
-                @else
-                <span class="badge bg-warning px-3 py-2">
-                    <i class="fas fa-clock me-2"></i>Waiting to Start
-                </span>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <!-- Players List Section -->
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-0">
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">
-                                <i class="fas fa-users me-2 text-primary"></i>Players in Room
-                            </h5>
-                            <span class="badge bg-light text-dark px-3 py-2" id="player-count">
-                                Loading players...
-                            </span>
-                        </div>
-                        <table class="table table-hover mb-0" id="player-datatable">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="px-4 py-3">Player Name</th>
-                                    <th class="px-4 py-3 text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Control Panel Section -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-4">
-                        <i class="fas fa-gamepad me-2 text-primary"></i>Simulation Controls
-                    </h5>
-                    <div class="d-grid gap-3">
-                        <form action="/startSimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
-                                {{ $room->start == 1 ? 'disabled' : '' }}>
-                                <i class="fas fa-play me-2"></i>Start Simulation
-                            </button>
-                        </form>
-
-                        <div class="btn-group w-100">
-                            <form action="/pauseSimulation" method="POST" class="w-50">
-                                @csrf
-                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                    class="btn btn-outline-primary w-100">
-                                    <i class="fas fa-pause me-2"></i>Pause
-                                </button>
-                            </form>
-                            <form action="/resumeSimulation" method="POST" class="w-50">
-                                @csrf
-                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                    class="btn btn-outline-primary w-100">
-                                    <i class="fas fa-play me-2"></i>Resume
-                                </button>
-                            </form>
-                        </div>
-
-                        <form action="/nextDaySimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-success w-100">
-                                <i class="fas fa-forward me-2"></i>Next Day
-                            </button>
-                        </form>
-
-                        <form action="/endSimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-danger w-100">
-                                <i class="fas fa-stop-circle me-2"></i>End Simulation
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <style>
     :root {
         --primary-color: #2563eb;
@@ -189,6 +74,112 @@
     }
 </style>
 
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="lobby-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">Room #{{ $room->room_id }}</h2>
+            </div>
+            <div class="lobby-status">
+                @if ($room->start == 1)
+                <span class="badge bg-success px-3 py-2">
+                    <i class="fas fa-play-circle me-2"></i>Simulation Running
+                </span>
+                @else
+                <span class="badge bg-warning px-3 py-2">
+                    <i class="fas fa-clock me-2"></i>Waiting to Start
+                </span>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Players List Section -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fas fa-users me-2 text-primary"></i>Players in Room
+                            </h5>
+                            <span class="badge bg-light text-dark px-3 py-2" id="player-count">
+                                Loading players...
+                            </span>
+                        </div>
+                        <table class="table table-hover mb-0" id="player-datatable">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="px-4 py-3">Player Name</th>
+                                    <th class="px-4 py-3">Score</th>
+                                    <th class="px-4 py-3 text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel Section -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fas fa-gamepad me-2 text-primary"></i>Simulation Controls
+                    </h5>
+                    <div class="d-grid gap-3">
+                        <form action="/startSimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
+                                {{ $room->start == 1 ? 'disabled' : '' }}>
+                                <i class="fas fa-play me-2"></i>Start Simulation
+                            </button>
+                        </form>
+
+                        <div class="btn-group w-100">
+                            <form action="/pauseSimulation" method="POST" class="w-50">
+                                @csrf
+                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                    class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-pause me-2"></i>Pause
+                                </button>
+                            </form>
+                            <form action="/resumeSimulation" method="POST" class="w-50">
+                                @csrf
+                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                    class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-play me-2"></i>Resume
+                                </button>
+                            </form>
+                        </div>
+
+                        <form action="/nextDaySimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-success w-100">
+                                <i class="fas fa-forward me-2"></i>Next Day
+                            </button>
+                        </form>
+
+                        <form action="/endSimulation" method="POST">
+                            @csrf
+                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
+                                class="btn btn-danger w-100">
+                                <i class="fas fa-stop-circle me-2"></i>End Simulation
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(() => {
         const roomId = "{{ $room->room_id }}";
@@ -207,19 +198,26 @@
                     name: 'player_username'
                 },
                 {
-                    data: 'player_username', // Menggunakan player_username bukan id
+                    data: 'score',
+                    name: 'score'
+                },
+                {
+                    data: 'player_username',
                     name: 'action',
                     orderable: false,
                     searchable: false,
                     render: (data) => {
                         return `
-            <form action='kick-player' method='POST' class='form-delete'>
-                @csrf
-                <button type="submit" class="btn kick-btn" data-username="${data}">
-                    <i class="bi bi-x-circle"></i>
-                </button>
-            </form>`;
+<div class="text-end">
+    <form action='kick-player' method='POST' class='form-delete'>
+        @csrf
+        <button type="submit" class="btn kick-btn" data-username="${data}">
+            <i class="bi bi-x-circle"></i>
+        </button>
+    </form>
+</div>`;
                     },
+
                 },
             ],
 
