@@ -16,39 +16,15 @@ RUN apt-get update && apt-get install -y \
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd xml dom
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Configure PHP-FPM
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/;listen.owner = www-data/listen.owner = www-data/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/;listen.group = www-data/listen.group = www-data/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /usr/local/etc/php-fpm.d/www.conf
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# ...rest of your existing Dockerfile...
 
-# Set working directory
-WORKDIR /var/www
-
-# Copy composer files first
-COPY composer.json composer.lock ./
-
-# Install composer dependencies
-RUN composer install --no-scripts --no-autoloader
-
-# Copy existing application directory
-COPY . .
-
-# Generate autoload files
-RUN composer dump-autoload
-
-# Install Node dependencies and build assets
-RUN npm install && npm run build
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy and setup start script
+# Update start script to ensure PHP-FPM starts
 COPY start.sh /var/www/start.sh
 RUN chmod +x /var/www/start.sh
 
