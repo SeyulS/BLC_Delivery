@@ -9,14 +9,17 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: "0.0.0.0",
+        host: '0.0.0.0',
+        port: 5173,
         hmr: {
-            // TODO: Change into ip public
-            host: "0.0.0.0",
-            protocol: "http",
+            host: '0.0.0.0',
+            protocol: 'http'
         },
-        watch: {
-            usePolling: true,
+        cors: {
+            origin: '*',
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true
         },
     },
 });
