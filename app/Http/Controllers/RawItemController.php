@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Raw_Item;  // Ubah ke Raw_Item sesuai dengan penamaan Anda
+use App\Models\RawItem;
 use Illuminate\Http\Request;
 
 class RawItemController extends Controller
@@ -23,7 +23,7 @@ class RawItemController extends Controller
         $columns = ['id', 'raw_item_name', 'raw_item_price'];  // Kolom yang ingin ditampilkan
 
         // Query untuk mengambil data
-        $query = Raw_Item::query(); // Menggunakan Raw_Item
+        $query = RawItem::query(); // Menggunakan Raw_Item
 
         // Filter pencarian jika ada
         if ($search = $request->get('search')['value']) {
@@ -41,7 +41,7 @@ class RawItemController extends Controller
         // Ambil data dengan pagination
         $data = $query->skip($request->get('start'))->take($request->get('length'))->get();
 
-        $totalRecords = Raw_Item::count();  // Menggunakan Raw_Item
+        $totalRecords = RawItem::count();  // Menggunakan Raw_Item
         $filteredRecords = $query->count();
 
         $data = $data->map(function ($item) {
@@ -59,7 +59,7 @@ class RawItemController extends Controller
     }
 
 
-  
+
     public function store(Request $request)
     {
         // Validasi data yang diterima
@@ -68,7 +68,7 @@ class RawItemController extends Controller
             'raw_item_price' => 'required|numeric',
         ]);
 
-        Raw_Item::create([
+        RawItem::create([
             'raw_item_name' => $request->raw_item_name,
             'raw_item_price' => $request->raw_item_price,
         ]);
@@ -78,11 +78,11 @@ class RawItemController extends Controller
 
     public function edit($id)
     {
-        $rawItem = Raw_Item::findOrFail($id);  // Menggunakan Raw_Item
+        $rawItem = RawItem::findOrFail($id);  // Menggunakan Raw_Item
         return response()->json($rawItem);
     }
 
- 
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -90,7 +90,7 @@ class RawItemController extends Controller
             'raw_item_price' => 'required|numeric',
         ]);
 
-        Raw_item::where('id', $id)
+        Rawitem::where('id', $id)
             ->update([
                 'raw_item_name' => $request->raw_item_name,
                 'raw_item_price' => $request->raw_item_price
@@ -102,7 +102,7 @@ class RawItemController extends Controller
 
     public function destroy($id)
     {
-        $rawItem = Raw_Item::findOrFail($id);
+        $rawItem = RawItem::findOrFail($id);
         $rawItemName = $rawItem->raw_item_name;
         $rawItem->delete();
 

@@ -12,7 +12,7 @@ use App\Models\LCLDelivery;
 use App\Models\Loan;
 use App\Models\Machine;
 use App\Models\Player;
-use App\Models\Raw_Item;
+use App\Models\RawItem;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -208,7 +208,7 @@ class CreateRoomController extends Controller
             $raw = json_decode($query->raw_item_needed, true);
             $harga = 0;
             foreach ($raw as $r) {
-                $harga = $harga + Raw_Item::where('id', $r)->first()->raw_item_price;
+                $harga = $harga + RawItem::where('id', $r)->first()->raw_item_price;
             }
             $hpp[] = $harga;
         }
@@ -371,7 +371,7 @@ class CreateRoomController extends Controller
             $raw = json_decode($query->raw_item_needed, true);
             $harga = 0;
             foreach ($raw as $r) {
-                $harga = $harga + Raw_Item::where('id', $r)->first()->raw_item_price;
+                $harga = $harga + RawItem::where('id', $r)->first()->raw_item_price;
             }
             $hpp[] = $harga;
         }

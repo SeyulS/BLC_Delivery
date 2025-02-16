@@ -20,7 +20,7 @@ class Items extends Model
         // Periksa jika data tidak null atau kosong
         if (is_array($rawItemIds) && is_array($quantities)) {
             foreach ($rawItemIds as $index => $rawItemId) {
-                $rawItem = Raw_Item::find($rawItemId); // Cari data raw item berdasarkan ID
+                $rawItem = RawItem::find($rawItemId); // Cari data raw item berdasarkan ID
 
                 if ($rawItem) {
                     $bom[] = $quantities[$index] . 'x ' . $rawItem->raw_item_name;
@@ -33,7 +33,7 @@ class Items extends Model
 
     public function raw_items()
     {
-        return $this->hasMany(Raw_item::class, 'id', 'raw_item_id');
+        return $this->hasMany(RawItem::class, 'id', 'raw_item_id');
     }
 
 

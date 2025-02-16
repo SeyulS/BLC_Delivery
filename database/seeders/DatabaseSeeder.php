@@ -11,8 +11,7 @@ use App\Models\DeckDemand;
 use App\Models\Decks;
 use App\Models\Items;
 use App\Models\Machine;
-use App\Models\Raw_item;
-
+use App\Models\RawItem;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,37 +26,37 @@ class DatabaseSeeder extends Seeder
             'admin_username' => 'samuel',
             'password' => bcrypt('12345')
         ]);
-        
+
         Player::create([
             'player_username' => 'samuelado',
             'password' => bcrypt('12345'),
             'room_id' => 123,
         ]);
-        
+
         Player::factory(20)->create();
 
-        Raw_item::create([
+        RawItem::create([
             'raw_item_name' => "Kayu",
             'raw_item_price' => 70,
         ]);
 
-        Raw_item::create([
+        RawItem::create([
             'raw_item_name' => "Paku",
             'raw_item_price' => 50,
         ]);
 
-        Raw_item::create([
+        RawItem::create([
             'raw_item_name' => "Lem",
             'raw_item_price' => 40,
         ]);
 
-        Raw_item::create([
+        RawItem::create([
             'raw_item_name' => "Bantal",
             'raw_item_price' => 70,
         ]);
 
-        
-        Raw_item::create([
+
+        RawItem::create([
             'raw_item_name' => "Engsel",
             'raw_item_price' => 80,
         ]);

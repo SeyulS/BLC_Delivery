@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Items;
 use App\Models\Machine;
 use App\Models\Player;
-use App\Models\Raw_Item;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -102,7 +101,7 @@ class ProductionController extends Controller
             if ($currentCapacity + $sizeItemProduce > $player->inventory) {
                 return back()->with('fail', 'You need larger warehouse !');
             }
-    
+
             for ($i = 0; $i < count($playerRawItems); $i++) {
                 $playerRawItems[$i] = $playerRawItems[$i] - $BOM[$i];
             }

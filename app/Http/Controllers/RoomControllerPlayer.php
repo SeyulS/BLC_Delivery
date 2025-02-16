@@ -11,7 +11,7 @@ use App\Models\Items;
 use App\Models\LCLDelivery;
 use App\Models\Machine;
 use App\Models\Player;
-use App\Models\Raw_item;
+use App\Models\RawItem;
 use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
 
@@ -142,7 +142,7 @@ class RoomControllerPlayer extends Controller
             }
         }
         $rawItem = array_unique($rawItem);
-        $rawItemChosen = Raw_item::whereIn('id', $rawItem)->get();
+        $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
 
         $itemChosenName = [];
         foreach ($itemChosen as $item) {
@@ -241,7 +241,7 @@ class RoomControllerPlayer extends Controller
             }
         }
         $rawItem = array_unique($rawItem);
-        $rawItemChosen = Raw_item::whereIn('id', $rawItem)->get();
+        $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
 
         $itemChosenName = [];
         foreach ($itemChosen as $item) {
@@ -348,7 +348,7 @@ class RoomControllerPlayer extends Controller
         $BOM = [];  // Initialize the BOM array
         foreach (json_decode($items) as $item) {
             $query = Items::where('id', $item)->first();
-        
+
             $rawItems = [];
 
             $rawItemsNeeded = json_decode($query->raw_item_needed);
@@ -356,20 +356,20 @@ class RoomControllerPlayer extends Controller
 
             for ($i = 0; $i < count($rawItemsNeeded); $i++) {
                 $rawItems[] = [
-                    'name' => Raw_item::where('id', $rawItemsNeeded[$i])->first()->raw_item_name,
+                    'name' => RawItem::where('id', $rawItemsNeeded[$i])->first()->raw_item_name,
                     'quantity' => $quantityItemsNeeded[$i]
                 ];
             }
-        
+
             $BOM[] = [
-                'item_name' => $query->item_name, 
+                'item_name' => $query->item_name,
                 'raw_items' => $rawItems,
                 'width' => $query->item_width,
                 'length' => $query->item_length,
                 'height' => $query->item_height,
                 'weight' => $query->item_weight
             ];
-        }        
+        }
         // dd($BOM);
 
         $machine = $room->machine_chosen;
@@ -389,7 +389,7 @@ class RoomControllerPlayer extends Controller
                     foreach ($rawItemsNeeded as $raw) {
                         $rawItem[] = $raw;
                     }
-                    
+
                 }
             }
         }
@@ -398,7 +398,7 @@ class RoomControllerPlayer extends Controller
             'player' => $player,
             'room' => $room,
             'machines' => $machineName,
-            'rawItems' => Raw_item::whereIn('id', array_unique($rawItem))->get(),
+            'rawItems' => RawItem::whereIn('id', array_unique($rawItem))->get(),
             'lateDeliveryCharge' => $room->late_delivery_charge,
             'earlyDeliveryCharge' => $room->early_delivery_charge,
             'inventoryCost' => $room->inventory_cost,
@@ -433,7 +433,7 @@ class RoomControllerPlayer extends Controller
         $room = Room::where('room_id', $roomCode)->first();
         return view('Player.fitur.paying_debt',[
             'player' => Auth::guard('player')->user(),
-            'room' => $room 
+            'room' => $room
         ]);
     }
 }
