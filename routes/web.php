@@ -56,16 +56,16 @@ Route::post('/deletePlayer', [RegistPlayerController::class, 'destroy']);
 
 
 // CRUD Raw Item
-Route::get('raw-items', [RawItemController::class, 'index']); 
-Route::get('raw-items/data', [RawItemController::class, 'getData']); 
-Route::post('raw-items', [RawItemController::class, 'store']); 
-Route::get('raw-items/{id}/edit', [RawItemController::class, 'edit']); 
-Route::put('raw-items/{id}', [RawItemController::class, 'update']); 
-Route::get('raw-items/delete/{id}', [RawItemController::class, 'destroy']); 
+Route::get('raw-items', [RawItemController::class, 'index']);
+Route::get('raw-items/data', [RawItemController::class, 'getData']);
+Route::post('raw-items', [RawItemController::class, 'store']);
+Route::get('raw-items/{id}/edit', [RawItemController::class, 'edit']);
+Route::put('raw-items/{id}', [RawItemController::class, 'update']);
+Route::get('raw-items/delete/{id}', [RawItemController::class, 'destroy']);
 
 
 // CRUD Items
-Route::get('items', [ItemController::class, 'index']); 
+Route::get('items', [ItemController::class, 'index']);
 Route::post('/createItem', [ItemController::class, 'create']);
 
 // CRUD Machines
@@ -75,7 +75,7 @@ Route::post('/createMachine', [MachineController::class, 'create']);
 Route::get('/api/players/{room_id}', [RoomControllerAdmin::class, 'getPlayers']);
 
 // Post Method
-Route::post('/kick-player', [RoomControllerAdmin::class, 'kickPlayer']);
+Route::post('/lobby/kick-player', [RoomControllerAdmin::class, 'kickPlayer'])->name('kick.player');
 Route::post('/joinRoom', [RoomControllerPlayer::class,'join'])->middleware('auth.player');
 Route::post('/createRoom', [CreateRoomController::class,'createRoom'])->middleware('auth.administrator');
 Route::post('/startSimulation', [UtilityRoomController::class, 'start']);

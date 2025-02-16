@@ -21,8 +21,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.17.0/echo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    
-    @vite(['resources/js/app.js'])
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
 

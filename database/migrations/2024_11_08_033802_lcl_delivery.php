@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('LCL_delivery', function (Blueprint $table) {
+        Schema::create('lcl_delivery', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id');
             $table->string('destination');
