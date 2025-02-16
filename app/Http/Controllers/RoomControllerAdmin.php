@@ -46,33 +46,29 @@ class RoomControllerAdmin extends Controller
 
     public function kickPlayer(Request $request)
     {
-        try {
-            $request->validate([
-                'player_username' => 'required|string',
-                'room_id' => 'required'
-            ]);
 
-            $player = Player::where('player_username', $request->player_username)->first();
-
-            if (!$player) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Player not found'
-                ], 404);
-            }
-
-            // Update player's room status
-            $player->update(['room_id' => null]);
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Player has been kicked from the room'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 400);
+        if (!$request->input('player_username')) {
+            return response()->json(['message' => 'Player ID is required'], 400);
         }
+
+        $player = Player::where('player_username', $request->input('player_username'))->first();
+        $roomId = $player->room_id;
+        if (!$player) {
+            return response()->json(['message' => 'Player not found'], 404);
+        }
+
+        $player->room_id = null;
+        $player->inventory = null;
+        $player->raw_items = null;
+        $player->items = null;
+        $player->machine_capacity = null;
+        $player->revenue = null;
+        $player->jatuh_tempo = null;
+        $player->debt = null;
+        $player->produce = null;
+        $player->save();
+        PlayerRemove::dispatch($player->player_username, $roomId);
+
+        return response()->json(['message' => 'Player successfully removed'], 200);
     }
 }

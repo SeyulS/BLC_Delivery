@@ -209,7 +209,7 @@
                         render: (data) => {
                             return `
         <div class="text-end">
-            <form action='/lobby/kick-player' method='POST' class='form-delete'>
+            <form action='kick-player' method='POST' class='form-delete'>
                 @csrf
                 <button type="submit" class="btn kick-btn" data-username="${data}">
                     <i class="bi bi-x-circle"></i>
