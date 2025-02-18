@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class LCLHistory extends Model
 {
     use HasFactory;
-    protected $table = 'lclhistory';
+    protected $table = 'lcl_history';
 }
