@@ -17,6 +17,14 @@
         --shadow: rgba(0, 0, 0, 0.05);
     }
 
+    .toast-success {
+        background-color: #059669 !important; /* Green */
+    }
+    
+    .toast-error {
+        background-color: #dc2626 !important; /* Red */
+    }
+
     /* Layout */
     .dashboard-container {
         background-color: var(--background);
@@ -119,7 +127,8 @@
     }
 
     /* Form Elements */
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
         border: 1px solid var(--border);
         border-radius: 8px;
         padding: 0.75rem 1rem;
@@ -129,7 +138,8 @@
         transition: all 0.2s ease;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: var(--primary);
         box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
         outline: none;
@@ -218,16 +228,16 @@
                     <div class="row g-3 align-items-center">
                         <div class="col-md-8">
                             <div class="input-group">
-                                <input type="number" 
-                                       class="form-control"
-                                       name="quantityPurchase" 
-                                       id="quantityPurchase"
-                                       placeholder="Enter purchase quantity" 
-                                       required>
+                                <input type="number"
+                                    class="form-control"
+                                    name="quantityPurchase"
+                                    id="quantityPurchase"
+                                    placeholder="Enter purchase quantity"
+                                    required>
                                 <span class="ms-2 d-flex align-items-center">
-                                    <i class="fas fa-question-circle tooltip-icon" 
-                                       data-bs-toggle="tooltip" 
-                                       title="Enter the number of warehouse units to purchase"></i>
+                                    <i class="fas fa-question-circle tooltip-icon"
+                                        data-bs-toggle="tooltip"
+                                        title="Enter the number of warehouse units to purchase"></i>
                                 </span>
                             </div>
                         </div>
@@ -250,13 +260,13 @@
             <div class="card-body">
                 <div class="machine-grid" id="machineCapacities">
                     @foreach($playerMachineCapacity as $index => $capacity)
-                        <div class="machine-card">
-                            <h6>{{ $machineName[$index] }}</h6>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-muted">Production Capacity:</span>
-                                <span class="fw-bold">{{ $capacity }} Units</span>
-                            </div>
+                    <div class="machine-card">
+                        <h6>{{ $machineName[$index] }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Production Capacity:</span>
+                            <span class="fw-bold">{{ $capacity }} Units</span>
                         </div>
+                    </div>
                     @endforeach
                 </div>
 
@@ -268,9 +278,9 @@
                             <select name="machineType" id="machineType" class="form-select" required>
                                 <option value="" disabled selected>Select Machine Type</option>
                                 @foreach($machine as $index => $type)
-                                    <option value="{{ $type }}">
-                                        {{ $machineName[$index] }} - ${{ number_format($machinePrice[$index]) }}
-                                    </option>
+                                <option value="{{ $type }}">
+                                    {{ $machineName[$index] }} - ${{ number_format($machinePrice[$index]) }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -288,15 +298,15 @@
 
 <script>
     $(document).ready(() => {
-        @if(session('success'))
-        toastr.success("{{ session('success') }}");
-        @endif
-
-        @if(session('error'))
-        toastr.error("{{ session('error') }}");
-        @endif
-
         const roomId = "{{ $room->room_id }}";
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        };
 
         $("#purchase").on("click", function(event) {
             event.preventDefault(); // Menghentikan default behavior tombol
@@ -320,7 +330,7 @@
                     // Mencetak data yang dikirim pada form
                     console.log("Tombol Purchase ditekan");
                     console.log("Room ID:", roomId);
-                    console.log("Hello",quantity);
+                    console.log("Hello", quantity);
 
                     // Kirim form menggunakan AJAX jika konfirmasi
                     $.ajax({
@@ -332,12 +342,12 @@
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(response) {
-                            console.log('Success Response:', response);
-                            if (response.success) {
+                            if (response.status == 'success') {
+                                console.log(response.message);
                                 $('#warehouseCapacity').html(`${response.currentWarehouse} m²`);
                                 $('#currentCapacity').html(`${response.currentCapacity} m²`);
                                 $('#player_revenue').html(`<p class="me-7">${response.player_revenue}</p>`)
-                                toastr.success(response.message);
+
                             } else {
                                 toastr.error(response.message);
                             }

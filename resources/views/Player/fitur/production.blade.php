@@ -19,14 +19,6 @@
         padding: 2rem 0;
     }
 
-    .page-header {
-        background: white;
-        color: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        margin-bottom: 2rem;
-    }
-
     .machine-card {
         background: white;
         border-radius: 15px;
@@ -41,17 +33,25 @@
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .machine-image {
+    .machine-icon-container {
         position: relative;
-        height: 200px;
-        overflow: hidden;
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .machine-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .machine-icon {
+        font-size: 4rem;
+        color: #4a5568;
         transition: all 0.3s ease;
+    }
+
+    .machine-card:hover .machine-icon {
+        color: var(--primary-color);
+        transform: scale(1.1);
     }
 
     .machine-content {
@@ -126,10 +126,11 @@
     .lock-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
+        color: #fff;
     }
 
     .btn-produce {
-        background: var(--dark-color);
+        background: var(--primary-color);
         color: white;
         padding: 1rem 2rem;
         border-radius: 10px;
@@ -137,19 +138,22 @@
         font-size: 1.1rem;
         transition: all 0.3s ease;
         border: none;
+        margin-top: 2rem;
     }
 
     .btn-produce:hover {
-        background: var(--light-color);
+        background: var(--secondary-color);
         transform: translateY(-2px);
         box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
     }
+
+    .toast-success { background-color: #059669 !important; }
+    .toast-error { background-color: #dc2626 !important; }
+    .toast-info { background-color: #2563eb !important; }
 </style>
 
 <div class="production-dashboard">
     <div class="container">
-
-        <!-- Production Form -->
         <form action="/produceItem" method="POST">
             @csrf
             <div class="row g-4 mb-4">
@@ -159,21 +163,19 @@
                         <div class="machine-card {{ $playerMachineCapacity[$i] == 0 ? 'locked-machine' : '' }}">
                             @if($playerMachineCapacity[$i] == 0)
                             <div class="locked-overlay">
-                                <i class="fas fa-lock lock-icon"></i>
+                                <i class="bi bi-lock-fill lock-icon"></i>
                                 <input type="hidden" name="quantityProduce[]" value="0">
                                 <p>Machine Locked</p>
                             </div>
                             @endif
 
-                            <div class="machine-image">
-                                <img src="https://picsum.photos/400/300?random={{ $i }}"
-                                    alt="{{ $roomMachineName[$i] }}"
-                                    class="{{ $playerMachineCapacity[$i] == 0 ? 'locked-image' : '' }}">
+                            <div class="machine-icon-container">
+                                <i class="bi bi-gear-wide-connected machine-icon"></i>
                             </div>
 
                             <div class="machine-content">
                                 <h5 class="machine-title">
-                                    <i class="fas fa-industry me-2"></i>
+                                    <i class="bi bi-tools me-2"></i>
                                     {{ $roomMachineName[$i] }}
                                 </h5>
 
@@ -199,11 +201,11 @@
                             </div>
                         </div>
                     </div>
-                    @endfor
+                @endfor
             </div>
 
             <button type="submit" class="btn btn-produce w-100">
-                <i class="fas fa-play-circle me-2"></i>
+                <i class="bi bi-play-circle-fill me-2"></i>
                 Start Production
             </button>
         </form>
@@ -221,6 +223,14 @@
         toastr.error("{{ session('fail') }}");
         @endif
 
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        };
+
         // Form submission handling
         $("form[action='/produceItem']").on("submit", function(e) {
             e.preventDefault();
@@ -233,7 +243,7 @@
             });
 
             if (!hasProduction) {
-                toastr.warning('Please set production quantity for at least one machine');
+                toastr.info('Please set production quantity for at least one machine');
                 return;
             }
 

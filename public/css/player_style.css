@@ -1,29 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
-::after,
-::before {
-    box-sizing: border-box;
+/* Reset Styles */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
-}
-
-a {
-    text-decoration: none;
-}
-
-li {
-    list-style: none;
-}
-
-h1 {
-    font-weight: 600;
-    font-size: 1.5rem;
+    box-sizing: border-box;
+    text-decoration: none !important;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
+    background-color: #fafbfe;
 }
 
+/* Wrapper & Main Content */
 .wrapper {
     display: flex;
 }
@@ -36,147 +28,259 @@ body {
     background-color: #fafbfe;
 }
 
+.hide-menu {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.app-title {
+    padding: 0rem 0.5rem 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.app-title h1 {
+    color: #2563eb;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Update existing styles */
+.sidebar-logo {
+    margin: auto 0;
+    padding-left: 0.5rem;
+}
+
+/* Sidebar Base */
 #sidebar {
     width: 70px;
     min-width: 70px;
     z-index: 1000;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     background-color: white;
     display: flex;
     flex-direction: column;
-    border: black;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1); /* Menambahkan shadow */
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
 }
-
 
 #sidebar.expand {
     width: 260px;
     min-width: 260px;
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    width: 100%;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.15);
+}
+
+/* Sidebar Header & Logo */
 .toggle-btn {
     background-color: transparent;
     cursor: pointer;
     border: 0;
-    padding: 1rem 1.5rem;
+    padding: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background-color: rgba(37, 99, 235, 0.08);
+}
+
+.toggle-btn:hover i {
+    color: #2563eb;
+    transform: scale(1.1);
 }
 
 .toggle-btn i {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: black;
-}
-
-.sidebar-logo {
-    margin: auto 0;
+    transition: transform 0.3s ease;
+    display: block; /* Ensure icon is always visible */
 }
 
 .sidebar-logo a {
-    color: black;
+    color: #1a1a1a;
     font-size: 1.15rem;
     font-weight: 600;
 }
 
-#sidebar:not(.expand) .sidebar-logo,
-#sidebar:not(.expand) a.sidebar-link span {
-    display: none;
-}
-
-.sidebar-nav {
-    padding: 0.4rem 0;
-    flex: 1 1 auto;
-}
-
-a.sidebar-link {
-    padding: .625rem 1.625rem;
-    color: black;
-    display: block;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    border-left: 3px solid transparent;
-}
-
-.sidebar-link i {
-    font-size: 1.1rem;
-    margin-right: .75rem;
-}
-
-.sidebar-link.disabled {
-    pointer-events: none;
-    cursor: not-allowed;
-    opacity: 0.5; /* Opsional: untuk membuatnya terlihat lebih redup */
-}
-
-
-a.sidebar-link:hover {
-    background-color: rgba(61, 65, 142, 0.075);
-    border-left: 3px solid #2563eb;
-}
-
-/* Menambahkan gaya untuk menu aktif */
-.sidebar-link.active {
-    background-color: rgba(61, 65, 142, 0.075);
-    border-left: 3px solid #2563eb;
-}
-
-
-.sidebar-item {
-    position: relative;
-}
-
-#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
-    position: absolute;
-    top: 0;
-    left: 70px;
-    background-color: #0e2238;
-    padding: 0;
-    min-width: 15rem;
-    display: none;
-}
-
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
-    display: block;
-    max-height: 15em;
-    width: 100%;
-    opacity: 1;
-}
-
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
-    border: solid;
-    border-width: 0 .075rem .075rem 0;
-    content: "";
-    display: inline-block;
-    padding: 2px;
-    position: absolute;
-    right: 1.5rem;
-    top: 1.4rem;
-    transform: rotate(-135deg);
-    transition: all .2s ease-out;
-}
-
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
-    transform: rotate(45deg);
-    transition: all .2s ease-out;
+/* Player Profile Section */
+.player-profile-container {
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 2px solid rgba(37, 99, 235, 0.2);
 }
 
 .player-profile {
-    color: black;
+    background: linear-gradient(
+        to right bottom,
+        rgba(37, 99, 235, 0.05),
+        rgba(37, 99, 235, 0.1)
+    );
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.3rem;
+    color: #1a1a1a;
     font-size: 0.9rem;
-    font-family: 'Poppins', sans-serif;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-item:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    transform: translateX(2px);
+}
+
+.profile-item i {
+    width: 24px;
+    margin-right: 0.75rem;
+    color: #2563eb;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.profile-item span {
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.profile-item .label {
+    font-size: 0.7rem;
+    color: #64748b;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-item .value {
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* Navigation Structure */
+.sidebar-nav {
+    padding-top: 0.2rem;
+    list-style: none;
+}
+
+.sidebar-header:first-child {
+    margin-top: 0;
+}
+/* Header Styling */
+.sidebar-header {
+    padding: 1rem 0.01rem 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 1rem;
+}
+
+/* Navigation Items */
+.sidebar-item {
+    margin: 0.2rem 0;
+}
+
+.sidebar-subitem {
+    padding-left: 1rem;
+}
+
+.sidebar-link {
+    padding: 0.7rem 1rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    border-radius: 0 6px 6px 0;
+    white-space: nowrap;
+}
+
+.sidebar-link i {
+    width: 20px;
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+    color: inherit;
+}
+
+.sidebar-link span {
+    font-weight: 400;
+}
+
+/* Link States */
+.sidebar-link:hover {
+    background-color: rgba(37, 99, 235, 0.05);
+    color: #2563eb;
+    border-left: 3px solid #2563eb;
+}
+
+.sidebar-link.active {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    border-left: 3px solid #2563eb;
+    font-weight: 500;
+}
+
+.sidebar-link.disabled {
+    color: #9ca3af;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Collapsed State Handling */
+#sidebar:not(.expand) {
+    width: 50px;
+    min-width: 50px;
+    overflow: hidden;
+}
+
+#sidebar:not(.expand) *:not(.toggle-btn):not(.toggle-btn *) {
+    display: none; /* Hide everything except toggle button and its children */
+}
+
+#sidebar:not(.expand) .toggle-btn {
+    display: flex;
+    padding: 0.7rem;
     width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.player-profile hr {
-    width: 80%;
-    border: none; /* Menghapus border default */
-    height: 1px; /* Menentukan ketebalan garis */
-    background-color: #2563eb; /* Menentukan warna garis */
-    margin: 0 auto; /* Memusatkan elemen secara horizontal */
+#sidebar:not(.expand) .toggle-btn i {
+    display: block;
+    transform: rotate(180deg);
+    margin: 0;
 }
 
-
-#sidebar:not(.expand) .player-profile {
-    display: none; /* Sembunyikan konten profil saat sidebar terkecil */
+/* Group Spacing */
+.sidebar-nav > li:not(:first-child) {
+    margin-top: 0.2rem;
 }
 
-
-
+/* Ensure proper text rendering */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

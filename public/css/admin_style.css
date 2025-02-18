@@ -1,165 +1,194 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-::after,
-::before {
-    box-sizing: border-box;
+/* Reset & Base */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
-}
-
-a {
-    text-decoration: none;
-}
-
-li {
-    list-style: none;
-}
-
-h1 {
-    font-weight: 600;
-    font-size: 1.5rem;
+    box-sizing: border-box;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
+    background: #f8f9fa;
 }
 
 .wrapper {
     display: flex;
-}
-
-.main {
     min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
-    background-color: #fafbfe;
 }
 
+/* Main Content Area */
+.main {
+    flex: 1;
+    margin-left: 70px; /* Match collapsed sidebar width */
+    transition: margin-left 0.3s ease;
+}
+
+.wrapper #sidebar.expand ~ .main {
+    margin-left: 260px; /* Match expanded sidebar width */
+}
+
+/* Sidebar Base */
 #sidebar {
+    position: fixed;
     width: 70px;
-    min-width: 70px;
-    z-index: 1000;
-    transition: all .25s ease-in-out;
-    background-color: #0e2238;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #1a1f2c 0%, #151921 100%);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 #sidebar.expand {
     width: 260px;
-    min-width: 260px;
+}
+
+/* Header Section */
+#title {
+    padding: 1.2rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .toggle-btn {
-    background-color: transparent;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 0.5rem;
     cursor: pointer;
-    border: 0;
-    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
 }
 
 .toggle-btn i {
-    font-size: 1.5rem;
-    color: #FFF;
-}
-
-.sidebar-logo {
-    margin: auto 0;
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
 }
 
 .sidebar-logo a {
-    color: #FFF;
-    font-size: 1.15rem;
+    color: #fff;
+    font-size: 1.1rem;
     font-weight: 600;
+    margin-left: 0.8rem;
+    text-decoration: none;
 }
 
-#sidebar:not(.expand) .sidebar-logo,
-#sidebar:not(.expand) a.sidebar-link span {
-    display: none;
-}
-
+/* Navigation */
 .sidebar-nav {
-    padding: 2rem 0;
-    flex: 1 1 auto;
+    padding: 1rem 0;
+    margin: 0;
+    list-style: none;
+    flex: 1;
 }
 
-a.sidebar-link {
-    padding: .625rem 1.625rem;
-    color: #FFF;
-    display: block;
-    font-size: 0.9rem;
-    white-space: nowrap;
+.sidebar-item {
+    margin: 0.2rem 0;
+}
+
+.sidebar-link {
+    position: relative;
+    padding: 0.8rem 1rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 0 6px 6px 0;
+    margin: 0 0.5rem;
     border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid rgba(59, 130, 246, 0.5);
+}
+
+.sidebar-link.active {
+    color: #fff;
+    background: rgba(59, 130, 246, 0.15);
+    border-left: 3px solid #3b82f6;
+    font-weight: 500;
 }
 
 .sidebar-link i {
     font-size: 1.1rem;
-    margin-right: .75rem;
+    min-width: 24px;
+    margin-right: 0.75rem;
 }
 
-.sidebar-link.disabled {
-    pointer-events: none;
-    cursor: not-allowed;
-    opacity: 0.5; /* Opsional: untuk membuatnya terlihat lebih redup */
+.sidebar-link span {
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-
-a.sidebar-link:hover {
-    background-color: rgba(255, 255, 255, .075);
-    border-left: 3px solid #3b7ddd;
-}
-
-.sidebar-item {
-    position: relative;
-}
-
-/* Make sure dropdowns are hidden by default */
-#sidebar .sidebar-dropdown {
-    display: none;
-}
-
-/* When the sidebar is expanded, display the dropdown */
-#sidebar.expand .sidebar-dropdown {
+/* Dropdown */
+.sidebar-dropdown {
+    background: rgba(0, 0, 0, 0.15);
+    margin: 0.5rem;
+    border-radius: 6px;
     display: block !important;
 }
 
-/* Ensuring the collapse class is correctly applied */
-.sidebar-link.collapsed + .sidebar-dropdown {
-    display: none !important;
+.sidebar-dropdown .sidebar-link {
+    padding: 0.7rem 1rem 0.7rem 3rem;
+    font-size: 0.85rem;
+    margin: 0;
 }
 
+.sidebar-dropdown .sidebar-link.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #fff;
+}
 
+/* Remove Bootstrap collapse behavior */
+.collapse:not(.show) {
+    display: block;
+}
 
-#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
-    position: absolute;
-    top: 0;
-    left: 70px;
-    background-color: #0e2238;
-    padding: 0;
-    min-width: 15rem;
+/* Footer */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: auto;
+}
+
+/* Collapsed State */
+#sidebar:not(.expand) .sidebar-logo,
+#sidebar:not(.expand) .sidebar-link span {
     display: none;
 }
 
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
-    max-height: 15em;
-    width: 100%;
-    opacity: 1;
+#sidebar:not(.expand) .sidebar-link {
+    justify-content: center;
+    padding: 0.8rem;
+    margin: 0.2rem 0.5rem;
 }
 
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
-    border: solid;
-    border-width: 0 .075rem .075rem 0;
-    content: "";
-    display: inline-block;
-    padding: 2px;
+#sidebar:not(.expand) .sidebar-link i {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+#sidebar:not(.expand) .sidebar-dropdown {
     position: absolute;
-    right: 1.5rem;
-    top: 1.4rem;
-    transform: rotate(-135deg);
-    transition: all .2s ease-out;
+    left: 70px;
+    top: 0;
+    width: 200px;
+    background: #1a1f2c;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 6px 6px 0;
+    display: none !important;
 }
 
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
-    transform: rotate(45deg);
-    transition: all .2s ease-out;
+#sidebar:not(.expand) .sidebar-item:hover .sidebar-dropdown {
+    display: block !important;
 }

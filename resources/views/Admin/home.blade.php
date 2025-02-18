@@ -29,6 +29,7 @@
             </div>
 
             <!-- Number of Days and Special Days (Row 2) -->
+            <!-- Number of Days and Special Days (Row 2) -->
             <div class="form-group mt-4">
                 <div class="row">
                     <div class="col-md-6">
@@ -37,7 +38,8 @@
                     </div>
                     <div class="col-md-6" id="specialDaysContainer">
                         <label class="form-label">Special Days</label>
-                        <div class="d-flex align-items-center mb-2">
+                        <!-- Remove mb-2 from this div to match spacing -->
+                        <div class="d-flex align-items-center">
                             <input type="number" class="form-control" name="specialDays[]" placeholder="Enter special day" min="1">
                             <button type="button" class="btn btn-success btn-sm ms-2" id="addSpecialDay">+</button>
                         </div>

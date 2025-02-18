@@ -26,6 +26,7 @@ return new class extends Migration
             $table->double('inventory_cost')->nullable();
             $table->integer('status');
             $table->integer('start');
+            $table->integer('finished');
             $table->timestamps();
         });
         

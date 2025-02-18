@@ -2,98 +2,141 @@
 
 @section('container')
 <style>
-    .card {
-        border-radius: 12px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease-in-out;
-        background: #fff;
-        padding: 20px;
+    .container-custom {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
     }
 
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-title {
-        font-size: 18px;
+    .page-title {
+        color: #1a202c;
+        font-size: 1.5rem;
         font-weight: 600;
-        color: #333;
-        /* Warna teks lebih netral */
-    }
-
-    .img-fluid {
-        max-width: 120px;
-        height: auto;
-        margin-bottom: 10px;
-    }
-
-    .quantity-input {
+        margin-bottom: 1.5rem;
         text-align: center;
-        border: 1px solid #ccc;
-        padding: 8px;
-        font-size: 14px;
-        width: 80%;
-        border-radius: 8px;
-        margin: 0 auto;
-        /* Biar input quantity tetap di tengah */
-        display: block;
     }
 
     .select-container {
-        margin-bottom: 20px;
+        margin-bottom: 2rem;
         text-align: center;
     }
 
     .form-select {
-        width: 40%;
-        /* Mengurangi panjang select team */
-        margin: 0 auto;
-        text-align: center;
+        width: 300px;
+        max-width: 100%;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid #e2e8f0;
+        font-size: 0.95rem;
+        background-color: #f8fafc;
+        transition: all 0.3s ease;
     }
 
-    .container-custom {
-        background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    .form-select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        background: #fff;
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+    }
+
+    .card-icon {
+        font-size: 2.5rem;
+        color: #4a5568;
+        margin: 1rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover .card-icon {
+        color: #3b82f6;
+        transform: scale(1.1);
+    }
+
+    .quantity-input {
+        text-align: center;
+        border: 2px solid #e2e8f0;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        width: 100%;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+
+    .quantity-input:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
     }
 
     .button-container {
-        margin-top: 20px;
+        margin-top: 2rem;
         display: flex;
         justify-content: center;
     }
+
+    #submit-button {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    #submit-button:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    hr {
+        border-color: #e2e8f0;
+        margin: 1.5rem 0;
+    }
 </style>
 
-@if(session('success'))
-<script>
-    $(document).ready(function() {
-        toastr.success('{{ session("success") }}');
-    });
-</script>
-@endif
-
-@if(session('fail'))
-<script>
-    $(document).ready(function() {
-        toastr.error('{{ session("fail") }}');
-    });
-</script>
-@endif
-
-<div class="container mt-4">
+<div class="container">
     <div class="container-custom">
-        <h4 class="text-center mb-3">Bahan Baku</h4>
+        <h4 class="page-title">Bahan Baku Management</h4>
         <hr>
 
-        <form class="mt-3" id="bahan-baku-form" action="/setting_bahan_baku" method="POST">
+        <form id="bahan-baku-form" action="/setting_bahan_baku" method="POST">
             @csrf
             <input type="hidden" name="room_id" value="{{ $room->room_id }}">
 
-            <!-- Pilih Tim -->
             <div class="select-container">
-                <select class="form-select form-select-lg" id="team-select" name="team">
+                <select class="form-select" id="team-select" name="team">
                     <option value="" selected disabled>Select Team</option>
                     @foreach($players as $player)
                     <option value="{{ $player->player_username }}">{{ $player->player_username }}</option>
@@ -101,29 +144,27 @@
                 </select>
             </div>
 
-            <!-- Daftar Item -->
-            <div class="row mt-4">
+            <div class="row g-4">
                 @foreach($rawItems as $rawItem)
-                <div class="col-md-4 mb-3">
-                    <div class="card text-center">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ $rawItem->raw_item_name }}</h5>
-                            <img src="https://tse2.mm.bing.net/th?id=OIP.TJiE4HWiS0s6051Xa63_YAHaFq&pid=Api&P=0&h=220"
-                                alt="Bahan Baku" class="img-fluid rounded">
-                            <input type="number" class="form-control quantity-input mt-3"
+                            <i class="bi bi-box-seam card-icon"></i>
+                            <input type="number"
+                                class="quantity-input"
                                 name="quantity[{{ $rawItem->id }}]"
-                                placeholder="Quantity"
+                                placeholder="Enter quantity"
                                 data-item-id="{{ $rawItem->id }}"
-                                min = 0>
+                                min="0">
                         </div>
                     </div>
                 </div>
                 @endforeach
             </div>
 
-            <!-- Tombol Submit -->
             <div class="button-container">
-                <button type="submit" id="submit-button" class="btn btn-secondary">Set Pembelian</button>
+                <button type="submit" id="submit-button" class="btn">Sell To Player</button>
             </div>
         </form>
     </div>

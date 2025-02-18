@@ -18,8 +18,18 @@
 
     .market-dashboard {
         background-color: var(--light-bg);
-        padding: 1.5rem 0;
         min-height: 100vh;
+        width: 100%;
+        padding: 0; /* Remove padding */
+    }
+
+    /* Update container styling */
+    .market-dashboard .container {
+        height: 100%;
+        padding: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: transparent; /* Remove background */
     }
 
     .page-header {
@@ -29,6 +39,12 @@
         border-radius: 0.75rem;
         margin-bottom: 1.5rem;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .market-dashboard .container {
+            padding: 1rem;
+        }
     }
 
     .page-header h3 {
@@ -193,9 +209,6 @@
                 <div class="col-md-6">
                     <h3>Market Intelligence</h3>
                     <p>Comprehensive market data and analysis</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <span class="text-secondary">Player: {{ $player->player_username }}</span>
                 </div>
             </div>
         </div>

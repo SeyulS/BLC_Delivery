@@ -12,6 +12,7 @@ use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ManageDataController;
 use App\Http\Controllers\PlayerHomeController;
 use App\Http\Controllers\PlayerPurchaseController;
+use App\Http\Controllers\PlayerScoreController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\RawItemController;
 use App\Http\Controllers\RegistAdminController;
@@ -30,6 +31,7 @@ Route::get('/', function(){
     return view('Player.login');
 });
 
+
 // Login, Logout, Regist Player
 Route::get('/loginPlayer', [LoginPlayerController::class,'index']);
 Route::post('/loginPlayer', [LoginPlayerController::class,'authenticate']);
@@ -47,8 +49,6 @@ Route::post('/logoutAdmin',[LoginPlayerController::class,'logout']);
 
 // Home Admin
 Route::get('/homeAdmin',[AdminHomeController::class,'index'])->middleware('auth.administrator');
-Route::get('/manageDeck',[DeckController::class,'index'])->middleware('auth.administrator');
-Route::get('/manageDeck/{deck_id}',[DeckController::class,'manage'])->middleware('auth.administrator');
 Route::get('/manageData',[ManageDataController::class, 'index']);
 Route::get('/manageAccount',[RegistPlayerController::class,'index']);
 Route::post('/deletePlayer', [RegistPlayerController::class, 'destroy']);
@@ -91,6 +91,7 @@ Route::get('/lobby/{room_id}/settingPengirimanFCL', [SettingPengirimanController
 Route::get('/lobby/{room_id}/settingPengirimanUdara', [SettingPengirimanController::class,'indexUdara']);
 Route::get('/lobby/{room_id}/settingPinjaman', [SettingPinjamanController::class,'index']);
 Route::get('/lobby/{room_id}/settingBahanBaku', [SettingBahanBaku::class,'index']);
+Route::get('/lobby/{room_id}/playerScore', [PlayerScoreController::class,'index']);
 Route::post('/setting_bahan_baku', [SettingBahanBaku::class,'setting'])->middleware('auth.administrator');
 Route::post('/setPinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
 Route::get('/lobby/{room_id}/utilityRoom', [UtilityRoomController::class,'index']);

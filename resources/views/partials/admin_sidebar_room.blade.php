@@ -1,5 +1,5 @@
 <aside id="sidebar" class="expand">
-    <div class="d-flex">
+    <div class="d-flex" id="title">
         <button class="toggle-btn" type="button">
             <i class="lni lni-grid-alt mt-2"></i>
         </button>
@@ -21,8 +21,7 @@
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+            <a href="#" class="sidebar-link has-dropdown">
                 <i class="lni lni-protection"></i>
                 <span>Pengiriman</span>
             </a>
@@ -45,10 +44,11 @@
                 <span>Bahan Baku</span>
             </a>
         </li>
+        
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="/lobby/{{ $room->room_id }}/playerScore" class="sidebar-link">
                 <i class="lni lni-cog"></i>
-                <span>Setting</span>
+                <span>Result</span>
             </a>
         </li>
     </ul>
@@ -59,3 +59,48 @@
         </a>
     </div>
 </aside>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarLinks = document.querySelectorAll('.sidebar-link');
+    
+    // Get current path
+    const currentPath = window.location.pathname;
+
+    sidebarLinks.forEach(link => {
+        // Remove any existing active class
+        link.classList.remove('active');
+        
+        // Add active class if href matches current path
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+
+        // Add click handler
+        link.addEventListener('click', function(e) {
+            // Skip for dropdown toggles
+            if (this.classList.contains('has-dropdown')) {
+                return;
+            }
+            
+            // Remove active class from all links
+            sidebarLinks.forEach(l => l.classList.remove('active'));
+            
+            // Add active class to clicked link
+            this.classList.add('active');
+            
+            // Store active state in localStorage
+            localStorage.setItem('activeLink', this.getAttribute('href'));
+        });
+    });
+
+    // Restore active state from localStorage
+    const storedActiveLink = localStorage.getItem('activeLink');
+    if (storedActiveLink) {
+        const activeLink = document.querySelector(`a[href="${storedActiveLink}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+});
+</script>

@@ -69,6 +69,7 @@ class CreateRoomController extends Controller
         ];
         $room->machine_chosen = json_encode($machineIndex);
         $room->start = 0;
+        $room->finished = 0;
         $room->save();
 
         // Manado

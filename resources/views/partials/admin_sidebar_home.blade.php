@@ -1,5 +1,5 @@
 <aside id="sidebar" class="expand">
-    <div class="d-flex">
+    <div class="d-flex" id="title">
         <button class="toggle-btn" type="button">
             <i class="lni lni-grid-alt mt-2"></i>
         </button>

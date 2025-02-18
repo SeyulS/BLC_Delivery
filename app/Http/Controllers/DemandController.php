@@ -32,7 +32,11 @@ class DemandController extends Controller
 
             $player->save();
             DemandTaken::dispatch($request->input('demand_id'));
-            return response()->json(['status' => 'success', 'message' => 'Successfully took the demand']);
+            return response()->json([
+                'status' => 'success', 
+                'message' => 'Successfully took the demand',
+                'demand_id' => $request->input('demand_id')
+            ]);
         }
     }
 

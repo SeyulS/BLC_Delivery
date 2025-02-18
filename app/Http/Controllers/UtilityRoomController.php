@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EndSimulation;
 use App\Events\NextDaySimulation;
 use App\Events\PauseSimulation;
 use App\Events\ResumeSimulation;
@@ -17,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
 use App\Models\Room;
+use App\Models\SimulationResult;
 
 class UtilityRoomController extends Controller
 {
@@ -215,10 +217,32 @@ class UtilityRoomController extends Controller
                 $debt = 0;
             }
             // Score = Revenue - Debt + evaluasi mesin - Value demand yang bellum terkirim
-            $p->score = $p->revenue + $evaluatedMachineValue - ($debt + $undeliveredDemandCharge);
+            $score = $p->revenue + $evaluatedMachineValue - ($debt + $undeliveredDemandCharge);
+
+            $result = new SimulationResult();
+            $result->room_id = $room->room_id;
+            $result->player_username = $p->player_username;
+            $result->score = $score;
+            $result->save();
+        }
+        $room->status = 0;
+        $room->finished = 1;
+        $room->save();
+
+        foreach($player as $p){
+            $p->room_id = null;
+            $p->inventory = null;
+            $p->raw_items = null;
+            $p->items = null;
+            $p->machine_capacity = null;
+            $p->revenue = null;
+            $p->jatuh_tempo = null;
+            $p->debt = null;
+            $p->produce = null;
             $p->save();
         }
 
+        EndSimulation::dispatch($room->room_id);
         return redirect()->back()->with('success', 'Calculation Finished');
 
     }

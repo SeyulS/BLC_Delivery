@@ -23,17 +23,32 @@ class RoomControllerPlayer extends Controller
     public function index($roomCode)
     {
         $room = Room::where('room_id', $roomCode)->first();
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
+        if ($room->finished == 1) {
+            return view('Player.home');
+        }
+
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         return view('Player.fitur.lobby', [
             'room' => $room,
             'player' => $player
-
         ]);
     }
 
     public function warehouseMachine($roomCode)
     {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+        
         $room = Room::where('room_id', $roomCode)->first();
+        if ($room->finished == 1) {
+            return view('Player.home');
+        }
+
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
@@ -87,18 +102,29 @@ class RoomControllerPlayer extends Controller
     }
     public function join(Request $request)
     {
-        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+        $room = Room::where('room_id', $request->roomCode)->first();
+
 
         $request->validate([
             'roomCode' => 'required|max:3'
         ]);
 
-        $room = Room::where('room_id', $request->roomCode)->first();
-
         if (!$room) {
             return back()->with('error', 'Invalid Room Code');
         }
 
+        if ($room->start == 1) {
+            return back()->with('error', 'Room Simulation has started');
+        }
+
+        if ($room->finished == 1) {
+            return back()->with('error', 'Room Simulation has finished');
+        }
+
+        $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $player = Player::firstWhere('player_username', Auth::guard('player')->user()->player_username);
         $player->room_id = $room->room_id;
         $player->save();
@@ -110,11 +136,21 @@ class RoomControllerPlayer extends Controller
             'player' => $player
         ]);
     }
-    public function calendar($roomCode){
+    public function calendar($roomCode)
+    {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
+
+        if($room->finished == 1){
+            return view('Player.home');
+        }
+
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
-        return view('Player.fitur.calendar',[
+        return view('Player.fitur.calendar', [
             'room' => $room,
             'player' => $player
         ]);
@@ -122,8 +158,14 @@ class RoomControllerPlayer extends Controller
 
     public function profile($roomCode)
     {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
 
         $room = Room::where('room_id', $roomCode)->first();
+        if($room->finished == 1){
+            return view('Player.home');
+        }
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
@@ -189,17 +231,16 @@ class RoomControllerPlayer extends Controller
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
             $queryItem = Items::where('id', $roomItemIndex[$i])->first();
-            $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_length *$queryItem->item_width);
+            $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
         }
 
         // Demands
         $demands = Demand::where('room_id', $room->room_id)
             ->where('player_username', $player->player_username)->get();
 
-        if($player->jatuh_tempo == null){
+        if ($player->jatuh_tempo == null) {
             $jatuh_tempo = null;
-        }
-        else{
+        } else {
             $jatuh_tempo = $player->jatuh_tempo - $room->recent_day;
         }
         return view('Player.fitur.player_profile', [
@@ -222,7 +263,14 @@ class RoomControllerPlayer extends Controller
 
     public function production($roomCode)
     {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
+        if($room->finished == 1){
+            return view('Player.home');
+        }
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
         $itemChosen = json_decode($room->item_chosen, true);
 
@@ -308,7 +356,15 @@ class RoomControllerPlayer extends Controller
 
     public function showDemand($roomCode)
     {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
+
+        if($room->finished == 1){
+            return view('Player.home');
+        }
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
         $demands = Demand::where('room_id', $room->room_id)
@@ -339,8 +395,17 @@ class RoomControllerPlayer extends Controller
         ]);
     }
 
-    public function marketIntelligence($roomCode){
+    public function marketIntelligence($roomCode)
+    {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
+
+        if($room->finished == 1){
+            return view('Player.home');
+        }
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
         $items = $room->item_chosen;
@@ -389,7 +454,6 @@ class RoomControllerPlayer extends Controller
                     foreach ($rawItemsNeeded as $raw) {
                         $rawItem[] = $raw;
                     }
-
                 }
             }
         }
@@ -429,11 +493,18 @@ class RoomControllerPlayer extends Controller
         return response()->json(['error' => 'Player not found'], 404);
     }
 
-    public function payingOffDebt($roomCode){
+    public function payingOffDebt($roomCode)
+    {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
-        return view('Player.fitur.paying_debt',[
+        return view('Player.fitur.paying_debt', [
             'player' => Auth::guard('player')->user(),
             'room' => $room
         ]);
     }
+
+    
 }

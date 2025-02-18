@@ -14,6 +14,10 @@
         --border: #e2e8f0;
     }
 
+    .toast-info {
+        background-color: #2563eb !important; /* Blue */
+    }
+
     .demands-dashboard {
         min-height: 100vh;
         background-color: #f1f5f9;
@@ -92,7 +96,7 @@
     /* Demands Grid */
     .demands-grid {
         display: grid;
-        grid-template-columns: repeat(5,1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 1.5rem;
         padding: 1.5rem;
         background: white;
@@ -315,6 +319,14 @@
 
 <script>
     $(document).ready(function() {
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        }
         $('#destination-filter, #demand-id-filter, #item-filter').on('change input', function() {
             console.log('Filtering demands...');
             var selectedDestination = $('#destination-filter').val().toLowerCase() || '';
@@ -384,6 +396,7 @@
                                     Swal.showLoading();
                                 }
                             });
+
                         },
                         success: function(response) {
                             if (response.status === 'success') {
@@ -420,6 +433,7 @@
             .listen('.DemandTakenEvent', (event) => {
                 var demandId = event.demandId;
                 var card = $('#card' + demandId);
+                toastr.info(`Demand No. ${demandId} has been taken`);
                 card.remove();
             });
         window.Echo.channel('start-simulation')
@@ -471,7 +485,7 @@
                     timer: 5000,
                     didOpen: () => {
                         Swal.showLoading();
-                        
+
                     },
                 });
 

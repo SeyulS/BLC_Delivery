@@ -113,7 +113,6 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th class="px-4 py-3">Player Name</th>
-                                        <th class="px-4 py-3">Score</th>
                                         <th class="px-4 py-3 text-end">Actions</th>
                                     </tr>
                                 </thead>
@@ -169,7 +168,7 @@
                             <form action="/endSimulation" method="POST">
                                 @csrf
                                 <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                    class="btn btn-danger w-100">
+                                    class="btn btn-danger w-100 {{ $room->finished == 1 ? 'disabled' : '' }}">
                                     <i class="fas fa-stop-circle me-2"></i>End Simulation
                                 </button>
                             </form>
@@ -196,10 +195,6 @@
                 columns: [{
                         data: 'player_username',
                         name: 'player_username'
-                    },
-                    {
-                        data: 'score',
-                        name: 'score'
                     },
                     {
                         data: 'player_username',

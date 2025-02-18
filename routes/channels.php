@@ -44,3 +44,7 @@ Broadcast::channel('update-revenue', function(){
 Broadcast::channel('demand-taken', function(){
     return true;
 });
+
+Broadcast::channel('end-simulation', function(){
+    return true;
+});
