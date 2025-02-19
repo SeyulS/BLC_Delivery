@@ -50,7 +50,7 @@
                     <div class="col-md-6">
                         <div class="info-box">
                             <label class="text-muted">Loan Due</label>
-                            <h4 class="due-amount" id="loanDue">{{ $player->jatuh_tempo }} days</h4>
+                            <h4 class="due-amount" id="loanDue">{{ $player->jatuh_tempo - $room->recent_day }} days</h4>
                         </div>
                     </div>
                 </div>

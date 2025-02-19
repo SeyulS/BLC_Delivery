@@ -12,6 +12,13 @@
         --light-color: #f8f9fa;
         --border-color: #e2e8f0;
     }
+    .toast-success {
+        background-color: #059669 !important; /* Green */
+    }
+    
+    .toast-error {
+        background-color: #dc2626 !important; /* Red */
+    }
 
     .dashboard-container {
         background-color: #f8f9fa;
@@ -292,6 +299,14 @@
             width: '100%',
             height: '100%'
         });
+        
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        };
 
         $('#team-select').on('change', function() {
             var playerUsername = $(this).val();

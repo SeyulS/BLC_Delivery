@@ -98,7 +98,7 @@ class SettingPengirimanController extends Controller
         if ($quantity < $demand->quantity) {
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Item Player tidak mencukupi !'
+                'message' => 'Player doesnt have enough items !'
             ]);
         }
 
@@ -141,7 +141,7 @@ class SettingPengirimanController extends Controller
         if ($player->revenue < $deliveryPrice + $latePrice || $player->revenue < $deliveryPrice + $earlyPrice){
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Saldo Player tidak mencukupi !'
+                'message' => 'Player doesnt have enough money !'
             ]);
         }
 
@@ -175,7 +175,7 @@ class SettingPengirimanController extends Controller
 
         return response()->json([
             'status' => 'success', 
-            'message' => 'Pengiriman Berhasil'
+            'message' => 'Delivery Success'
         ]);
 
     }
@@ -355,7 +355,7 @@ class SettingPengirimanController extends Controller
         if ($player->revenue < $deliveryPrice + $latePrice || $player->revenue < $deliveryPrice + $earlyPrice){
             return response()->json([
                 'status' => 'fail', 
-                'message' => 'Saldo Player tidak mencukupi !'
+                'message' => 'Player doesnt have enought money !'
             ]);
         }
 
@@ -389,7 +389,7 @@ class SettingPengirimanController extends Controller
 
         return response()->json([
             'status' => 'success', 
-            'message' => 'Pengiriman Berhasil'
+            'message' => 'Delivery Success !'
         ]);
 
     }

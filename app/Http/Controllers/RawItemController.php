@@ -12,7 +12,7 @@ class RawItemController extends Controller
      */
     public function index()
     {
-        return view('admin.crud.crud_raw_items');
+        return view('Admin.crud.crud_raw_items');
     }
 
     /**

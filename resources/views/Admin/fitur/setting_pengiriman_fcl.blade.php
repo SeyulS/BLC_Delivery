@@ -13,6 +13,16 @@
         --border-color: #e2e8f0;
     }
 
+    .toast-success {
+        background-color: #059669 !important;
+        /* Green */
+    }
+
+    .toast-error {
+        background-color: #dc2626 !important;
+        /* Red */
+    }
+
     .dashboard-container {
         background-color: #f8f9fa;
         min-height: 100vh;
@@ -153,14 +163,14 @@
                             </thead>
                             <tbody>
                                 @foreach ($history as $h)
-                                    <tr>
-                                        <td>{{ $h->day }}</td>
-                                        <td>{{ $h->destination }}</td>
-                                        <td>{{ $h->player_username }}</td>
-                                        <td>{{ $h->list_of_demands }}</td>
-                                        <td>{{ $h->delivery_cost }}</td>
-                                        <td>{{ $h->revenue }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $h->day }}</td>
+                                    <td>{{ $h->destination }}</td>
+                                    <td>{{ $h->player_username }}</td>
+                                    <td>{{ $h->list_of_demands }}</td>
+                                    <td>{{ $h->delivery_cost }}</td>
+                                    <td>{{ $h->revenue }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -201,6 +211,14 @@
             closeOnSelect: false,
             theme: 'classic'
         });
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        };
 
         // Rest of your existing JavaScript code remains the same
         function fetchDemands() {
@@ -299,20 +317,20 @@
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            if(response.status == 'success'){
+                            if (response.status == 'success') {
                                 Swal.fire({
                                     title: 'Success!',
                                     text: 'Pengiriman berhasil diset!',
                                     icon: 'success',
                                     timer: 2000,
                                     showConfirmButton: false
-                                }).then(()=>{
+                                }).then(() => {
                                     location.reload();
                                 });
                             } else {
                                 toastr.error(response.message);
                             }
-                            
+
                         },
                         error: function(xhr) {
                             toastr.error('Failed to set pengiriman:', xhr.responseText);

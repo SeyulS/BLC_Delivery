@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class FCLHistory extends Model
 {
     use HasFactory;
-    protected $table = 'fclhistory';
+    protected $table = 'fcl_history';
 
 }

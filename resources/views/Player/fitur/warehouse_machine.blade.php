@@ -309,15 +309,13 @@
         };
 
         $("#purchase").on("click", function(event) {
-            event.preventDefault(); // Menghentikan default behavior tombol
+            event.preventDefault();
 
             var quantity = $('#quantityPurchase').val();
             var warehouseSize = "{{ $room->warehouse_size }}";
             var warehousePrice = "{{ $room->warehouse_price }}";
             var roomId = "{{ $room->room_id }}";
 
-
-            // Konfirmasi dengan SweetAlert
             Swal.fire({
                 title: 'Warehouse Purchase Confirmation',
                 text: `You sure you want to buy warehouse with size ${quantity * warehouseSize} m² and price $${quantity * warehousePrice}?`,
@@ -327,12 +325,10 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Mencetak data yang dikirim pada form
                     console.log("Tombol Purchase ditekan");
                     console.log("Room ID:", roomId);
-                    console.log("Hello", quantity);
+                    console.log("Quantity", quantity);
 
-                    // Kirim form menggunakan AJAX jika konfirmasi
                     $.ajax({
                         url: '/purchaseWarehouse',
                         method: 'POST',
@@ -342,12 +338,11 @@
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(response) {
-                            if (response.status == 'success') {
-                                console.log(response.message);
+                            if (response.success) {
+                                toastr.success(response.message);
                                 $('#warehouseCapacity').html(`${response.currentWarehouse} m²`);
                                 $('#currentCapacity').html(`${response.currentCapacity} m²`);
                                 $('#player_revenue').html(`<p class="me-7">${response.player_revenue}</p>`)
-
                             } else {
                                 toastr.error(response.message);
                             }

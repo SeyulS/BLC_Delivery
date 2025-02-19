@@ -27,6 +27,10 @@ class RoomControllerPlayer extends Controller
             return redirect('/loginPlayer');
         }
 
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
+        }
+
         if ($room->finished == 1) {
             return view('Player.home');
         }
@@ -42,6 +46,10 @@ class RoomControllerPlayer extends Controller
     {
         if (Auth::guard('player')->user() == null) {
             return redirect('/loginPlayer');
+        }
+
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
         }
         
         $room = Room::where('room_id', $roomCode)->first();
@@ -107,7 +115,6 @@ class RoomControllerPlayer extends Controller
         }
         $room = Room::where('room_id', $request->roomCode)->first();
 
-
         $request->validate([
             'roomCode' => 'required|max:3'
         ]);
@@ -142,6 +149,10 @@ class RoomControllerPlayer extends Controller
             return redirect('/loginPlayer');
         }
 
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
 
         if($room->finished == 1){
@@ -160,6 +171,10 @@ class RoomControllerPlayer extends Controller
     {
         if (Auth::guard('player')->user() == null) {
             return redirect('/loginPlayer');
+        }
+
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -267,6 +282,10 @@ class RoomControllerPlayer extends Controller
             return redirect('/loginPlayer');
         }
 
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
         if($room->finished == 1){
             return view('Player.home');
@@ -360,6 +379,10 @@ class RoomControllerPlayer extends Controller
             return redirect('/loginPlayer');
         }
 
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
+        }
+
         $room = Room::where('room_id', $roomCode)->first();
 
         if($room->finished == 1){
@@ -399,6 +422,10 @@ class RoomControllerPlayer extends Controller
     {
         if (Auth::guard('player')->user() == null) {
             return redirect('/loginPlayer');
+        }
+
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -497,6 +524,10 @@ class RoomControllerPlayer extends Controller
     {
         if (Auth::guard('player')->user() == null) {
             return redirect('/loginPlayer');
+        }
+
+        if (Auth::guard('player')->user()->room_id == null){
+            return view('Player.home');
         }
 
         $room = Room::where('room_id', $roomCode)->first();

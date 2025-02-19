@@ -14,7 +14,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return view('admin.crud.crud_items', [
+        return view('Admin.crud.crud_items', [
             'rawItems' => RawItem::all(),
             'items' => Items::all()
         ]);
