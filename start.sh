@@ -30,8 +30,13 @@ usermod -a -G www-data $USER
 # Reload groups (or log out and back in)
 newgrp www-data
 
-# Navigate to project directory
-cd /var/www/BLC_Delivery
+# Install dependencies
+npm install
+
+# Install Vite globally
+npm install -g vite
+composer install
+npm run build
 
 # Clear and cache config
 php artisan config:clear
