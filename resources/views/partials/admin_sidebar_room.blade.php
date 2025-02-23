@@ -17,13 +17,13 @@
         <li class="sidebar-item">
             <a href="/lobby/{{ $room->room_id }}/settingPinjaman" class="sidebar-link">
                 <i class="bi bi-credit-card"></i>
-                <span>Pinjaman</span>
+                <span>Loan</span>
             </a>
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link has-dropdown">
                 <i class="lni lni-protection"></i>
-                <span>Pengiriman</span>
+                <span>Delivery</span>
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
@@ -33,7 +33,7 @@
                     <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center"><i class="bi bi-box-fill"></i>Full Container Load</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanUdara" class="sidebar-link" style="text-align: center"><i class="bi bi-airplane-engines"></i>Pengiriman Udara</a>
+                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanUdara" class="sidebar-link" style="text-align: center"><i class="bi bi-airplane-engines"></i>Air Delivery</a>
                 </li>
             </ul>
         </li>
@@ -41,7 +41,14 @@
         <li class="sidebar-item">
             <a href="/lobby/{{ $room->room_id }}/settingBahanBaku" class="sidebar-link">
                 <i class="bi bi-capsule"></i>
-                <span>Bahan Baku</span>
+                <span>Raw Items</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a href="/lobby/{{ $room->room_id }}/demandInformation" class="sidebar-link">
+                <i class="bi bi-capsule"></i>
+                <span>Demand Information</span>
             </a>
         </li>
         

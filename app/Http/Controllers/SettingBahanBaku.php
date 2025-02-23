@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\UpdateRevenue;
 use App\Models\Items;
 use App\Models\Player;
+use App\Models\PurchaseRawItemHistory;
 use App\Models\Room;
 use App\Models\RawItem;
 use Illuminate\Http\Request;
@@ -34,10 +35,37 @@ class SettingBahanBaku extends Controller
         $rawItem = array_unique($rawItem);
         $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
 
+        $purchaseHistory = PurchaseRawItemHistory::where('room_id', $room_id)->get();
+
+        // Prepare purchase history without consolidation
+        $purchaseHistoryData = [];
+        foreach ($purchaseHistory as $history) {
+            $rawItems = json_decode($history->raw_items);
+            $items = [];
+            foreach ($rawItems as $raw) {
+                if ($raw->quantity > 0) {
+                    $itemId = $raw->item_id;
+                    $items[] = [
+                        'item_name' => RawItem::find($itemId)->raw_item_name,
+                        'quantity' => $raw->quantity,
+                    ];
+                }
+            }
+            $purchaseHistoryData[] = [
+                'player_username' => $history->player_username,
+                'day' => $history->day,
+                'items' => $items,
+                'total_cost' => $history->total_price,
+                'revenue_before' => $history->revenue_before,
+                'revenue_after' => $history->revenue_after,
+            ];
+        }
+
         return view('Admin.fitur.bahan_baku', [
             'room' => $room,
             'players' => Player::where('room_id', $room_id)->get(),
-            'rawItems' => $rawItemChosen
+            'rawItems' => $rawItemChosen,
+            'purchaseHistory' => $purchaseHistoryData
         ]);
     }
 
@@ -51,7 +79,7 @@ class SettingBahanBaku extends Controller
         }
 
         $query = Player::where('player_username', $request->player_id)->first();
-
+        $room = Room::where('room_id', $request->room_id)->first();
         if ($query->revenue < $price) {
             return response()->json([
                 'status' => 'fail',
@@ -68,8 +96,19 @@ class SettingBahanBaku extends Controller
             $query->raw_items = json_encode($currentRawItems);
 
             // Potong saldo
+            $prevRenue = $query->revenue;
             $query->revenue = $query->revenue - $price;
             $query->save();
+
+            $history = new PurchaseRawItemHistory();
+            $history->room_id = $request->input('room_id');
+            $history->day = $room->recent_day;
+            $history->player_username = $request->input('player_id');
+            $history->raw_items = json_encode($request->input('items'));
+            $history->total_price = $price;
+            $history->revenue_before = $prevRenue;
+            $history->revenue_after = $query->revenue;
+            $history->save();
 
             UpdateRevenue::dispatch();
 

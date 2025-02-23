@@ -44,13 +44,22 @@
                     <div class="col-md-6">
                         <div class="info-box">
                             <label class="text-muted">Current Debt</label>
+                            @if ($player->jatuh_tempo == null)
+                            <h4 class="due-amount" id="loanDue">-</h4>
+                            @else
                             <h4 class="debt-amount" id="currentDebt">Rp {{ number_format($player->debt ?? 0, 0, ',', '.') }}</h4>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="info-box">
                             <label class="text-muted">Loan Due</label>
+                            @if ($player->jatuh_tempo == null)
+                            <h4 class="due-amount" id="loanDue">-</h4>
+                            @else
                             <h4 class="due-amount" id="loanDue">{{ $player->jatuh_tempo - $room->recent_day }} days</h4>
+
+                            @endif
                         </div>
                     </div>
                 </div>

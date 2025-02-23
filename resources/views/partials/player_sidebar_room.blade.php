@@ -101,25 +101,28 @@
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            @if($room->status == 1)
-            @if($player->produce == 1)
-            <a href="/player-lobby/{{ $room->room_id }}/production"
-                class="sidebar-link able {{ Request::is('player-lobby/'.$room->room_id.'/production') ? 'active' : '' }}">
+            <a href="/player-lobby/{{ $room->room_id }}/production" class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
+            {{ Request::is('player-lobby/'.$room->room_id.'/production') ? 'active' : '' }}">
                 <i class="bi bi-hammer"></i>
                 <span>Production</span>
             </a>
-            @else
-            <a href="/player-lobby/{{ $room->room_id }}/production" class="sidebar-link disabled">
-                <i class="bi bi-hammer"></i>
-                <span>Production</span>
-            </a>
-            @endif
-            @else
-            <a href="/player-lobby/{{ $room->room_id }}/production" class="sidebar-link disabled">
-                <i class="bi bi-hammer"></i>
-                <span>Production</span>
-            </a>
-            @endif
         </li>
+
+        <li class="sidebar-header">History</li>
+        <li class="sidebar-item sidebar-subitem">
+            <a href="/player-lobby/{{ $room->room_id }}/deliveredDemand" class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
+            {{ Request::is('player-lobby/'.$room->room_id.'/deliveredDemand') ? 'active' : '' }}">
+                <i class="bi bi-journal-text"></i>
+                <span>Delivered Demand</span>
+            </a>
+        </li>
+        <li class="sidebar-item sidebar-subitem">
+            <a href="/player-lobby/{{ $room->room_id }}/purchasedRawItems" class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
+            {{ Request::is('player-lobby/'.$room->room_id.'/purchasedRawItems') ? 'active' : '' }}">
+                <i class="bi bi-list-nested"></i>
+                <span>Purchased Raw Item</span>
+            </a>
+        </li>
+
     </ul>
 </aside>

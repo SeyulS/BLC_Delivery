@@ -19,16 +19,19 @@
         padding: 2rem 0;
     }
 
-    .machine-card {
+    .machine-card,
+    .history-card {
         background: white;
         border-radius: 15px;
         overflow: hidden;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
         transition: all 0.3s ease;
         height: 100%;
+        margin-bottom: 2rem;
     }
 
-    .machine-card:hover {
+    .machine-card:hover,
+    .history-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
@@ -54,11 +57,13 @@
         transform: scale(1.1);
     }
 
-    .machine-content {
+    .machine-content,
+    .history-content {
         padding: 1.5rem;
     }
 
-    .machine-title {
+    .machine-title,
+    .history-title {
         font-size: 1.25rem;
         font-weight: 600;
         color: var(--dark-color);
@@ -147,68 +152,189 @@
         box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
     }
 
-    .toast-success { background-color: #059669 !important; }
-    .toast-error { background-color: #dc2626 !important; }
-    .toast-info { background-color: #2563eb !important; }
+    .toast-success {
+        background-color: #059669 !important;
+    }
+
+    .toast-error {
+        background-color: #dc2626 !important;
+    }
+
+    .toast-info {
+        background-color: #2563eb !important;
+    }
+
+    /* Production History Table Styles */
+    .history-table th {
+        background: #f8fafc;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem;
+    }
+
+    .history-table td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .history-table th.raw-items-column,
+    .history-table td.raw-items-column {
+        min-width: 300px;
+        width: 30%;
+    }
+
+    .produce-item {
+        background: rgba(99, 241, 99, 0.1);
+        color: rgb(15, 123, 15);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .produce-quantity {
+        background: rgb(15, 123, 15);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .raw-item {
+        background: rgba(255, 99, 71, 0.1);
+        color: #ff6347;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .raw-quantity {
+        background: #ff6347;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
 </style>
 
 <div class="production-dashboard">
     <div class="container">
-        <form action="/produceItem" method="POST">
-            @csrf
-            <div class="row g-4 mb-4">
-                @for ($i = 0; $i < count($roomMachine); $i++)
-                    <input type="hidden" name="machine_id[]" value="{{ $roomMachine[$i] }}">
-                    <div class="col-md-4">
-                        <div class="machine-card {{ $playerMachineCapacity[$i] == 0 ? 'locked-machine' : '' }}">
-                            @if($playerMachineCapacity[$i] == 0)
-                            <div class="locked-overlay">
-                                <i class="bi bi-lock-fill lock-icon"></i>
-                                <input type="hidden" name="quantityProduce[]" value="0">
-                                <p>Machine Locked</p>
-                            </div>
-                            @endif
+        <!-- Production Form -->
+        <div class="machine-card">
+            <div class="machine-content">
+                <form action="/produceItem" method="POST">
+                    @csrf
+                    <div class="row g-4 mb-4">
+                        @for ($i = 0; $i < count($roomMachine); $i++)
+                            <input type="hidden" name="machine_id[]" value="{{ $roomMachine[$i] }}">
+                            <div class="col-md-4">
+                                <div class="machine-card {{ $playerMachineCapacity[$i] == 0 ? 'locked-machine' : '' }}">
+                                    @if($playerMachineCapacity[$i] == 0)
+                                    <div class="locked-overlay">
+                                        <i class="bi bi-lock-fill lock-icon"></i>
+                                        <input type="hidden" name="quantityProduce[]" value="0">
+                                        <p>Machine Locked</p>
+                                    </div>
+                                    @endif
 
-                            <div class="machine-icon-container">
-                                <i class="bi bi-gear-wide-connected machine-icon"></i>
-                            </div>
+                                    <div class="machine-icon-container">
+                                        <i class="bi bi-gear-wide-connected machine-icon"></i>
+                                    </div>
 
-                            <div class="machine-content">
-                                <h5 class="machine-title">
-                                    <i class="bi bi-tools me-2"></i>
-                                    {{ $roomMachineName[$i] }}
-                                </h5>
+                                    <div class="machine-content">
+                                        <h5 class="machine-title">
+                                            <i class="bi bi-tools me-2"></i>
+                                            {{ $roomMachineName[$i] }}
+                                        </h5>
 
-                                <div class="machine-stats">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="text-muted">Max Production Capacity</span>
-                                        <span class="capacity-badge">
-                                            {{ $playerMachineCapacity[$i] }} units
-                                        </span>
+                                        <div class="machine-stats">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="text-muted">Max Production Capacity</span>
+                                                <span class="capacity-badge">
+                                                    {{ $playerMachineCapacity[$i] }} units
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="production-input">
+                                            <input type="number"
+                                                class="quantity-input"
+                                                min="0"
+                                                max="{{ $playerMachineCapacity[$i] }}"
+                                                name="quantityProduce[]"
+                                                value="{{ old('quantityProduce.' . $i, 0) }}"
+                                                {{ $playerMachineCapacity[$i] == 0 ? 'disabled' : '' }}
+                                                placeholder="0">
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="production-input">
-                                    <input type="number"
-                                        class="quantity-input"
-                                        min="0"
-                                        max="{{ $playerMachineCapacity[$i] }}"
-                                        name="quantityProduce[]"
-                                        value="{{ old('quantityProduce.' . $i, 0) }}"
-                                        {{ $playerMachineCapacity[$i] == 0 ? 'disabled' : '' }}
-                                        placeholder="0">
-                                </div>
                             </div>
-                        </div>
+                            @endfor
                     </div>
-                @endfor
-            </div>
 
-            <button type="submit" class="btn btn-produce w-100">
-                <i class="bi bi-play-circle-fill me-2"></i>
-                Start Production
-            </button>
-        </form>
+                    <button type="submit" class="btn btn-produce w-100">
+                        <i class="bi bi-play-circle-fill me-2"></i>
+                        Start Production
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Production History Table -->
+        <div class="history-card">
+            <div class="history-content">
+                <h4 class="history-title">Production History</h4>
+                <hr>
+                <table class="table history-table" id="productionHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Raw Items Spent</th>
+                            <th>Production Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($productionHistory as $history)
+                        <tr>
+                            <td>{{ $history->day }}</td>
+                            <td>
+                                @for($i = 0; $i < count($roomRawItem); $i++)
+                                    @if(json_decode($history->raw_item_spended)[$i] > 0)
+                                    <div class="raw-item">
+                                        {{ $roomRawItem[$i]->raw_item_name }}
+                                        <span class="raw-quantity">{{ json_decode($history->raw_item_spended)[$i] }}x</span>
+                                    </div>
+                                    @endif
+                                    @endfor
+                            </td>
+                            <td>
+                                @for($i = 0; $i < count($roomItem); $i++)
+                                    @if(json_decode($history->production_items)[$i] > 0)
+                                    <div class="produce-item">
+                                        {{ $roomItem[$i]->item_name }}
+                                        <span class="produce-quantity">{{ json_decode($history->production_items)[$i] }}x</span>
+                                    </div>
+                                    @endif
+                                    @endfor
+                            </td>
+                            </td>
+                            @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -268,7 +394,29 @@
             });
         });
 
-        // Your existing Echo listeners...
+        // Initialize DataTable for production history
+        $('#productionHistoryTable').DataTable({
+            pageLength: 10,
+            ordering: true,
+            responsive: true,
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="bi bi-file-earmark-excel me-2"></i>Export Excel',
+                    className: 'btn btn-success btn-sm'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<i class="bi bi-file-earmark-pdf me-2"></i>Export PDF',
+                    className: 'btn btn-danger btn-sm'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer me-2"></i>Print',
+                    className: 'btn btn-primary btn-sm'
+                }
+            ]
+        });
     });
 </script>
 @endsection

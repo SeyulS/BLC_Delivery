@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('revenue');
             $table->double('cost');
             $table->double('profit');
+            $table->boolean('is_delivered')->default(false);
             $table->timestamps();
         });
     }

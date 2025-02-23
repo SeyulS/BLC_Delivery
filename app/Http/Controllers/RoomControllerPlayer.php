@@ -11,6 +11,8 @@ use App\Models\Items;
 use App\Models\LCLDelivery;
 use App\Models\Machine;
 use App\Models\Player;
+use App\Models\ProductionHistory;
+use App\Models\PurchaseRawItemHistory;
 use App\Models\RawItem;
 use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
@@ -248,16 +250,13 @@ class RoomControllerPlayer extends Controller
             $queryItem = Items::where('id', $roomItemIndex[$i])->first();
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
         }
-
-        // Demands
-        $demands = Demand::where('room_id', $room->room_id)
-            ->where('player_username', $player->player_username)->get();
-
+        
         if ($player->jatuh_tempo == null) {
             $jatuh_tempo = null;
         } else {
             $jatuh_tempo = $player->jatuh_tempo - $room->recent_day;
         }
+
         return view('Player.fitur.player_profile', [
             'player' => $player,
             'jatuh_tempo' => $jatuh_tempo,
@@ -271,8 +270,10 @@ class RoomControllerPlayer extends Controller
             'roomMachineName' => $machineChosenName,
             'playerMachineCapacity' => $playerMachineCapacity,
             'usedCapacity' => $totalCapacity,
-            'demands' => $demands,
-            'currentDateTime' => now()->format('Y-m-d H:i:s'),
+            'demands' => Demand::where('room_id', $room->room_id)
+                            ->where('player_username', $player->player_username)
+                            ->where('is_delivered', false)
+                            ->get(),
         ]);
     }
 
@@ -291,6 +292,7 @@ class RoomControllerPlayer extends Controller
             return view('Player.home');
         }
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
+
         $itemChosen = json_decode($room->item_chosen, true);
 
         $rawItem = [];
@@ -310,10 +312,9 @@ class RoomControllerPlayer extends Controller
         $rawItem = array_unique($rawItem);
         $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
 
-        $itemChosenName = [];
+        $itemUsed = [];
         foreach ($itemChosen as $item) {
-            $query = Items::where('id', $item)->first();
-            $itemChosenName[] = $query->item_name;
+            $itemUsed[] =  Items::where('id', $item)->first();
         }
 
         // Id Mesin Yang Dipakai
@@ -363,13 +364,15 @@ class RoomControllerPlayer extends Controller
             'room' => $room,
             'roomRawItem' => $rawItemChosen,
             'playerRawItem' => json_decode(Auth::guard('player')->user()->raw_items),
-            'roomItem' => $itemChosen,
-            'roomItemName' => $itemChosenName,
+            'roomItem' => $itemUsed,
             'playerItemQty' => json_decode(Auth::guard('player')->user()->items),
             'roomMachine' => $machineChosen,
             'roomMachineName' => $machineChosenName,
             'playerMachineCapacity' => $playerMachineCapacity,
-            'currentCapacity' => $totalCapacity
+            'currentCapacity' => $totalCapacity,
+            'productionHistory' => ProductionHistory::where('room_id', $room->room_id)
+                ->where('player_username', $player->player_username)
+                ->get()
         ]);
     }
 
@@ -534,6 +537,79 @@ class RoomControllerPlayer extends Controller
         return view('Player.fitur.paying_debt', [
             'player' => Auth::guard('player')->user(),
             'room' => $room
+        ]);
+    }
+
+    public function historyDemand($roomCode){
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+        return view('Player.fitur.delivered_demand', [
+            'player' => Auth::guard('player')->user(),
+            'room' => Room::where('room_id', $roomCode)->first(),
+            'demands' => Demand::where('room_id', $roomCode)
+                ->where('player_username', Auth::guard('player')->user()->player_username)
+                ->where('is_delivered', true)
+                ->get()
+        ]);
+    }
+
+    public function purchasedRawItems($roomCode){
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
+        $room = Room::where('room_id', $roomCode)->first();
+        $itemChosen = json_decode($room->item_chosen, true);
+
+        $rawItem = [];
+
+        foreach ($itemChosen as $item) {
+            $i = Items::where('id', $item)->first();
+            if ($i) {
+                $rawItemsNeeded = is_string($i->raw_item_needed) ? json_decode($i->raw_item_needed, true) : $i->raw_item_needed;
+
+                if (is_array($rawItemsNeeded)) {
+                    foreach ($rawItemsNeeded as $raw) {
+                        $rawItem[] = $raw;
+                    }
+                }
+            }
+        }
+        $rawItem = array_unique($rawItem);
+        $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
+
+        $purchaseHistory = PurchaseRawItemHistory::where('room_id', $roomCode)
+        ->where('player_username', Auth::guard('player')->user()->player_username)
+        ->get();
+
+        // Prepare purchase history without consolidation
+        $purchaseHistoryData = [];
+        foreach ($purchaseHistory as $history) {
+            $rawItems = json_decode($history->raw_items);
+            $items = [];
+            foreach ($rawItems as $raw) {
+                if ($raw->quantity > 0) {
+                    $itemId = $raw->item_id;
+                    $items[] = [
+                        'item_name' => RawItem::find($itemId)->raw_item_name,
+                        'quantity' => $raw->quantity,
+                    ];
+                }
+            }
+            $purchaseHistoryData[] = [
+                'player_username' => $history->player_username,
+                'day' => $history->day,
+                'items' => $items,
+                'total_cost' => $history->total_price,
+                'revenue_before' => $history->revenue_before,
+                'revenue_after' => $history->revenue_after,
+            ];
+        }
+        return view('Player.fitur.purchased_raw_item', [
+            'player' => Auth::guard('player')->user(),
+            'room' => Room::where('room_id', $roomCode)->first(),
+            'purchaseHistory' => $purchaseHistoryData
         ]);
     }
 

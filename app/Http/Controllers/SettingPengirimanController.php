@@ -169,7 +169,8 @@ class SettingPengirimanController extends Controller
         $history->revenue = $demand->revenue;
         $history->save();
 
-        $demand->delete();
+        $demand->is_delivered = true;
+        $demand->save();
 
         UpdateRevenue::dispatch();
 
@@ -274,7 +275,8 @@ class SettingPengirimanController extends Controller
         $history->save();
 
         foreach($demand as $d){
-            $d->delete();
+            $d->is_delivered = true;
+            $d->save();
         }
 
         UpdateRevenue::dispatch();
@@ -383,7 +385,8 @@ class SettingPengirimanController extends Controller
         $history->revenue = $demand->revenue;
         $history->save();
 
-        $demand->delete();
+        $demand->is_delivered = true;
+        $demand->save();
 
         UpdateRevenue::dispatch();
 

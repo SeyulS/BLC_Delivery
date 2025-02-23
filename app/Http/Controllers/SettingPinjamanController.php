@@ -59,7 +59,6 @@ class SettingPinjamanController extends Controller
                 'loan_due' => $request->input('loanDuration'),
                 'before_loan' => $beforeLoanRevenue,
                 'after_loan' => $player->revenue
-
             ]);
             
         }

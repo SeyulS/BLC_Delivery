@@ -153,7 +153,7 @@
             <!-- History Table -->
             <div class="col-md-8">
                 <div class="card p-4">
-                    <h4 class="mb-3">History Pengiriman</h4>
+                    <h4 class="mb-3">Less Container Load History</h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-hover shipping-history-table" id="pengirimanLCLHistory">
@@ -193,7 +193,7 @@
                     <h6>{{ $bjm->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($bjm->current_volume_capacity / $bjm->max_volume_capacity) * 100 }}%"
@@ -206,7 +206,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Berat</strong></label>
+                        <label class="form-label"><strong>Weight Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar bg-danger" role="progressbar"
                                 style="width: {{ ($bjm->current_weight_capacity / $bjm->max_weight_capacity) * 100 }}%">
@@ -229,7 +229,7 @@
                     <h6>{{ $mnd->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($mnd->current_volume_capacity / $mnd->max_volume_capacity) * 100 }}%"
@@ -242,7 +242,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Berat</strong></label>
+                        <label class="form-label"><strong>Weight Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar bg-danger" role="progressbar"
                                 style="width: {{ ($mnd->current_weight_capacity / $mnd->max_weight_capacity) * 100 }}%">
@@ -264,7 +264,7 @@
                     <h6>{{ $mks->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($mks->current_volume_capacity / $mks->max_volume_capacity) * 100 }}%"
@@ -277,7 +277,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Berat</strong></label>
+                        <label class="form-label"><strong>Weight Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar bg-danger" role="progressbar"
                                 style="width: {{ ($mks->current_weight_capacity / $mks->max_weight_capacity) * 100 }}%">

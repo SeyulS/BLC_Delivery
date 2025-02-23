@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Items;
 use App\Models\Machine;
 use App\Models\Player;
+use App\Models\ProductionHistory;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,6 @@ class ProductionController extends Controller
         if ($player->produce == 1) {
             $machineList = $request->input('machine_id', []);
             $inputProduce = $request->input('quantityProduce', []);
-
 
             $inputProduce = array_map(function ($quantity) {
                 return $quantity === null || $quantity === '' ? 0 : (int)$quantity;
@@ -115,6 +115,14 @@ class ProductionController extends Controller
             $player->items = json_encode($playerItems);
             $player->produce = 0;
             $player->save();
+
+            $history = new ProductionHistory();
+            $history->room_id = $room->room_id;
+            $history->day = $room->recent_day;
+            $history->player_username = $player->player_username;
+            $history->raw_item_spended = json_encode($BOM);
+            $history->production_items = json_encode($inputProduce);
+            $history->save();
 
 
             return back()->with('success', 'Successfully Produce !');

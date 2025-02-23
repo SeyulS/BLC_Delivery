@@ -91,6 +91,7 @@ Route::get('/lobby/{room_id}/settingPengirimanFCL', [SettingPengirimanController
 Route::get('/lobby/{room_id}/settingPengirimanUdara', [SettingPengirimanController::class,'indexUdara']);
 Route::get('/lobby/{room_id}/settingPinjaman', [SettingPinjamanController::class,'index']);
 Route::get('/lobby/{room_id}/settingBahanBaku', [SettingBahanBaku::class,'index']);
+Route::get('/lobby/{room_id}/demandInformation', [DemandController::class,'demandDeliveredInformation']);
 Route::get('/lobby/{room_id}/playerScore', [PlayerScoreController::class,'index']);
 Route::post('/setting_bahan_baku', [SettingBahanBaku::class,'setting'])->middleware('auth.administrator');
 Route::post('/setPinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
@@ -109,6 +110,8 @@ Route::get('/player-lobby/{room_id}/production', [RoomControllerPlayer::class,'p
 Route::get('/player-lobby/{room_id}/listOfDemands', [RoomControllerPlayer::class,'showDemand']);
 Route::get('/player-lobby/{room_id}/marketIntelligence', [RoomControllerPlayer::class,'marketIntelligence']);
 Route::get('/player-lobby/{room_id}/payingOffDebt',[RoomControllerPlayer::class,'payingOffDebt']);
+Route::get('/player-lobby/{room_id}/deliveredDemand',[RoomControllerPlayer::class,'historyDemand']);
+Route::get('/player-lobby/{room_id}/purchasedRawItems',[RoomControllerPlayer::class,'purchasedRawItems']);
 
 Route::post('/updateRevenue',[RoomControllerPlayer::class,'updateRevenue']);
 Route::post('/purchaseWarehouse',[PlayerPurchaseController::class,'purchaseWarehouse']);

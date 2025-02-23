@@ -147,7 +147,7 @@
             <!-- Column 2: History Pengiriman -->
             <div class="col-md-8">
                 <div class="card p-4">
-                    <h4 class="mb-3">History Pengiriman</h4>
+                    <h4 class="mb-3">Full Container Load History</h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-hover shipping-history-table" id="pengirimanLCLHistory">
