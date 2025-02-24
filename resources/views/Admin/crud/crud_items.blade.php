@@ -17,7 +17,7 @@
                     <form id="itemForm">
                         @csrf
                         <input type="hidden" id="itemId">
-                        
+
                         <!-- Basic Details Section -->
                         <div class="mb-4">
                             <label for="itemName" class="form-label fw-medium">Item Name</label>
@@ -39,13 +39,13 @@
                                             <select class="form-select rawItemSelect" name="raw_item_needed[]">
                                                 <option value="">Select Raw Material</option>
                                                 @foreach($rawItems as $rawItem)
-                                                    <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
+                                                <option value="{{ $rawItem->id }}">{{ $rawItem->raw_item_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="number" class="form-control" name="raw_item_quantity_needed[]" 
-                                                   placeholder="Qty" required min="1">
+                                            <input type="number" class="form-control" name="raw_item_quantity_needed[]"
+                                                placeholder="Qty" required min="1">
                                         </div>
                                     </div>
                                 </div>
@@ -58,23 +58,23 @@
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="item_length" 
-                                               name="item_length" required min="0" step="0.01" placeholder="Length">
-                                        <span class="input-group-text bg-light">cm</span>
+                                        <input type="number" class="form-control" id="item_length"
+                                            name="item_length" required min="0" step="0.01" placeholder="Length">
+                                        <span class="input-group-text bg-light">m</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="item_width" 
-                                               name="item_width" required min="0" step="0.01" placeholder="Width">
-                                        <span class="input-group-text bg-light">cm</span>
+                                        <input type="number" class="form-control" id="item_width"
+                                            name="item_width" required min="0" step="0.01" placeholder="Width">
+                                        <span class="input-group-text bg-light">m</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="item_height" 
-                                               name="item_height" required min="0" step="0.01" placeholder="Height">
-                                        <span class="input-group-text bg-light">cm</span>
+                                        <input type="number" class="form-control" id="item_height"
+                                            name="item_height" required min="0" step="0.01" placeholder="Height">
+                                        <span class="input-group-text bg-light">m</span>
                                     </div>
                                 </div>
                             </div>
@@ -84,9 +84,19 @@
                         <div class="mb-4">
                             <label for="itemWeight" class="form-label fw-medium">Item Weight</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="itemWeight" 
-                                       name="item_weight" required min="0" step="0.01">
+                                <input type="number" class="form-control" id="itemWeight"
+                                    name="item_weight" required min="0" step="0.01">
                                 <span class="input-group-text bg-light">kg</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="itemPrice" class="form-label fw-medium">Item Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">Rp</span>
+
+                                <input type="number" class="form-control" id="itemPrice"
+                                    name="item_price" required min="0" step="0.01">
                             </div>
                         </div>
 
@@ -111,7 +121,7 @@
                                 <th class="px-4 py-3">Bill Of Material</th>
                                 <th class="px-4 py-3">Dimensions (L×W×H)</th>
                                 <th class="px-4 py-3">Weight</th>
-                                <th class="px-4 py-3 text-end">Actions</th>
+                                <th class="px-4 py-3">Weight</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,11 +133,7 @@
                                     {{ $item->item_length }}×{{ $item->item_width }}×{{ $item->item_height }} cm
                                 </td>
                                 <td class="px-4">{{ $item->item_weight }} kg</td>
-                                <td class="px-4 text-end">
-                                    <button class="btn btn-action btn-delete deleteItem" data-id="{{ $item->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
+                                <td class="px-4">Rp {{ number_format($item->item_price) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -140,96 +146,98 @@
 
 <!-- Styles -->
 <style>
-.btn-action {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    margin-left: 0.5rem;
-    transition: all 0.2s;
-}
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        margin-left: 0.5rem;
+        transition: all 0.2s;
+    }
 
-.btn-edit {
-    background-color: #e3f2fd;
-    color: #1976d2;
-    border: none;
-}
+    .btn-edit {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: none;
+    }
 
-.btn-edit:hover {
-    background-color: #1976d2;
-    color: white;
-}
+    .btn-edit:hover {
+        background-color: #1976d2;
+        color: white;
+    }
 
-.btn-delete {
-    background-color: #ffebee;
-    color: #d32f2f;
-    border: none;
-}
+    .btn-delete {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: none;
+    }
 
-.btn-delete:hover {
-    background-color: #d32f2f;
-    color: white;
-}
+    .btn-delete:hover {
+        background-color: #d32f2f;
+        color: white;
+    }
 
-.dynamic-row {
-    position: relative;
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    background: white;
-}
+    .dynamic-row {
+        position: relative;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background: white;
+    }
 
-.remove-material {
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #ff5252;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    .remove-material {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #ff5252;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-.form-control:focus,
-.form-select:focus {
-    border-color: #1976d2;
-    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
-}
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
+    }
 
-#dynamicFields {
-    max-height: 300px;
-    overflow-y: auto;
-}
+    #dynamicFields {
+        max-height: 300px;
+        overflow-y: auto;
+    }
 </style>
 
 <!-- Scripts -->
 <script>
-$(document).ready(function() {
-    // Initialize DataTable
-    $('#itemsTable').DataTable({
-        order: [[0, 'asc']],
-        pageLength: 10,
-        responsive: true,
-        dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center"ip>',
-        language: {
-            search: "",
-            searchPlaceholder: "Search items..."
-        }
-    });
+    $(document).ready(function() {
+        // Initialize DataTable
+        $('#itemsTable').DataTable({
+            order: [
+                [0, 'asc']
+            ],
+            pageLength: 10,
+            responsive: true,
+            dom: '<"d-flex justify-content-between align-items-center mb-3"lf>rt<"d-flex justify-content-between align-items-center"ip>',
+            language: {
+                search: "",
+                searchPlaceholder: "Search items..."
+            }
+        });
 
-    // Add Material Field
-    $('#addMoreFields').on('click', function() {
-        const newField = `
+        // Add Material Field
+        $('#addMoreFields').on('click', function() {
+            const newField = `
             <div class="dynamic-row">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -252,56 +260,56 @@ $(document).ready(function() {
                 </div>
             </div>
         `;
-        $('#dynamicFields').append(newField);
-    });
-
-    // Remove Material Field
-    $(document).on('click', '.remove-material', function() {
-        $(this).closest('.dynamic-row').fadeOut(300, function() {
-            $(this).remove();
+            $('#dynamicFields').append(newField);
         });
-    });
 
-    // Form Submission
-    $('#itemForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        
-        $.ajax({
-            url: '/createItem',
-            method: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: response.message,
-                        showConfirmButton: false,
-                        timer: 2000
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
+        // Remove Material Field
+        $(document).on('click', '.remove-material', function() {
+            $(this).closest('.dynamic-row').fadeOut(300, function() {
+                $(this).remove();
+            });
+        });
+
+        // Form Submission
+        $('#itemForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: '/createItem',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: response.message
+                        });
+                    }
+                },
+                error: function(xhr) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: response.message
+                        text: 'Something went wrong! Please try again.'
                     });
                 }
-            },
-            error: function(xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Something went wrong! Please try again.'
-                });
-            }
+            });
         });
     });
-});
 </script>
 @endsection

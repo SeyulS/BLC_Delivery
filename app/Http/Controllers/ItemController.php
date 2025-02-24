@@ -48,6 +48,7 @@ class ItemController extends Controller
         $item->item_width = $request->input('item_width');
         $item->item_height = $request->input('item_height');
         $item->item_weight = $request->input('item_weight');
+        $item->item_price = $request->input('item_price');
         $item->save();
 
         return response([

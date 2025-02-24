@@ -17,9 +17,9 @@ return new class extends Migration
             $table->double('item_price')->nullable();
             $table->json('raw_item_needed')->nullable();
             $table->json('raw_quantity_needed')->nullable();
-            $table->integer('item_length')->nullable();
-            $table->integer('item_width')->nullable();
-            $table->integer('item_height')->nullable();
+            $table->double('item_length')->nullable();
+            $table->double('item_width')->nullable();
+            $table->double('item_height')->nullable();
             $table->double('item_weight')->nullable();
             $table->timestamps();
         });

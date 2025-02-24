@@ -316,10 +316,10 @@
                         <input type="number" class="form-control mb-2" name="loanValue1" id="loanValue1" placeholder="Enter Loan Value" required>
                         <div class="row">
                             <div class="col-md-7">
-                                <input type="number" class="form-control mb-2" name="loanInterest1" id="loanInterest1" placeholder="Loan Interest (%)" required>
+                                <input type="number" class="form-control mb-2" name="loanInterest1" id="loanInterest1" placeholder="Loan Interest (%)" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-5">
-                                <input type="number" class="form-control" name="loanDue1" id="loanDue1" placeholder="Loan Due" step="0.01" required>
+                                <input type="number" class="form-control" name="loanDue1" id="loanDue1" placeholder="Loan Due" required>
                             </div>
                         </div>
                     </div>
@@ -330,7 +330,7 @@
                         <input type="number" class="form-control mb-2" name="loanValue2" id="loanValue2" placeholder="Enter Loan Value" required>
                         <div class="row">
                             <div class="col-md-7">
-                                <input type="number" class="form-control mb-2" name="loanInterest2" id="loanInterest2" placeholder="Loan Interest (%)" required>
+                                <input type="number" class="form-control mb-2" name="loanInterest2" id="loanInterest2" placeholder="Loan Interest (%)" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-5">
                                 <input type="number" class="form-control" name="loanDue2" id="loanDue2" placeholder="Loan Due" step="0.01" required>
@@ -344,7 +344,7 @@
                         <input type="number" class="form-control mb-2" name="loanValue3" id="loanValue3" placeholder="Enter Loan Value" required>
                         <div class="row">
                             <div class="col-md-7">
-                                <input type="number" class="form-control mb-2" name="loanInterest3" id="loanInterest3" placeholder="Loan Interest (%)" required>
+                                <input type="number" class="form-control mb-2" name="loanInterest3" id="loanInterest3" placeholder="Loan Interest (%)" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-5">
                                 <input type="number" class="form-control" name="loanDue3" id="loanDue3" placeholder="Loan Due" step="0.01" required>

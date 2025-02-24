@@ -213,7 +213,6 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
         const table = $('#purchaseHistoryTable').DataTable({
             pageLength: 10,
             ordering: true,
