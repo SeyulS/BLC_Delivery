@@ -20,7 +20,8 @@
         background-color: var(--light-bg);
         min-height: 100vh;
         width: 100%;
-        padding: 0; /* Remove padding */
+        padding: 0;
+        /* Remove padding */
     }
 
     /* Update container styling */
@@ -29,7 +30,8 @@
         padding: 1.5rem;
         max-width: 1200px;
         margin: 0 auto;
-        background-color: transparent; /* Remove background */
+        background-color: transparent;
+        /* Remove background */
     }
 
     .page-header {
@@ -190,11 +192,11 @@
         .stats-grid {
             grid-template-columns: repeat(2, 1fr);
         }
-        
+
         .custom-table {
             font-size: 0.875rem;
         }
-        
+
         .dimension-value {
             font-size: 0.875rem;
         }
@@ -235,86 +237,86 @@
 
         <!-- Shipping Methods -->
         @foreach([
-            ['title' => 'Less Container Load', 'data' => $lcl],
-            ['title' => 'Full Container Load', 'data' => $fcl],
-            ['title' => 'Air Delivery', 'data' => $air]
+        ['title' => 'Less Container Load', 'data' => $lcl],
+        ['title' => 'Full Container Load', 'data' => $fcl],
+        ['title' => 'Air Delivery', 'data' => $air]
         ] as $shipping)
-            <div class="info-card">
-                <div class="card-header-custom">
-                    <h5>{{ $shipping['title'] }}</h5>
-                </div>
-                <div class="table-responsive">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Destination</th>
-                                <th>Duration</th>
-                                <th>Volume Capacity</th>
-                                <th>Weight Capacity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($shipping['data'] as $item)
-                                <tr>
-                                    <td>{{ $item->destination }}</td>
-                                    <td>{{ $item->pengiriman_duration }} days</td>
-                                    <td>{{ isset($item->current_volume_capacity) ? 
+        <div class="info-card">
+            <div class="card-header-custom">
+                <h5>{{ $shipping['title'] }}</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Duration</th>
+                            <th>Volume Capacity</th>
+                            <th>Weight Capacity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($shipping['data'] as $item)
+                        <tr>
+                            <td>{{ $item->destination }}</td>
+                            <td>{{ $item->pengiriman_duration }} days</td>
+                            <td>{{ isset($item->current_volume_capacity) ? 
                                           "{$item->current_volume_capacity} / {$item->max_volume_capacity}" : 
                                           $item->max_volume_capacity }}</td>
-                                    <td>{{ isset($item->current_weight_capacity) ? 
+                            <td>{{ isset($item->current_weight_capacity) ? 
                                           "{$item->current_weight_capacity} / {$item->max_weight_capacity}" : 
                                           $item->max_weight_capacity }}</td>
-                                    <td>${{ number_format($item->price) }}/m³</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            <td>${{ number_format($item->price) }}/m³</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+        </div>
         @endforeach
 
         <!-- Materials and Equipment Section -->
         <div class="row g-3">
             <!-- Bill of Materials -->
             @foreach($BOM as $materials)
-                <div class="col-md-4">
-                    <div class="info-card h-100">
-                        <div class="card-header-custom">
-                            <h5>{{ $materials['item_name'] }}</h5>
-                        </div>
-                        <div class="bom-card">
-                            <div class="bom-materials">
-                                <h6>Materials Required</h6>
-                                @foreach($materials['raw_items'] as $raw)
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="text-secondary">{{ $raw['name'] }}</span>
-                                        <span class="badge">× {{ $raw['quantity'] }}</span>
-                                    </div>
-                                @endforeach
+            <div class="col-md-4">
+                <div class="info-card h-100">
+                    <div class="card-header-custom">
+                        <h5>{{ $materials['item_name'] }}</h5>
+                    </div>
+                    <div class="bom-card">
+                        <div class="bom-materials">
+                            <h6>Materials Required</h6>
+                            @foreach($materials['raw_items'] as $raw)
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-secondary">{{ $raw['name'] }}</span>
+                                <span class="badge">× {{ $raw['quantity'] }}</span>
                             </div>
+                            @endforeach
+                        </div>
 
-                            <div class="dimensions-grid">
-                                <div class="dimension-item">
-                                    <small>Width</small>
-                                    <div class="dimension-value">{{ $materials['width'] }} m</div>
-                                </div>
-                                <div class="dimension-item">
-                                    <small>Height</small>
-                                    <div class="dimension-value">{{ $materials['height'] }} m</div>
-                                </div>
-                                <div class="dimension-item">
-                                    <small>Length</small>
-                                    <div class="dimension-value">{{ $materials['length'] }} m</div>
-                                </div>
-                                <div class="dimension-item">
-                                    <small>Weight</small>
-                                    <div class="dimension-value">{{ $materials['weight'] }} kg</div>
-                                </div>
+                        <div class="dimensions-grid">
+                            <div class="dimension-item">
+                                <small>Width</small>
+                                <div class="dimension-value">{{ $materials['width'] }} m</div>
+                            </div>
+                            <div class="dimension-item">
+                                <small>Height</small>
+                                <div class="dimension-value">{{ $materials['height'] }} m</div>
+                            </div>
+                            <div class="dimension-item">
+                                <small>Length</small>
+                                <div class="dimension-value">{{ $materials['length'] }} m</div>
+                            </div>
+                            <div class="dimension-item">
+                                <small>Weight</small>
+                                <div class="dimension-value">{{ $materials['weight'] }} kg</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             @endforeach
         </div>
 
@@ -335,10 +337,10 @@
                             </thead>
                             <tbody>
                                 @foreach($rawItems as $item)
-                                    <tr>
-                                        <td>{{ $item->raw_item_name }}</td>
-                                        <td>${{ number_format($item->raw_item_price) }}/pc</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $item->raw_item_name }}</td>
+                                    <td>${{ number_format($item->raw_item_price) }}/pc</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -363,12 +365,12 @@
                             </thead>
                             <tbody>
                                 @foreach($machines as $machine)
-                                    <tr>
-                                        <td>{{ $machine->machine_name }}</td>
-                                        <td>${{ number_format($machine->machine_price) }}</td>
-                                        <td>{{ $machine->machine_size }}m²</td>
-                                        <td>{{ $machine->production_capacity }}/day</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $machine->machine_name }}</td>
+                                    <td>${{ number_format($machine->machine_price) }}</td>
+                                    <td>{{ $machine->machine_size }}m²</td>
+                                    <td>{{ $machine->production_capacity }}/day</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -378,4 +380,127 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(() => {
+        const roomId = "{{ $room->room_id }}";
+        const playerUsername = "{{ $player->player_username }}";
+        window.Echo.channel('player-remove')
+            .listen('.PlayerRemoveEvent', (event) => {
+                if (event.playerUsername == playerUsername) {
+                    window.location.href = '/homePlayer'
+                }
+                if (event.roomId == roomId) {
+                    datatable.ajax.reload();
+                }
+
+            });
+
+        window.Echo.channel('start-simulation')
+            .listen('.StartSimulationEvent', (event) => {
+                if (event.roomId = roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation has started',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('pause-simulation')
+            .listen('.PauseSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was paused',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('resume-simulation')
+            .listen('.ResumeSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was resumed',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('next-day')
+            .listen('.NextDaySimulationEvent', (event) => {
+                console.log(event.roomId, roomId);
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'Moving to the next day. Please wait.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('end-simulation')
+            .listen('.EndSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Simulation Ended',
+                        text: 'The simulation has ended',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/homePlayer';
+                    }, 5000);
+                }
+            });
+
+    });
+</script>
 @endsection

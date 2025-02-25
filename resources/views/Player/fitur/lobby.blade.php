@@ -2,6 +2,16 @@
 
 @section('container')
 <style>
+    .toast-success {
+        background-color: #059669 !important;
+        /* Green */
+    }
+
+    .toast-error {
+        background-color: #dc2626 !important;
+        /* Red */
+    }
+
     .lobby-container {
         padding: 2rem;
         background: #f8fafc;
@@ -160,6 +170,13 @@
 
 <script>
     $(document).ready(() => {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        }
         const roomId = "{{ $room->room_id }}";
         const playerUsername = "{{ $player->player_username }}";
         const datatable = $('#player-datatable').DataTable({
@@ -192,8 +209,10 @@
         });
         window.Echo.channel('join-room')
             .listen('.JoinRoomEvent', (event) => {
-                if (event.roomId == roomId) {
-                    window.location.href = "/homePlayer"
+                var roomIdEvent = event.roomId;
+                if (roomId == roomIdEvent) {
+                    datatable.ajax.reload();
+                    toastr.success('Player Joined');
                 }
             });
 
@@ -313,7 +332,6 @@
                     }, 5000);
                 }
             });
-
     });
 </script>
 @endsection

@@ -1,6 +1,80 @@
 @extends('layout.admin_home')
 
 @section('container')
+
+<!-- Styles -->
+<style>
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        margin-left: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-edit {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background-color: #1976d2;
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: none;
+    }
+
+    .btn-delete:hover {
+        background-color: #d32f2f;
+        color: white;
+    }
+
+    .dynamic-row {
+        position: relative;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background: white;
+    }
+
+    .remove-material {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #ff5252;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
+    }
+
+    #dynamicFields {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+</style>
 <div class="container py-5">
     <!-- Header Section -->
     <div class="mb-4">
@@ -143,80 +217,6 @@
         </div>
     </div>
 </div>
-
-<!-- Styles -->
-<style>
-    .btn-action {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        margin-left: 0.5rem;
-        transition: all 0.2s;
-    }
-
-    .btn-edit {
-        background-color: #e3f2fd;
-        color: #1976d2;
-        border: none;
-    }
-
-    .btn-edit:hover {
-        background-color: #1976d2;
-        color: white;
-    }
-
-    .btn-delete {
-        background-color: #ffebee;
-        color: #d32f2f;
-        border: none;
-    }
-
-    .btn-delete:hover {
-        background-color: #d32f2f;
-        color: white;
-    }
-
-    .dynamic-row {
-        position: relative;
-        padding: 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        margin-bottom: 1rem;
-        background: white;
-    }
-
-    .remove-material {
-        position: absolute;
-        right: -10px;
-        top: -10px;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: #ff5252;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #1976d2;
-        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
-    }
-
-    #dynamicFields {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-</style>
 
 <!-- Scripts -->
 <script>
