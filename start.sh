@@ -32,14 +32,16 @@ newgrp www-data
 
 # Install dependencies
 npm install
+sudo chown -R $USER:$USER /var/www/BLC_Delivery/node_modules
 
 # Install Vite globally
-npm install -g vite
+# npm install -g vite
 composer install
 npm run build
 
 # Clear and cache config
 php artisan config:clear
+php artisan cache:clear
 php artisan config:cache
 
 # Run migrations
