@@ -1,12 +1,23 @@
 @extends('layout.admin_home')
 
 @section('container')
+<style>
+    .toast-success {
+        background-color: #059669 !important;
+        /* Green */
+    }
+
+    .toast-error {
+        background-color: #dc2626 !important;
+        /* Red */
+    }
+</style>
 <div class="container mt-5">
     <!-- Tampilkan pesan sukses -->
     @if(session('success'))
     <script>
         $(document).ready(function() {
-            toastr.success('{{ session("success") }}');
+            toastr.success('Registration Success, Account Created');
         });
     </script>
     @endif

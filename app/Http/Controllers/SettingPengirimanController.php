@@ -172,7 +172,7 @@ class SettingPengirimanController extends Controller
         $demand->is_delivered = true;
         $demand->save();
 
-        UpdateRevenue::dispatch();
+        UpdateRevenue::dispatch($request->input('player_username'), $request->input('room_id'));
 
         return response()->json([
             'status' => 'success', 
@@ -279,7 +279,7 @@ class SettingPengirimanController extends Controller
             $d->save();
         }
 
-        UpdateRevenue::dispatch();
+        UpdateRevenue::dispatch($request->input('player_username'), $request->input('room_id'));
         
         return response()->json([
             'status' => 'success', 
@@ -388,7 +388,7 @@ class SettingPengirimanController extends Controller
         $demand->is_delivered = true;
         $demand->save();
 
-        UpdateRevenue::dispatch();
+        UpdateRevenue::dispatch($request->input('player_username'), $request->input('room_id'));
 
         return response()->json([
             'status' => 'success', 

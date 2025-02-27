@@ -8,12 +8,12 @@
         </div>
     </div>  
     <ul class="sidebar-nav">
-        <li class="sidebar-item">
+        <!-- <li class="sidebar-item">
             <a href="/lol" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Admin Profile</span>
             </a>    
-        </li>
+        </li> -->
         <li class="sidebar-item">
             <a href="/manageAccount" class="sidebar-link">
                 <i class="lni lni-user"></i>

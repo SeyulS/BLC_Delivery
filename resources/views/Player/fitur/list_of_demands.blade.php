@@ -298,10 +298,11 @@
                         </div>
                     </div>
                     <div class="text-center mb-3">
-                        <img src="{{ asset('assets/BLC_Logo.png') }}" alt="BLC Delivery Logo"
+                        <img src="{{ asset('assets/BLCLogoCircle.png') }}" alt="BLC Delivery Logo"
                             style="width: 30%; height: auto;">
                         <p class="text-muted mt-2" style="font-size: 0.875rem;">
-                            Managed by BLC Delivery
+                            Managed by <img src="{{ asset('assets/BLCSentence.png') }}" alt="BLC Delivery Logo"
+                                style="width: 20%;">
                         </p>
                     </div>
                 </div>

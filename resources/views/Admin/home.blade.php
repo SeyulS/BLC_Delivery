@@ -1,7 +1,11 @@
 @extends('layout.admin_home')
 
 @section('container')
-
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
 <div class="container mt-5">
     <!-- Button to toggle the form visibility -->
     <button id="toggleFormButton" class="btn btn-outline-secondary btn-sm mb-3">

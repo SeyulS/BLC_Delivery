@@ -23,10 +23,10 @@ class ProductionController extends Controller
         if ($player->produce == 1) {
             $machineList = $request->input('machine_id', []);
             $inputProduce = $request->input('quantityProduce', []);
-
             $inputProduce = array_map(function ($quantity) {
                 return $quantity === null || $quantity === '' ? 0 : (int)$quantity;
             }, $inputProduce);
+
 
             // Item apa saja yang dibuat
             $itemList = [];
@@ -49,21 +49,19 @@ class ProductionController extends Controller
                     }
                 }
             }
-
+            
             $rawItem = array_unique($rawItem);
             $rawItem = array_values($rawItem);
             $BOM = array_fill(0, count($rawItem), 0); // Ini buat Array 0 0 0 sepanjang rawitem
-
             for ($i = 0; $i < count($itemList); $i++) {
                 $query = Items::where('id', $itemList[$i])->first();
                 $rawItemIndex = json_decode($query->raw_item_needed);
                 $rawQuantityNeeded = json_decode($query->raw_quantity_needed);
 
                 for ($j = 0; $j < count($rawItemIndex); $j++) {
-
                     $index = array_search($rawItemIndex[$j], $rawItem);
                     if ($index !== false) {
-                        $BOM[$index] += $inputProduce[$i] * $rawQuantityNeeded[$j];
+                        $BOM[$index] = $BOM[$index] + ($inputProduce[$i] * $rawQuantityNeeded[$j]);
                     }
                 }
             }

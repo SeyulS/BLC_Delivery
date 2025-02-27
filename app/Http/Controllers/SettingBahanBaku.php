@@ -33,8 +33,10 @@ class SettingBahanBaku extends Controller
             }
         }
         $rawItem = array_unique($rawItem);
-        $rawItemChosen = RawItem::whereIn('id', $rawItem)->get();
-
+        $rawItemChosen = [];
+        foreach ($rawItem as $raw) {
+            $rawItemChosen[] = RawItem::where('id', $raw)->first();
+        }
         $purchaseHistory = PurchaseRawItemHistory::where('room_id', $room_id)->get();
 
         // Prepare purchase history without consolidation

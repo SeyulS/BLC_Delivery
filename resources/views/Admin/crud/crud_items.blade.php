@@ -84,7 +84,7 @@
 
     <div class="row g-4">
         <!-- Form Section -->
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                     <h5 class="card-title fw-bold mb-4">Create New Item</h5>
@@ -185,7 +185,7 @@
         </div>
 
         <!-- Table Section -->
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-0">
                     <table id="itemsTable" class="table table-hover mb-0">
@@ -195,7 +195,7 @@
                                 <th class="px-4 py-3">Bill Of Material</th>
                                 <th class="px-4 py-3">Dimensions (L×W×H)</th>
                                 <th class="px-4 py-3">Weight</th>
-                                <th class="px-4 py-3">Weight</th>
+                                <th class="px-4 py-3">Price</th>
                             </tr>
                         </thead>
                         <tbody>
