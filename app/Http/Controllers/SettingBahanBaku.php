@@ -110,7 +110,7 @@ class SettingBahanBaku extends Controller
             $history->revenue_after = $query->revenue;
             $history->save();
 
-            UpdateRevenue::dispatch();
+            UpdateRevenue::dispatch($request->player_id, $request->room_id);
 
             return response()->json([
                 'status' => 'success',

@@ -14,8 +14,14 @@ class UpdateRevenue implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    
 
+    public $playerUsername;
+    public $roomId;
+    public function __construct($playerUsername, $roomId)
+    {
+        $this->playerUsername = $playerUsername;
+        $this->roomId = $roomId;
+    }
     /**
      * Get the channels the event should broadcast on.
      *
@@ -26,6 +32,11 @@ class UpdateRevenue implements ShouldBroadcastNow
         return [
             new Channel('update-revenue'),
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'UpdateRevenueEvent'; // Nama event untuk diterima di client
     }
 
     

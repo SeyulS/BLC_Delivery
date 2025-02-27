@@ -47,8 +47,7 @@ class PlayerPurchaseController extends Controller
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 
-        UpdateRevenue::dispatch();
-        UpdateWarehouse::dispatch();
+        UpdateRevenue::dispatch($player->player_username, $room->room_id);
 
         $player->save();
         return response()->json([
@@ -126,6 +125,8 @@ class PlayerPurchaseController extends Controller
 
         $player->machine_capacity = json_encode($currentMachineCapacity);
         $player->save();
+
+        UpdateRevenue::dispatch($player->player_username, $room->room_id);
 
         return response()->json([
             'status' => 'success',

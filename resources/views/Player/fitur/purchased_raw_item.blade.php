@@ -273,24 +273,36 @@
 
             });
 
-        window.Echo.channel('start-simulation')
-            .listen('.StartSimulationEvent', (event) => {
-                if (event.roomId = roomId) {
-                    Swal.fire({
-                        title: 'Loading...',
-                        text: 'The simulation has started',
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
+        window.Echo.channel('update-revenue')
+            .listen('.UpdateRevenueEvent', (event) => {
+                if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
-                    setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
-                    }, 5000);
+                    $.ajax({
+                        url: '/updateRevenue',
+                        method: 'POST',
+                        data: {
+                            player_id: playerUsername,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.revenue !== undefined) {
+                                const formatCurrency = (number) => {
+                                    return new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }).format(number);
+                                };
+                                $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
+                                $('#sidebar_revenue').html(formatCurrency(response.revenue));
+                                $('#debt').html(`: ${formatCurrency(response.debt)}`);
+                                $('#jatuh_tempo').html(`: ${response.jatuh_tempo} days`);
+                            }
+                        },
+                        error: (xhr) => {
+                            toastr.error('Failed to fetch revenue:', xhr.responseText);
+                        }
+                    })
+
                 }
             });
 

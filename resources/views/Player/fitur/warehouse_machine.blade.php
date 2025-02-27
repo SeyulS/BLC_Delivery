@@ -345,7 +345,6 @@
                                 toastr.success(response.message);
                                 $('#warehouseCapacity').html(`${response.currentWarehouse} m²`);
                                 $('#currentCapacity').html(`${response.currentCapacity} m²`);
-                                $('#player_revenue').html(`<p class="me-7">${response.player_revenue}</p>`)
                             } else {
                                 toastr.error(response.message);
                             }
@@ -496,6 +495,39 @@
                     setTimeout(() => {
                         window.location.href = '/homePlayer';
                     }, 5000);
+                }
+            });
+
+            window.Echo.channel('update-revenue')
+            .listen('.UpdateRevenueEvent', (event) => {
+                if (event.playerUsername == playerUsername && event.roomId == roomId) {
+
+                    $.ajax({
+                        url: '/updateRevenue',
+                        method: 'POST',
+                        data: {
+                            player_id: playerUsername,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.revenue !== undefined) {
+                                const formatCurrency = (number) => {
+                                    return new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }).format(number);
+                                };
+                                $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
+                                $('#sidebar_revenue').html(formatCurrency(response.revenue));
+                                $('#debt').html(`: ${formatCurrency(response.debt)}`);
+                                $('#jatuh_tempo').html(`: ${response.jatuh_tempo} days`);
+                            }
+                        },
+                        error: (xhr) => {
+                            toastr.error('Failed to fetch revenue:', xhr.responseText);
+                        }
+                    })
+
                 }
             });
     });

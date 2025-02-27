@@ -48,7 +48,7 @@ class SettingPinjamanController extends Controller
             $loanHistory->after_loan = $player->revenue;
             $loanHistory->save();
 
-            UpdateRevenue::dispatch();
+            UpdateRevenue::dispatch($player->player_username, $room->room_id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Pinjaman Success',
@@ -88,12 +88,13 @@ class SettingPinjamanController extends Controller
                 $player->jatuh_tempo = null;
                 $player->revenue = $player->revenue - $request->input('paymentAmount');
                 $player->save();
+                UpdateRevenue::dispatch($player->player_username, $player->room_id);
             }
             else{
                 $player->debt = $player->debt - $request->input('paymentAmount');
                 $player->revenue = $player->revenue - $request->input('paymentAmount');
                 $player->save();
-                
+                UpdateRevenue::dispatch($player->player_username, $player->room_id);    
             }
             return response()->json([
                 'status' => 'success',

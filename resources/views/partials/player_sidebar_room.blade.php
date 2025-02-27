@@ -31,8 +31,8 @@
             <div class="profile-item">
                 <i class="bi bi-cash-stack"></i>
                 <div>
-                    <span class="label">Revenue</span>
-                    <span class="value">{{ $player->revenue }}</span>
+                    <span class="label">Cash</span>
+                    <span class="value" id="sidebar_revenue">${{ number_format($player->revenue, 2, ',', '.') }}</span>
                 </div>
             </div>
         </div>
