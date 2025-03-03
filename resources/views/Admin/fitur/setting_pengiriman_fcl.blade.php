@@ -137,7 +137,7 @@
                         <!-- Submit Button -->
                         <div class="mt-4">
                             <button type="submit" class="btn btn-shipping w-100">
-                                <i class="fas fa-truck me-2"></i>Set Pengiriman
+                                <i class="fas fa-truck me-2"></i>Deliver
                             </button>
                         </div>
                     </form>
@@ -201,7 +201,6 @@
             placeholder: "Select an option",
             allowClear: true,
             width: '100%',
-            theme: 'classic'
         });
 
         $('#demand-select').select2({
@@ -209,7 +208,6 @@
             allowClear: true,
             width: '100%',
             closeOnSelect: false,
-            theme: 'classic'
         });
 
         toastr.options = {

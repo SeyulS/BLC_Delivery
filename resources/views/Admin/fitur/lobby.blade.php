@@ -141,47 +141,23 @@
                         <i class="fas fa-gamepad me-2 text-primary"></i>Simulation Controls
                     </h5>
                     <div class="d-grid gap-3">
-                        <form action="/startSimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-primary btn-lg w-100 d-flex align-items-center justify-content-center"
-                                {{ $room->start == 1 ? 'disabled' : '' }}>
-                                <i class="fas fa-play me-2"></i>Start Simulation
-                            </button>
-                        </form>
-
+                        <button id="start-btn" class="btn btn-primary w-100" {{ $room->start == 1 ? 'disabled' : '' }}>
+                            <i class="fas fa-play me-2"></i>Start Simulation
+                        </button>
                         <div class="btn-group w-100">
-                            <form action="/pauseSimulation" method="POST" class="w-50">
-                                @csrf
-                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                    class="btn btn-outline-primary w-100">
-                                    <i class="fas fa-pause me-2"></i>Pause
-                                </button>
-                            </form>
-                            <form action="/resumeSimulation" method="POST" class="w-50">
-                                @csrf
-                                <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                    class="btn btn-outline-primary w-100">
-                                    <i class="fas fa-play me-2"></i>Resume
-                                </button>
-                            </form>
+                            <button id="pause-btn" class="btn btn-outline-primary w-50">
+                                <i class="fas fa-pause me-2"></i>Pause
+                            </button>
+                            <button id="resume-btn" class="btn btn-outline-primary w-50">
+                                <i class="fas fa-play me-2"></i>Resume
+                            </button>
                         </div>
-
-                        <form action="/nextDaySimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-success w-100">
-                                <i class="fas fa-forward me-2"></i>Next Day
-                            </button>
-                        </form>
-
-                        <form action="/endSimulation" method="POST">
-                            @csrf
-                            <button type="submit" name="room_id" value="{{ $room->room_id }}"
-                                class="btn btn-danger w-100 {{ $room->finished == 1 ? 'disabled' : '' }}">
-                                <i class="fas fa-stop-circle me-2"></i>End Simulation
-                            </button>
-                        </form>
+                        <button id="next-day-btn" class="btn btn-success w-100">
+                            <i class="fas fa-forward me-2"></i>Next Day
+                        </button>
+                        <button id="end-btn" class="btn btn-danger w-100 {{ $room->finished == 1 ? 'disabled' : '' }}">
+                            <i class="fas fa-stop-circle me-2"></i>End Simulation
+                        </button>
                     </div>
                 </div>
             </div>
@@ -286,6 +262,39 @@
                 }
             });
         });
+        const confirmAction = (title, text, actionUrl) => {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, proceed!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(actionUrl, {
+                        _token: '{{ csrf_token() }}',
+                        room_id: roomId
+                    }, (response) => {
+                        if (response.status === 'error') {
+                            toastr.error(response.message);
+                            return;
+                        }
+                        toastr.success(response.message);
+                    }).fail((xhr) => {
+                        toastr.error(xhr.responseJSON?.message || 'Action failed');
+                    });
+                }
+            });
+        };
+
+        $('#start-btn').click(() => confirmAction('Start Simulation?', 'This will begin the simulation.', '/startSimulation'));
+        $('#pause-btn').click(() => confirmAction('Pause Simulation?', 'The simulation will be paused.', '/pauseSimulation'));
+        $('#resume-btn').click(() => confirmAction('Resume Simulation?', 'The simulation will continue.', '/resumeSimulation'));
+        $('#next-day-btn').click(() => confirmAction('Next Day?', 'Proceed to the next day in simulation.', '/nextDaySimulation'));
+        $('#end-btn').click(() => confirmAction('End Simulation?', 'This will permanently end the simulation.', '/endSimulation'));
 
     });
 </script>

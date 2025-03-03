@@ -95,6 +95,19 @@
                 </div>
             </div>
 
+            <div class="form-group mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="playerCapital" class="form-label">Player Capital</label>
+                        <input type="number" class="form-control" name="playerCapital" id="playerCapital" placeholder="Enter Player First Capital" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="currentAssetRatio" class="form-label">Current Asset Ratio</label>
+                        <input type="number" class="form-control mb-2" name="currentAssetRatio" id="currentAssetRatio" placeholder="Loan Interest (%)" min="0" step="0.01" required>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group mt-5">
                 <h5>Makassar</h5>
                 <hr>
@@ -337,7 +350,7 @@
                                 <input type="number" class="form-control mb-2" name="loanInterest2" id="loanInterest2" placeholder="Loan Interest (%)" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-5">
-                                <input type="number" class="form-control" name="loanDue2" id="loanDue2" placeholder="Loan Due" step="0.01" required>
+                                <input type="number" class="form-control" name="loanDue2" id="loanDue2" placeholder="Loan Due" required>
                             </div>
                         </div>
                     </div>
@@ -351,7 +364,7 @@
                                 <input type="number" class="form-control mb-2" name="loanInterest3" id="loanInterest3" placeholder="Loan Interest (%)" min="0" step="0.01" required>
                             </div>
                             <div class="col-md-5">
-                                <input type="number" class="form-control" name="loanDue3" id="loanDue3" placeholder="Loan Due" step="0.01" required>
+                                <input type="number" class="form-control" name="loanDue3" id="loanDue3" placeholder="Loan Due" required>
                             </div>
                         </div>
                     </div>
@@ -372,8 +385,8 @@
                         <input type="number" class="form-control" name="lateDeliveryCost" id="lateDeliveryCost" placeholder="Enter Late Delivery Cost" required>
                     </div>
                     <div class="col-md-3">
-                        <label for="cardPerDays" class="form-label">Card Per Days</label>
-                        <input type="number" class="form-control" name="cardPerDays" id="cardPerDays" placeholder="Card Per Days" required>
+                        <label for="cardPerDays" class="form-label">Demand Per Days</label>
+                        <input type="number" class="form-control" name="cardPerDays" id="cardPerDays" placeholder=" Demand Per Days" required>
                     </div>
                 </div>
             </div>

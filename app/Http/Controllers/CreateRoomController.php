@@ -37,7 +37,7 @@ class CreateRoomController extends Controller
             'warehousePrice' => 'required|numeric',
             'inventoryCost' => 'required|numeric',
             'lateDeliveryCost' => 'required|numeric',
-            'earlyDeliveryCost' => 'required|numeric'
+            'earlyDeliveryCost' => 'required|numeric',
         ]);
 
 
@@ -70,6 +70,8 @@ class CreateRoomController extends Controller
         $room->machine_chosen = json_encode($machineIndex);
         $room->start = 0;
         $room->finished = 0;
+        $room->first_capital = $request->input('playerCapital');
+        $room->current_asset_ratio = $request->input('currentAssetRatio');
         $room->save();
 
         // Manado

@@ -231,7 +231,7 @@
             </div>
             <div class="stat-card">
                 <h6>Inventory Cost</h6>
-                <div class="stat-value">${{ number_format($inventoryCost) }}/m²</div>
+                <div class="stat-value">${{ number_format($inventoryCost) }}/unit</div>
             </div>
         </div>
 

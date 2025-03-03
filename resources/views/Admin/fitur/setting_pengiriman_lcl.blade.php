@@ -143,7 +143,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-shipping w-100">
-                                <i class="fas fa-truck me-2"></i>Set Pengiriman
+                                <i class="fas fa-truck me-2"></i>Deliver
                             </button>
                         </div>
                     </form>
@@ -216,7 +216,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $bjm->price }} / m3</p>
                     </div>
                 </div>
@@ -252,7 +252,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $mnd->price }} / m3</p>
                     </div>
                 </div>
@@ -287,7 +287,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $mks->price }} / m3</p>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\EndSimulation;
 use App\Events\NextDaySimulation;
 use App\Events\PauseSimulation;
+use App\Events\PlayerRemove;
 use App\Events\ResumeSimulation;
 use App\Events\StartSimulation;
 use App\Models\AirplaneDelivery;
@@ -86,7 +87,7 @@ class UtilityRoomController extends Controller
                 ->update([
                     'raw_items' => json_encode($arr),
                     'items' => json_encode($arr2),
-                    'revenue' => 0,
+                    'revenue' => $room->first_capital,
                     'inventory' => 0,
                     'machine_capacity' => json_encode($arr3),
                     'jatuh_tempo' => null,
@@ -94,11 +95,17 @@ class UtilityRoomController extends Controller
                     'produce' => 1,
                 ]);
 
-        StartSimulation::dispatch($room->room_id);
+            StartSimulation::dispatch($room->room_id);
 
-            return redirect()->back()->with('success', 'Simulation has started');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Simulation has been started'
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Room not found');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Simulation Room Not Found'
+            ]);
         }
     }
 
@@ -111,9 +118,15 @@ class UtilityRoomController extends Controller
             $room->save();
 
             PauseSimulation::dispatch($room->room_id);
-            return redirect()->back()->with('success', 'Simulation has paused');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Simulation has been paused'
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Room not found');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Simulation Room Not Found'
+            ]);
         }
     }
 
@@ -126,9 +139,15 @@ class UtilityRoomController extends Controller
             $room->save();
 
             ResumeSimulation::dispatch($room->room_id);
-            return redirect()->back()->with('success', 'Simulation has been resumed');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Simulation has been resume'
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Room not found');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Simulation Room Not Found'
+            ]);
         }
     }
 
@@ -137,9 +156,9 @@ class UtilityRoomController extends Controller
         $room = Room::where('room_id', $request->input('room_id'))->first();
         if ($room->recent_day != $room->max_day) {
             $players = Player::where('room_id', $room->room_id)->get();
-            foreach ($players as $player){
+            foreach ($players as $player) {
                 // Cek Jatuh Tempo
-                if($player->jatuh_tempo == $room->recent_day + 1){
+                if ($player->jatuh_tempo == $room->recent_day + 1) {
                     $player->revenue = $player->revenue - $player->debt;
                     $player->debt = null;
                     $player->jatuh_tempo = null;
@@ -147,28 +166,47 @@ class UtilityRoomController extends Controller
                 }
                 $totalInventory = 0;
                 $currentItemCapacity = json_decode($player->items);
-                $roomItemIndex = json_decode($room->item_chosen);
+                // $roomItemIndex = json_decode($room->item_chosen);
 
-                for ($i = 0; $i < count($roomItemIndex); $i++) {
-                    $queryItem = Items::where('id', $roomItemIndex[$i])->first();
-                    $totalInventory = $totalInventory + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
+                foreach ($currentItemCapacity as $item) {
+                    $totalInventory = $totalInventory + $item;
                 }
-
+                // for ($i = 0; $i < count($roomItemIndex); $i++) {
+                //     $queryItem = Items::where('id', $roomItemIndex[$i])->first();
+                //     $totalInventory = $totalInventory + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
+                // }
                 $inventoryDebt = $totalInventory * $room->inventory_cost;
                 $player->revenue = $player->revenue - $inventoryDebt;
                 $player->produce = 1;
                 $player->save();
+
+                $debt = $player->debt;
+                if ($debt != null) {
+                    if ($player->revenue / $player->debt < $room->current_asset_ratio) {
+                        $player->room_id = null;
+                        $player->inventory = null;
+                        $player->raw_items = null;
+                        $player->items = null;
+                        $player->machine_capacity = null;
+                        $player->revenue = null;
+                        $player->jatuh_tempo = null;
+                        $player->debt = null;
+                        $player->produce = null;
+                        $player->save();
+                        PlayerRemove::dispatch($player->player_username, $room->room_id);
+                    }
+                }
             }
 
             $lcl = LCLDelivery::where('room_id', $room->room_id)->get();
-            foreach ($lcl as $l){
+            foreach ($lcl as $l) {
                 $l->current_volume_capacity = 0;
                 $l->current_weight_capacity = 0;
                 $l->save();
             }
 
             $air = AirplaneDelivery::where('room_id', $room->room_id)->get();
-            foreach ($air as $a){
+            foreach ($air as $a) {
                 $a->current_volume_capacity = 0;
                 $a->current_weight_capacity = 0;
                 $a->save();
@@ -178,14 +216,19 @@ class UtilityRoomController extends Controller
             $room->save();
 
             NextDaySimulation::dispatch($room->room_id);
-            return redirect()->back()->with('success', 'The day has changed');
-            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Simulation day has changed'
+            ]);
         } else {
             $room->status = 0;
             $room->save();
 
             PauseSimulation::dispatch($room->room_id);
-            return redirect()->back()->with('success', 'The game has ended');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Simulation has ended'
+            ]);
         }
     }
 
@@ -194,26 +237,26 @@ class UtilityRoomController extends Controller
         $room = Room::where('room_id', $request->input('room_id'))->first();
         $player = Player::where('room_id', $room->room_id)->get();
 
-        foreach($player as $p){
+        foreach ($player as $p) {
             $evaluatedMachineValue = 0;
             $undeliveredDemandCharge = 0; // Akan mengurangi revenue peserta jika masih ada sisa demand di akhir permainan
 
             $machineChosen = json_decode($room->machine_chosen);
             $playerQuantityMachine = json_decode($p->machine_capacity);
 
-            for($i = 0; $i < count($machineChosen); $i++){
+            for ($i = 0; $i < count($machineChosen); $i++) {
                 $machinePrice = Machine::where('id', $machineChosen[$i])->first()->machine_price;
-                $evaluatedMachineValue = $evaluatedMachineValue + ( $machinePrice * $playerQuantityMachine[$i] * 0.1);
+                $evaluatedMachineValue = $evaluatedMachineValue + ($machinePrice * $playerQuantityMachine[$i] * 0.1);
             }
 
             $demand = Demand::where('player_username', $p->player_username)->get();
-            foreach($demand as $d){
+            foreach ($demand as $d) {
                 $lateCharge = ($room->recent_day - $d->day) * $room->late_delivery_charge;
                 $undeliveredDemandCharge = $undeliveredDemandCharge + ($d->revenue + $lateCharge);
             }
 
             $debt = $p->debt;
-            if($debt == null){
+            if ($debt == null) {
                 $debt = 0;
             }
             // Score = Revenue - Debt + evaluasi mesin - Value demand yang bellum terkirim
@@ -229,7 +272,7 @@ class UtilityRoomController extends Controller
         $room->finished = 1;
         $room->save();
 
-        foreach($player as $p){
+        foreach ($player as $p) {
             $p->room_id = null;
             $p->inventory = null;
             $p->raw_items = null;
@@ -243,7 +286,9 @@ class UtilityRoomController extends Controller
         }
 
         EndSimulation::dispatch($room->room_id);
-        return redirect()->back()->with('success', 'Calculation Finished');
-
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Calculating Player Score has finished !!'
+        ]);
     }
 }

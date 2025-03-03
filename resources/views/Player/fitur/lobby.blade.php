@@ -190,7 +190,7 @@
             columns: [{
                 data: 'player_username',
                 name: 'player_username',
-                className: 'text-center', // Add this line
+                className: 'text-center',
                 render: function(data) {
                     return `
                 <div class="player-name">

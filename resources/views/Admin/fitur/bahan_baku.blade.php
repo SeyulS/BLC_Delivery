@@ -333,6 +333,38 @@
         font-size: 0.75rem;
         font-weight: 600;
     }
+
+    .revenue-change {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .revenue-before {
+        color: #64748b;
+        text-decoration: line-through;
+        font-size: 0.85rem;
+    }
+
+    .revenue-after {
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .revenue-arrow {
+        color: #64748b;
+        font-size: 1rem;
+    }
+
+    .revenue-decrease {
+        background: rgba(239, 68, 68, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 </style>
 
 <div class="container">
@@ -430,8 +462,7 @@
                             <th>Player</th>
                             <th>Raw Item Purchased</th>
                             <th>Total Cost</th>
-                            <th>Revenue Before</th>
-                            <th>Revenue After</th>
+                            <th>Revenue Change</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -451,8 +482,13 @@
                                 </div>
                             </td>
                             <td>${{ number_format($history['total_cost'], 2) }}</td>
-                            <td>${{ number_format($history['revenue_before'], 2) }}</td>
-                            <td>${{ number_format($history['revenue_after'], 2) }}</td>
+                            <td>
+                                <div class="revenue-decrease">
+                                    <span class="revenue-before">${{ number_format($history['revenue_before'], 2) }}</span>
+                                    <i class="bi bi-arrow-right revenue-arrow"></i>
+                                    <span class="revenue-after">${{ number_format($history['revenue_after'], 2) }}</span>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

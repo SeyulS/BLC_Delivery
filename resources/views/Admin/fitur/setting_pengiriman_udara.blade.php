@@ -135,7 +135,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-shipping w-100">
-                                <i class="fas fa-plane me-2"></i>Set Pengiriman
+                                <i class="fas fa-plane me-2"></i>Deliver
                             </button>
                         </div>
                     </form>
@@ -185,7 +185,7 @@
                     <h6>{{ $bjm->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($bjm->current_volume_capacity / $bjm->max_volume_capacity) * 100 }}%">
@@ -205,7 +205,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $bjm->price }} / m3</p>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                     <h6>{{ $mnd->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($mnd->current_volume_capacity / $mnd->max_volume_capacity) * 100 }}%">
@@ -227,7 +227,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Berat</strong></label>
+                        <label class="form-label"><strong>Weight Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar bg-danger" role="progressbar"
                                 style="width: {{ ($mnd->current_weight_capacity / $mnd->max_weight_capacity) * 100 }}%">
@@ -237,7 +237,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $mnd->price }} / m3</p>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
                     <h6>{{ $mks->destination }}</h6>
                     <hr>
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Volume</strong></label>
+                        <label class="form-label"><strong>Volume Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar"
                                 style="width: {{ ($mks->current_volume_capacity / $mks->max_volume_capacity) * 100 }}%">
@@ -259,7 +259,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Kapasitas Berat</strong></label>
+                        <label class="form-label"><strong>Weight Capacity</strong></label>
                         <div class="progress">
                             <div class="progress-bar bg-danger" role="progressbar"
                                 style="width: {{ ($mks->current_weight_capacity / $mks->max_weight_capacity) * 100 }}%">
@@ -269,7 +269,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label"><strong>Harga</strong></label>
+                        <label class="form-label"><strong>Price</strong></label>
                         <p class="mb-0">{{ $mks->price }} / m3</p>
                     </div>
                 </div>

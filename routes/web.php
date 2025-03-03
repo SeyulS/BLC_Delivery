@@ -49,27 +49,27 @@ Route::post('/logoutAdmin',[LoginPlayerController::class,'logout']);
 
 // Home Admin
 Route::get('/homeAdmin',[AdminHomeController::class,'index'])->middleware('auth.administrator');
-Route::get('/manageData',[ManageDataController::class, 'index']);
-Route::get('/manageAccount',[RegistPlayerController::class,'index']);
-Route::post('/deletePlayer', [RegistPlayerController::class, 'destroy']);
+Route::get('/manageData',[ManageDataController::class, 'index'])->middleware('auth.administrator');
+Route::get('/manageAccount',[RegistPlayerController::class,'index'])->middleware('auth.administrator');
+Route::post('/deletePlayer', [RegistPlayerController::class, 'destroy'])->middleware('auth.administrator');
 
 
 
 // CRUD Raw Item
-Route::get('raw-items', [RawItemController::class, 'index']);
-Route::get('raw-items/data', [RawItemController::class, 'getData']);
-Route::post('raw-items', [RawItemController::class, 'store']);
-Route::get('raw-items/{id}/edit', [RawItemController::class, 'edit']);
-Route::put('raw-items/{id}', [RawItemController::class, 'update']);
-Route::get('raw-items/delete/{id}', [RawItemController::class, 'destroy']);
+Route::get('raw-items', [RawItemController::class, 'index'])->middleware('auth.administrator');
+Route::get('raw-items/data', [RawItemController::class, 'getData'])->middleware('auth.administrator');
+Route::post('raw-items', [RawItemController::class, 'store'])->middleware('auth.administrator');
+Route::get('raw-items/{id}/edit', [RawItemController::class, 'edit'])->middleware('auth.administrator');
+Route::put('raw-items/{id}', [RawItemController::class, 'update'])->middleware('auth.administrator');
+Route::get('raw-items/delete/{id}', [RawItemController::class, 'destroy'])->middleware('auth.administrator');
 
 
 // CRUD Items
-Route::get('items', [ItemController::class, 'index']);
+Route::get('items', [ItemController::class, 'index'])->middleware('auth.administrator');
 Route::post('/createItem', [ItemController::class, 'create']);
 
 // CRUD Machines
-Route::get('machine', [MachineController::class, 'index']);
+Route::get('machine', [MachineController::class, 'index'])->middleware('auth.administrator');
 Route::post('/createMachine', [MachineController::class, 'create']);
 
 Route::get('/api/players/{room_id}', [RoomControllerAdmin::class, 'getPlayers']);
@@ -86,32 +86,33 @@ Route::post('/nextDaySimulation', [UtilityRoomController::class, 'nextDay']);
 
 // Fitur Room Admin
 Route::get('/lobby/{room_id}', [RoomControllerAdmin::class,'index'])->middleware('auth.administrator');
-Route::get('/lobby/{room_id}/settingPengirimanLCL',[SettingPengirimanController::class,'indexLCL']);
-Route::get('/lobby/{room_id}/settingPengirimanFCL', [SettingPengirimanController::class,'indexFCL']);
-Route::get('/lobby/{room_id}/settingPengirimanUdara', [SettingPengirimanController::class,'indexUdara']);
-Route::get('/lobby/{room_id}/settingPinjaman', [SettingPinjamanController::class,'index']);
-Route::get('/lobby/{room_id}/settingBahanBaku', [SettingBahanBaku::class,'index']);
-Route::get('/lobby/{room_id}/demandInformation', [DemandController::class,'demandDeliveredInformation']);
-Route::get('/lobby/{room_id}/playerScore', [PlayerScoreController::class,'index']);
-Route::post('/setting_bahan_baku', [SettingBahanBaku::class,'setting'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/settingPengirimanLCL',[SettingPengirimanController::class,'indexLCL'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/settingPengirimanFCL', [SettingPengirimanController::class,'indexFCL'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/settingPengirimanUdara', [SettingPengirimanController::class,'indexUdara'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/settingPinjaman', [SettingPinjamanController::class,'index'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/settingBahanBaku', [SettingBahanBaku::class,'index'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/demandInformation', [DemandController::class,'demandDeliveredInformation'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/playerScore', [PlayerScoreController::class,'index'])->middleware('auth.administrator');
+Route::post('/setting_bahan_baku', [SettingBahanBaku::class,'setting']);
+
 Route::post('/setPinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
-Route::get('/lobby/{room_id}/utilityRoom', [UtilityRoomController::class,'index']);
+Route::get('/lobby/{room_id}/utilityRoom', [UtilityRoomController::class,'index'])->middleware('auth.administrator');
 Route::post('/kirimLCL',[SettingPengirimanController::class,'setLCL']);
 Route::post('/kirimFCL',[SettingPengirimanController::class,'setFCL']);
 Route::post('/kirimUdara',[SettingPengirimanController::class,'setUdara']);
 
 
 // Fitur Room Player
-Route::get('/player-lobby/{roomCode}', [RoomControllerPlayer::class, 'index'])->name('player.lobby');
-Route::get('/player-lobby/{room_id}/calendar', [RoomControllerPlayer::class,'calendar']);
-Route::get('/player-lobby/{roomCode}/playerProfile', [RoomControllerPlayer::class, 'profile']);
-Route::get('/player-lobby/{roomCode}/warehouseMachine', [RoomControllerPlayer::class,'warehouseMachine']);
-Route::get('/player-lobby/{room_id}/production', [RoomControllerPlayer::class,'production']);
-Route::get('/player-lobby/{room_id}/listOfDemands', [RoomControllerPlayer::class,'showDemand']);
-Route::get('/player-lobby/{room_id}/marketIntelligence', [RoomControllerPlayer::class,'marketIntelligence']);
-Route::get('/player-lobby/{room_id}/payingOffDebt',[RoomControllerPlayer::class,'payingOffDebt']);
-Route::get('/player-lobby/{room_id}/deliveredDemand',[RoomControllerPlayer::class,'historyDemand']);
-Route::get('/player-lobby/{room_id}/purchasedRawItems',[RoomControllerPlayer::class,'purchasedRawItems']);
+Route::get('/player-lobby/{roomCode}', [RoomControllerPlayer::class, 'index'])->name('player.lobby')->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/calendar', [RoomControllerPlayer::class,'calendar'])->middleware('auth.player');
+Route::get('/player-lobby/{roomCode}/playerProfile', [RoomControllerPlayer::class, 'profile'])->middleware('auth.player');
+Route::get('/player-lobby/{roomCode}/warehouseMachine', [RoomControllerPlayer::class,'warehouseMachine'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/production', [RoomControllerPlayer::class,'production'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/listOfDemands', [RoomControllerPlayer::class,'showDemand'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/marketIntelligence', [RoomControllerPlayer::class,'marketIntelligence'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/payingOffDebt',[RoomControllerPlayer::class,'payingOffDebt'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/deliveredDemand',[RoomControllerPlayer::class,'historyDemand'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/purchasedRawItems',[RoomControllerPlayer::class,'purchasedRawItems'])->middleware('auth.player');
 
 Route::post('/updateRevenue',[RoomControllerPlayer::class,'updateRevenue']);
 Route::post('/purchaseWarehouse',[PlayerPurchaseController::class,'purchaseWarehouse']);

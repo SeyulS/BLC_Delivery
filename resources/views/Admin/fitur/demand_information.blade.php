@@ -134,6 +134,7 @@
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 36px;
     }
+
     .page-header {
         padding: 1.5rem;
         border-bottom: 1px solid #e2e8f0;
@@ -171,6 +172,29 @@
     /* Center icon with text */
     .page-title i {
         font-size: 1.25rem;
+    }
+
+    /* Add to your existing style section */
+    .item-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: #4f46e5;
+        font-weight: 500;
+    }
+
+    .item-display i {
+        font-size: 1rem;
+        color: #6366f1;
+    }
+
+    .item-quantity {
+        font-weight: 600;
+        color: #4338ca;
     }
 </style>
 
@@ -225,7 +249,6 @@
                         <th>Demand ID</th>
                         <th>Destination</th>
                         <th>Item</th>
-                        <th>Quantity</th>
                         <th>Need Day</th>
                         <th>Revenue</th>
                         <th>Taken By</th>
@@ -236,8 +259,13 @@
                     <tr>
                         <td>{{ $demand->demand_id }}</td>
                         <td>{{ $demand->tujuan_pengiriman }}</td>
-                        <td>{{ $demand->item->item_name }}</td>
-                        <td>{{ number_format($demand->quantity) }}</td>
+                        <td>
+                            <div class="item-display">
+                                <i class="bi bi-box"></i>
+                                <span class="item-quantity">{{ number_format($demand->quantity) }}x</span>
+                                {{ $demand->item->item_name }}
+                            </div>
+                        </td>
                         <td>Day {{ $demand->need_day }}</td>
                         <td>${{ number_format($demand->revenue, 2) }}</td>
                         <td>{{ $demand->player_username }}</td>
