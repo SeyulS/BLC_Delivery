@@ -275,9 +275,9 @@ class CreateRoomController extends Controller
             $item_price = $price[$item_index];
 
             if (in_array($day, $specialDays)) {
-                $quantity = mt_rand(10, 20);
+                $quantity = mt_rand(14, 15);
             } else {
-                $quantity = mt_rand(1, 5);
+                $quantity = mt_rand(4, 5);
             }
 
             $city_quantities[$city][] = $quantity;

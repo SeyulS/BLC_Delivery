@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="currentAssetRatio" class="form-label">Current Asset Ratio</label>
-                        <input type="number" class="form-control mb-2" name="currentAssetRatio" id="currentAssetRatio" placeholder="Loan Interest (%)" min="0" step="0.01" required>
+                        <input type="number" class="form-control mb-2" name="currentAssetRatio" id="currentAssetRatio" placeholder="Current Asset Ratio (%)" min="0" step="0.01" required>
                     </div>
                 </div>
             </div>
