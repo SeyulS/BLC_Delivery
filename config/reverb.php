@@ -33,7 +33,7 @@ return [
             'port' => env('REVERB_SERVER_PORT', 8080),
             'hostname' => env('REVERB_HOST'),
             'options' => [
-                // 'verify' => false,
+                'verify' => false,
                 'tls' => [],
             ],
             'max_request_size' => env('REVERB_MAX_REQUEST_SIZE', 10_000),
