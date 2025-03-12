@@ -2,6 +2,10 @@
 
 @section('container')
 <style>
+    .table-warning {
+        background-color: #fff3cd !important;
+    }
+
     :root {
         --primary-color: #2563eb;
         --danger-color: #dc2626;
@@ -123,6 +127,8 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="px-4 py-3">Player Name</th>
+                                    <th class="px-4 py-3">Cash</th>
+                                    <th class="px-4 py-3">Debt</th>
                                     <th class="px-4 py-3 text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -167,8 +173,6 @@
 
 <script>
     $(document).ready(() => {
-        const roomId = "{{ $room->room_id }}";
-
         toastr.options = {
             "closeButton": true,
             "progressBar": true,
@@ -176,7 +180,10 @@
             "timeOut": "3000",
             "extendedTimeOut": "1000",
         }
-        // Initialize DataTable
+
+        const roomId = "{{ $room->room_id }}";
+        const highestLoan = parseFloat("{{ $highestLoan }}");
+
         const datatable = $('#player-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -190,26 +197,39 @@
                     name: 'player_username'
                 },
                 {
+                    data: 'revenue',
+                    name: 'revenue'
+                },
+                {
+                    data: 'debt',
+                    name: 'debt'
+                },
+                {
                     data: 'player_username',
                     name: 'action',
                     orderable: false,
                     searchable: false,
                     render: (data) => {
                         return `
-        <div class="text-end">
-            <form action='kick-player' method='POST' class='form-delete'>
-                @csrf
-                <button type="submit" class="btn kick-btn" data-username="${data}">
-                    <i class="bi bi-x-circle"></i>
-                </button>
-            </form>
-        </div>`;
+                <div class="text-end">
+                    <form action='kick-player' method='POST' class='form-delete'>
+                        @csrf
+                        <button type="submit" class="btn kick-btn" data-username="${data}">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </form>
+                </div>`;
                     },
-
                 },
             ],
-
+            createdRow: function(row, data, dataIndex) {
+                let revenue = parseFloat(data.revenue);
+                if (revenue + highestLoan <= 0) {
+                    $(row).addClass('table-warning'); // Tambahkan warna highlight
+                }
+            }
         });
+
 
         // Listen for player join event and reload table
         window.Echo.channel('join-room')

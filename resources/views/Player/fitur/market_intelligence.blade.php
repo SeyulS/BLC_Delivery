@@ -187,6 +187,64 @@
         margin-top: 0.25rem;
     }
 
+    .loan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .loan-card {
+        background: var(--card-bg);
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .loan-title {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .loan-title i {
+        color: var(--primary-color);
+    }
+
+    .loan-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .loan-detail {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .loan-detail:last-child {
+        border-bottom: none;
+    }
+
+    .loan-label {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+    }
+
+    .loan-value {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .stats-grid {
@@ -233,6 +291,32 @@
                 <h6>Inventory Cost</h6>
                 <div class="stat-value">${{ number_format($inventoryCost) }}/unit</div>
             </div>
+        </div>
+
+        <!-- Loan Information -->
+        <div class="loan-grid">
+            @foreach($loans as $index => $loan)
+            <div class="loan-card">
+                <h6 class="loan-title">
+                    <i class="bi bi-cash-stack"></i>
+                    Loan Type {{ $index + 1 }}
+                </h6>
+                <div class="loan-info">
+                    <div class="loan-detail">
+                        <span class="loan-label">Amount</span>
+                        <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span class="loan-label">Interest Rate</span>
+                        <span class="loan-value">{{ $loan->loan_interest }}%</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span class="loan-label">Duration</span>
+                        <span class="loan-value">{{ $loan->loan_due }} days</span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
 
         <!-- Shipping Methods -->

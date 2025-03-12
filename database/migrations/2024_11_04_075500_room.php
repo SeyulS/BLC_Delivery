@@ -25,7 +25,6 @@ return new class extends Migration
             $table->double('late_delivery_charge')->nullable();
             $table->double('inventory_cost')->nullable();
             $table->double('first_capital');
-            $table->double('current_asset_ratio');
             $table->integer('status');
             $table->integer('start');
             $table->integer('finished');

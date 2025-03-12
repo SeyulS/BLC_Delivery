@@ -242,8 +242,13 @@
     $(document).ready(function() {
         // Initialize Select2
         $('#player-select').select2({
-            theme: 'classic',
-            placeholder: 'Select a player',
+            placeholder: 'Select Team',
+            allowClear: true,
+            width: '100%'
+        });
+
+        $('#loan_select').select2({
+            placeholder: 'Select Loan Type',
             allowClear: true,
             width: '100%'
         });

@@ -7,7 +7,7 @@ use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 use Illuminate\Http\Request;
 use App\Events\PlayerRemove;
-
+use App\Models\Loan;
 use App\Models\Player;
 
 class RoomControllerAdmin extends Controller
@@ -15,8 +15,17 @@ class RoomControllerAdmin extends Controller
     public function index($room_id)
     {
         $room = Room::where('room_id', $room_id)->first();
+
+        $highestLoan = 0;
+        $loan = Loan::where('room_id', $room_id)->get();
+        foreach ($loan as $l) {
+            if ($l->loan_value > $highestLoan) {
+                $highestLoan = $l->loan_value;
+            }
+        }
         return view('Admin.fitur.lobby', [
-            'room' => $room
+            'room' => $room,
+            'highestLoan' => $highestLoan
         ]);
     }
 

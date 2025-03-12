@@ -503,7 +503,8 @@
         $('#team-select').select2({
             placeholder: "Select Team",
             allowClear: true,
-            width: '100%'
+            width: '100%',
+            height: '100%'
         });
 
         $('#dayFilter, #playerFilter').select2({

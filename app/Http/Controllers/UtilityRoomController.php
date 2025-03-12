@@ -179,23 +179,7 @@ class UtilityRoomController extends Controller
                 $player->revenue = $player->revenue - $inventoryDebt;
                 $player->produce = 1;
                 $player->save();
-
-                $debt = $player->debt;
-                if ($debt != null) {
-                    if ($player->revenue / $player->debt < $room->current_asset_ratio) {
-                        $player->room_id = null;
-                        $player->inventory = null;
-                        $player->raw_items = null;
-                        $player->items = null;
-                        $player->machine_capacity = null;
-                        $player->revenue = null;
-                        $player->jatuh_tempo = null;
-                        $player->debt = null;
-                        $player->produce = null;
-                        $player->save();
-                        PlayerRemove::dispatch($player->player_username, $room->room_id);
-                    }
-                }
+                
             }
 
             $lcl = LCLDelivery::where('room_id', $room->room_id)->get();

@@ -71,7 +71,6 @@ class CreateRoomController extends Controller
         $room->start = 0;
         $room->finished = 0;
         $room->first_capital = $request->input('playerCapital');
-        $room->current_asset_ratio = $request->input('currentAssetRatio');
         $room->save();
 
         // Manado
@@ -198,13 +197,10 @@ class CreateRoomController extends Controller
             $validatedData['item2'],
             $validatedData['item3'],
         ];
+
         $specialDays = $validatedData['specialDays'] ?? [];
-        $price = [];
         $hpp = [];
 
-        foreach ($items as $item) {
-            $price[] = Items::where('id', $item)->first()->item_price;
-        }
 
         foreach ($items as $item) {
             $query = Items::where('id', $item)->first();
@@ -220,33 +216,33 @@ class CreateRoomController extends Controller
             [
                 'tujuan' => 'Manado',
                 'lead_time' => $request->input('mnd.LCL_duration'),
-                'price' => $request->input('mnd.LCL_price'),
+                'price' => $request->input('mnd.udara_price'),
             ],
             [
                 'tujuan' => 'Banjarmasin',
                 'lead_time' => $request->input('banjar.LCL_duration'),
-                'price' => $request->input('banjar.LCL_price'),
+                'price' => $request->input('banjar.udara_price'),
             ],
             [
                 'tujuan' => 'Makassar',
                 'lead_time' => $request->input('mks.LCL_duration'),
-                'price' => $request->input('mks.LCL_price'),
+                'price' => $request->input('mks.udara_price'),
             ],
         ];
 
-        $this->generateDemand($validatedData['roomCode'], 1, $validatedData['numDays'], $request->input('cardPerDays'), $ekspedisi, $items, $hpp, $price, $specialDays);
+        $this->generateDemand($validatedData['roomCode'], 1, $validatedData['numDays'], $request->input('cardPerDays'), $ekspedisi, $items, $hpp, $specialDays);
 
         return redirect()->back()->with('success', 'Room created successfully');
     }
 
-    public function generateDemand($roomCode, $startDay, $numDays, $numDemandsPerDay, $ekspedisi, $items, $hpp, $jual, $specialDays)
+    public function generateDemand($roomCode, $startDay, $numDays, $numDemandsPerDay, $ekspedisi, $items, $hpp, $specialDays)
     {
         for ($day = $startDay; $day < $startDay + $numDays; $day++) {
-            $this->calculateDemand($roomCode, $day, $items, $ekspedisi, $hpp, $jual, $numDemandsPerDay, $specialDays);
+            $this->calculateDemand($roomCode, $day, $items, $ekspedisi, $hpp, $numDemandsPerDay, $specialDays);
         }
     }
 
-    public function calculateDemand($roomCode, $day, $items, $ekspedisi, $hpp, $price, $num_demands, $specialDays)
+    public function calculateDemand($roomCode, $day, $items, $ekspedisi, $hpp, $num_demands, $specialDays)
     {
         $demand_list = [];
         $cities = ['Manado', 'Banjarmasin', 'Makassar'];
@@ -267,17 +263,13 @@ class CreateRoomController extends Controller
         for ($i = 0; $i < $num_demands; $i++) {
             $city  = $cities[$i % $city_count];
             $city_demand_count[$city] += 1;
-
-            $item_index = mt_rand(0, count($items) - 1);
-            $item = $items[$item_index];
-
-            $item_hpp = $hpp[$item_index];
-            $item_price = $price[$item_index];
+            $rand = mt_rand(0,count($items)-1);
+            $chosenItem = Items::where('id', $items[$rand])->first();
 
             if (in_array($day, $specialDays)) {
-                $quantity = mt_rand(14, 15);
+                $quantity = mt_rand(12, 15);
             } else {
-                $quantity = mt_rand(4, 5);
+                $quantity = mt_rand(3, 5);
             }
 
             $city_quantities[$city][] = $quantity;
@@ -293,19 +285,32 @@ class CreateRoomController extends Controller
             if ($route && is_array($route)) {
                 $lead_time = $route['lead_time'];
                 $shipping_price = $route['price'];
-                $due_date = $day + $lead_time + mt_rand(0, $lead_time);
+                $randomDueDate = [-1,0,1,2];
+                $due_date = $day + $lead_time + $randomDueDate[mt_rand(0,count($randomDueDate)-1)];
                 $city_due_dates[$city][] = $due_date;
 
-                $value = $item_price * $quantity;
-                $total_shippin_cost = $shipping_price * $quantity;
-                $total_hpp = $item_hpp * $quantity + $total_shippin_cost;
+                $randomPercentage = [1, 0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95];
+
+                $used = 0;
+                $volume = $chosenItem->item_width * $chosenItem->item_height * $chosenItem->item_length * $quantity;
+                $weight = $chosenItem->item_weight * $quantity;
+                if($volume > $weight){
+                    $used = $volume;
+                } else {
+                    $used = $weight;
+                }
+
+                $value = ($chosenItem->item_price * $quantity * $randomPercentage[mt_rand(0,count($randomPercentage)-1)]) + ($used * $shipping_price);
+                $total_shippin_cost = $used * $quantity;
+
+                $total_hpp = $hpp[$rand] * $quantity + $total_shippin_cost;
 
                 $profit = $value - $total_hpp;
 
                 $demand_list[] = [
                     'demand_id' => $i,
                     'destination' => $city,
-                    'item' => $item,
+                    'item' => $chosenItem->id,
                     'quantity' => $quantity,
                     'due_date' => $due_date,
                     'value' => $value,
@@ -318,22 +323,22 @@ class CreateRoomController extends Controller
         $shortest_due_dates_per_city = [];
         $largest_quantities_per_city = [];
 
-        foreach ($cities as $city) {
-            foreach ($cities as $city) {
-                $shortest_due_dates_per_city[$city] = !empty($city_due_dates[$city]) ? min($city_due_dates[$city]) : null;
-                $largest_quantities_per_city[$city] = !empty($city_quantities[$city]) ? max($city_quantities[$city]) : null;
-            }
-        }
+        // foreach ($cities as $city) {
+        //     foreach ($cities as $city) {
+        //         $shortest_due_dates_per_city[$city] = !empty($city_due_dates[$city]) ? min($city_due_dates[$city]) : null;
+        //         $largest_quantities_per_city[$city] = !empty($city_quantities[$city]) ? max($city_quantities[$city]) : null;
+        //     }
+        // }
 
-        foreach ($demand_list as $demand) {
-            $city = $demand['destination'];
-            if ($demand['due_date'] === $shortest_due_dates_per_city[$city]) {
-                $demand['value'] = ($demand['value'] * 1.05);
-            }
-            if ($demand['quantity'] === $largest_quantities_per_city) {
-                $demand['value'] = ($demand['value'] * 1.05);
-            }
-        }
+        // foreach ($demand_list as $demand) {
+        //     $city = $demand['destination'];
+        //     if ($demand['due_date'] === $shortest_due_dates_per_city[$city]) {
+        //         $demand['value'] = ($demand['value'] * 1.05);
+        //     }
+        //     if ($demand['quantity'] === $largest_quantities_per_city) {
+        //         $demand['value'] = ($demand['value'] * 1.05);
+        //     }
+        // }
 
         foreach ($demand_list as $demand) {
             // dd($demand['destination']);
@@ -399,6 +404,6 @@ class CreateRoomController extends Controller
             ],
         ];
 
-        $this->generateDemand(134, 1, $numDays, 100, $ekspedisi, $items, $hpp, $price, $specialDays);
+        $this->generateDemand(111, 1, $numDays, 100, $ekspedisi, $items, $hpp, $price, $specialDays);
     }
 }

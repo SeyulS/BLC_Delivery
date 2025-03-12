@@ -9,6 +9,7 @@ use App\Models\Demand;
 use App\Models\FCLDelivery;
 use App\Models\Items;
 use App\Models\LCLDelivery;
+use App\Models\Loan;
 use App\Models\Machine;
 use App\Models\Player;
 use App\Models\ProductionHistory;
@@ -510,7 +511,8 @@ class RoomControllerPlayer extends Controller
             'BOM' => $BOM,
             'lcl' => LCLDelivery::where('room_id', $room->room_id)->get(),
             'fcl' => FCLDelivery::where('room_id', $room->room_id)->get(),
-            'air' => AirplaneDelivery::where('room_id', $room->room_id)->get()
+            'air' => AirplaneDelivery::where('room_id', $room->room_id)->get(),
+            'loans' => Loan::where('room_id', $room->room_id)->get()
         ]);
     }
 

@@ -280,7 +280,7 @@
                             <select name="machineType" id="machineType" class="form-select" required>
                                 <option value="" disabled selected>Select Machine Type</option>
                                 @foreach($machine as $index => $type)
-                                <option value="{{ $type }}">
+                                <option value="{{ $type }}" data-machine-name="{{ $machineName[$index] }}">
                                     {{ $machineName[$index] }} - ${{ number_format($machinePrice[$index]) }}
                                 </option>
                                 @endforeach
@@ -363,10 +363,11 @@
             event.preventDefault(); // Menghentikan default behavior form submit
 
             const machineType = $('#machineType').val();
+            const machineName = $('#machineType option:selected').data('machine-name');
 
             Swal.fire({
                 title: 'Konfirmasi Pembelian Mesin',
-                text: `Apakah Anda yakin ingin membeli mesin ${machineType}?`,
+                html: `You sure you want to buy this <strong>${machineName}</strong>?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, beli!',
@@ -498,7 +499,7 @@
                 }
             });
 
-            window.Echo.channel('update-revenue')
+        window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 

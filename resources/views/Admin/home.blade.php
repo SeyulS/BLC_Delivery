@@ -101,10 +101,6 @@
                         <label for="playerCapital" class="form-label">Player Capital</label>
                         <input type="number" class="form-control" name="playerCapital" id="playerCapital" placeholder="Enter Player First Capital" required>
                     </div>
-                    <div class="col-md-6">
-                        <label for="currentAssetRatio" class="form-label">Current Asset Ratio</label>
-                        <input type="number" class="form-control mb-2" name="currentAssetRatio" id="currentAssetRatio" placeholder="Current Asset Ratio (%)" min="0" step="0.01" required>
-                    </div>
                 </div>
             </div>
 
