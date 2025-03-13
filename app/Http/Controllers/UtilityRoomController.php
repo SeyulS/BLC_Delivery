@@ -230,13 +230,15 @@ class UtilityRoomController extends Controller
 
             for ($i = 0; $i < count($machineChosen); $i++) {
                 $machinePrice = Machine::where('id', $machineChosen[$i])->first()->machine_price;
-                $evaluatedMachineValue = $evaluatedMachineValue + ($machinePrice * $playerQuantityMachine[$i] * 0.1);
+                $evaluatedMachineValue = $evaluatedMachineValue + ($machinePrice * $playerQuantityMachine[$i] * 0.05);
             }
 
-            $demand = Demand::where('player_username', $p->player_username)->get();
+            $demand = Demand::where('player_username', $p->player_username)
+                ->where('is_delivered', 0)
+                ->get();
+
             foreach ($demand as $d) {
-                $lateCharge = ($room->recent_day - $d->day) * $room->late_delivery_charge;
-                $undeliveredDemandCharge = $undeliveredDemandCharge + ($d->revenue + $lateCharge);
+                $undeliveredDemandCharge = $undeliveredDemandCharge + $d->revenue;
             }
 
             $debt = $p->debt;
