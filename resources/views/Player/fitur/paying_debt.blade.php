@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | Pay Debt
+@endsection
 @section('container')
 <style>
     .debt-payment-container {
@@ -96,6 +98,8 @@
     $(document).ready(() => {
         const roomId = "{{ $room->room_id }}";
         const playerUsername = "{{ $player->player_username }}";
+
+        console.log(roomId);
         const payFullDebtLink = document.getElementById('payFullDebt');
         const paymentAmountInput = document.getElementById('paymentAmount');
         const currentDebtElement = document.getElementById('currentDebt');
@@ -164,9 +168,11 @@
                         type: "POST",
                         data: {
                             paymentAmount: paymentAmount,
+                            roomId : roomId,
                             _token: '{{ csrf_token() }}',
                         },
                         success: function(response) {
+                            console.log(response);
                             if (response.status == 'success') {
                                 Swal.fire('Success', response.message, 'success');
                             } else {

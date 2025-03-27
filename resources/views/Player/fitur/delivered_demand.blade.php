@@ -134,6 +134,68 @@
     .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 36px;
     }
+
+    .page-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .page-title {
+        color: #1e293b;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .demands-container {
+        padding: 2rem;
+        background: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .container-custom {
+        width: 100%;
+    }
+
+    /* Center icon with text */
+    .page-title i {
+        font-size: 1.25rem;
+    }
+
+    /* Add to your existing style section */
+    .item-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(99, 102, 241, 0.1);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: #4f46e5;
+        font-weight: 500;
+    }
+
+    .item-display i {
+        font-size: 1rem;
+        color: #6366f1;
+    }
+
+    .item-quantity {
+        font-weight: 600;
+        color: #4338ca;
+    }
 </style>
 
 <div class="demands-container">
@@ -144,7 +206,7 @@
             <div class="page-header">
                 <h1 class="page-title text-center">
                     <i class="bi bi-box-seam me-2"></i>
-                    Delivered Demand History
+                    Demand Delivered Information
                 </h1>
             </div>
             <!-- Update the filter section -->
@@ -187,7 +249,6 @@
                         <th>Demand ID</th>
                         <th>Destination</th>
                         <th>Item</th>
-                        <th>Quantity</th>
                         <th>Need Day</th>
                         <th>Revenue</th>
                     </tr>
@@ -197,8 +258,13 @@
                     <tr>
                         <td>{{ $demand->demand_id }}</td>
                         <td>{{ $demand->tujuan_pengiriman }}</td>
-                        <td>{{ $demand->item->item_name }}</td>
-                        <td>{{ number_format($demand->quantity) }}</td>
+                        <td>
+                            <div class="item-display">
+                                <i class="bi bi-box"></i>
+                                <span class="item-quantity">{{ number_format($demand->quantity) }}x</span>
+                                {{ $demand->item->item_name }}
+                            </div>
+                        </td>
                         <td>Day {{ $demand->need_day }}</td>
                         <td>${{ number_format($demand->revenue, 2) }}</td>
                     </tr>
@@ -211,9 +277,6 @@
 <script>
     $(document).ready(function() {
         // Initialize DataTable
-        const roomId = "{{ $room->room_id }}";
-        const playerUsername = "{{ $player->player_username }}";
-
         const table = $('#demandsTable').DataTable({
             pageLength: 10,
             ordering: true,
@@ -236,15 +299,17 @@
             ]
         });
 
-        // Day Filter - Updated with exact match
+        // Initialize Select2
+        $('.form-select').select2({
+            width: '100%',
+            placeholder: 'Select an option',
+            allowClear: true // Allows clearing the selection
+        });
+
+        // Day Filter
         $('#dayFilter').on('change', function() {
             const value = $(this).val();
-            if (value) {
-                // Using regex for exact match
-                table.column(4).search('^Day ' + value + '$', true, false).draw();
-            } else {
-                table.column(4).search('').draw();
-            }
+            table.column(4).search(value ? 'Day ' + value : '').draw();
         });
 
         // Destination Filter
@@ -258,139 +323,9 @@
             // Reset Select2 dropdowns
             $('.form-select').val(null).trigger('change');
 
-            // Clear DataTable filters and reset page
+            // Clear DataTable filters
             table.search('').columns().search('').draw();
         });
-
-        window.Echo.channel('update-revenue')
-            .listen('.UpdateRevenueEvent', (event) => {
-                if (event.playerUsername == playerUsername && event.roomId == roomId) {
-
-                    $.ajax({
-                        url: '/updateRevenue',
-                        method: 'POST',
-                        data: {
-                            player_id: playerUsername,
-                            _token: '{{ csrf_token() }}',
-                        },
-                        success: function(response) {
-                            if (response.revenue !== undefined) {
-                                const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
-                                        style: 'currency',
-                                        currency: 'USD'
-                                    }).format(number);
-                                };
-                                $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
-                                $('#sidebar_revenue').html(formatCurrency(response.revenue));
-                                $('#debt').html(`: ${formatCurrency(response.debt)}`);
-                                $('#jatuh_tempo').html(`: ${response.jatuh_tempo} days`);
-                            }
-                        },
-                        error: (xhr) => {
-                            toastr.error('Failed to fetch revenue:', xhr.responseText);
-                        }
-                    })
-
-                }
-            });
-
-        window.Echo.channel('player-remove')
-            .listen('.PlayerRemoveEvent', (event) => {
-                if (event.playerUsername == playerUsername) {
-                    window.location.href = '/homePlayer'
-                }
-                if (event.roomId == roomId) {
-                    datatable.ajax.reload();
-                }
-
-            });
-
-        window.Echo.channel('pause-simulation')
-            .listen('.PauseSimulationEvent', (event) => {
-                if (event.roomId == roomId) {
-                    Swal.fire({
-                        title: 'Loading...',
-                        text: 'The simulation was paused',
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-
-                    setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
-                    }, 5000);
-                }
-            });
-
-        window.Echo.channel('resume-simulation')
-            .listen('.ResumeSimulationEvent', (event) => {
-                if (event.roomId == roomId) {
-                    Swal.fire({
-                        title: 'Loading...',
-                        text: 'The simulation was resumed',
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-
-                    setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
-                    }, 5000);
-                }
-            });
-
-        window.Echo.channel('next-day')
-            .listen('.NextDaySimulationEvent', (event) => {
-                console.log(event.roomId, roomId);
-                if (event.roomId == roomId) {
-                    Swal.fire({
-                        title: 'Loading...',
-                        text: 'Moving to the next day. Please wait.',
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-
-                    setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
-                    }, 5000);
-                }
-            });
-
-        window.Echo.channel('end-simulation')
-            .listen('.EndSimulationEvent', (event) => {
-                if (event.roomId == roomId) {
-                    Swal.fire({
-                        title: 'Simulation Ended',
-                        text: 'The simulation has ended',
-                        icon: 'info',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        timer: 5000,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-
-                    setTimeout(() => {
-                        window.location.href = '/homePlayer';
-                    }, 5000);
-                }
-            });
-
     });
 </script>
 @endsection

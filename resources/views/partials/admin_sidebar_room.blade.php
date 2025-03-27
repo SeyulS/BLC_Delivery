@@ -47,8 +47,15 @@
 
         <li class="sidebar-item">
             <a href="/lobby/{{ $room->room_id }}/demandInformation" class="sidebar-link">
-                <i class="bi bi-capsule"></i>
+                <i class="bi bi-box-seam"></i>
                 <span>Demand Information</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a href="/lobby/{{ $room->room_id }}/player_transaction" class="sidebar-link">
+                <i class="bi bi-receipt"></i>
+                <span>Player Transaction</span>
             </a>
         </li>
         

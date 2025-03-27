@@ -159,6 +159,7 @@
                                     <th>Demand ID</th>
                                     <th>Delivery Cost</th>
                                     <th>Revenue</th>
+                                    <th>Additional Charge</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,6 +171,7 @@
                                     <td>{{ $h->list_of_demands }}</td>
                                     <td>{{ $h->delivery_cost }}</td>
                                     <td>{{ $h->revenue }}</td>
+                                    <td>{{ $h->late_early_charge }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

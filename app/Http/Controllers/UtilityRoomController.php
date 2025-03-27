@@ -15,6 +15,7 @@ use App\Models\Items;
 use App\Models\LCLDelivery;
 use App\Models\Machine;
 use App\Models\Player;
+use App\Models\RevenueHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -158,11 +159,23 @@ class UtilityRoomController extends Controller
             $players = Player::where('room_id', $room->room_id)->get();
             foreach ($players as $player) {
                 // Cek Jatuh Tempo
+                $prevRevenue = $player->revenue;
                 if ($player->jatuh_tempo == $room->recent_day + 1) {
-                    $player->revenue = $player->revenue - $player->debt;
+                    $debt = $player->debt;
+                    $player->revenue = $player->revenue - $debt;
                     $player->debt = null;
                     $player->jatuh_tempo = null;
                     $player->save();
+
+                    $revenueHistory = new RevenueHistory();
+                    $revenueHistory->room_id = $room->room_id;
+                    $revenueHistory->day = $room->recent_day;
+                    $revenueHistory->player_username = $player->player_username;
+                    $revenueHistory->transaction_description = 'Debt Payment';
+                    $revenueHistory->revenue_before = $prevRevenue;
+                    $revenueHistory->revenue_after = $player->revenue;
+                    $revenueHistory->value = $debt * -1;
+                    $revenueHistory->save();
                 }
                 $totalInventory = 0;
                 $currentItemCapacity = json_decode($player->items);
@@ -176,10 +189,23 @@ class UtilityRoomController extends Controller
                 //     $totalInventory = $totalInventory + ($currentItemCapacity[$i] * $queryItem->item_length * $queryItem->item_width);
                 // }
                 $inventoryDebt = $totalInventory * $room->inventory_cost;
+                $prevRevenue = $player->revenue;
                 $player->revenue = $player->revenue - $inventoryDebt;
                 $player->produce = 1;
                 $player->save();
-                
+
+                if ($inventoryDebt != 0) {
+                    $revenueHistory = new RevenueHistory();
+                    $revenueHistory->room_id = $room->room_id;
+                    $revenueHistory->day = $room->recent_day;
+                    $revenueHistory->player_username = $player->player_username;
+                    $revenueHistory->transaction_description = 'Inventory Cost';
+                    $revenueHistory->revenue_before = $prevRevenue;
+                    $revenueHistory->revenue_after = $player->revenue;
+                    $revenueHistory->value = $inventoryDebt * -1;
+                    $revenueHistory->save();
+                }
+
             }
 
             $lcl = LCLDelivery::where('room_id', $room->room_id)->get();
@@ -255,21 +281,21 @@ class UtilityRoomController extends Controller
             $result->save();
         }
         $room->status = 0;
-        $room->finished = 1;
+        // $room->finished = 1;
         $room->save();
 
-        foreach ($player as $p) {
-            $p->room_id = null;
-            $p->inventory = null;
-            $p->raw_items = null;
-            $p->items = null;
-            $p->machine_capacity = null;
-            $p->revenue = null;
-            $p->jatuh_tempo = null;
-            $p->debt = null;
-            $p->produce = null;
-            $p->save();
-        }
+        // foreach ($player as $p) {
+        //     $p->room_id = null;
+        //     $p->inventory = null;
+        //     $p->raw_items = null;
+        //     $p->items = null;
+        //     $p->machine_capacity = null;
+        //     $p->revenue = null;
+        //     $p->jatuh_tempo = null;
+        //     $p->debt = null;
+        //     $p->produce = null;
+        //     $p->save();
+        // }
 
         EndSimulation::dispatch($room->room_id);
         return response()->json([

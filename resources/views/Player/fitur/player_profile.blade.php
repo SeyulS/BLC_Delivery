@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | Financial & Inventory
+@endsection
 @section('container')
 <style>
     :root {
@@ -63,7 +65,7 @@
     }
 
     .status-badge {
-        padding: 0.35rem 1rem;
+        padding: 0.2rem 0.7rem;
         border-radius: 50px;
         font-size: 0.75rem;
         font-weight: 600;
@@ -98,6 +100,7 @@
         margin-right: 0.5rem;
         color: var(--primary-color);
     }
+
 </style>
 
 <div class="container-fluid py-4">
@@ -109,11 +112,11 @@
                 <div class="section-title">
                     <i class="fas fa-wallet"></i> Financial Overview
                 </div>
-                <div class="mb-4">
-                    <div class="stat-label">Revenue</div>
+                <div class="mb-3">
+                    <div class="stat-label">Cash On Hand</div>
                     <div class="stat-value text-success" id="revenue">${{ number_format($player->revenue, 2) }}</div>
                 </div>
-                <div class="mb-4">
+                <div class="mb-3">
                     <div class="stat-label">Current Debt</div>
                     <div class="stat-value text-danger" id="debt">${{ number_format($player->debt, 2) }}</div>
                 </div>
@@ -125,6 +128,8 @@
                     <div class="status-badge bg-danger text-white" id="jatuh_tempo">{{ $jatuh_tempo }} days remaining</div>
                     @endif
                 </div>
+                
+
             </div>
         </div>
 
@@ -156,7 +161,7 @@
 
                 <div class="row">
                     <!-- Raw Materials -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h6 class="section-title">
                             <i class="fas fa-box"></i> Raw Materials
                         </h6>
@@ -171,14 +176,27 @@
                     </div>
 
                     <!-- Finished Products -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h6 class="section-title">
                             <i class="fas fa-box-open"></i> Finished Products
                         </h6>
                         @forelse ($roomItem as $index => $item)
                         <div class="inventory-item d-flex justify-content-between align-items-center">
                             <span>{{ $roomItemName[$index] }}</span>
-                            <span class="badge bg-success">{{ $playerItemQty[$index] }}</span>
+                            <span class="badge bg-secondary">{{ $playerItemQty[$index] }}</span>
+                        </div>
+                        @empty
+                        <div class="text-muted">No finished products available</div>
+                        @endforelse
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="section-title">
+                            <i class="fas fa-tools"></i> Machine
+                        </h6>
+                        @forelse ($roomMachine as $index => $item)
+                        <div class="inventory-item d-flex justify-content-between align-items-center">
+                            <span>{{ $roomMachineName[$index] }}</span>
+                            <span class="badge bg-warning">{{ $playerMachineQuantity[$index] }}</span>
                         </div>
                         @empty
                         <div class="text-muted">No finished products available</div>
@@ -192,12 +210,12 @@
         <div class="col-md-3">
             <div class="dashboard-card h-100 p-4">
                 <div class="section-title">
-                    <i class="fas fa-cogs"></i> Machine Status
+                    <i class="fas fa-cogs"></i> Machine Production Capacity
                 </div>
                 @forelse ($roomMachine as $index => $machine)
                 <div class="machine-stat">
                     <div class="stat-label">{{ $roomMachineName[$index] }}</div>
-                    <div class="stat-value">{{ $playerMachineCapacity[$index] }} <small>units</small></div>
+                    <div class="stat-value">{{ $playerMachineCapacity[$index] }} <small>units / day</small></div>
                 </div>
                 @empty
                 <div class="text-muted">No machines available</div>
@@ -224,7 +242,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Destination</th>
-                                <th>Deadline</th>
+                                <th>Need Day</th>
                                 <th>Product</th>
                                 <th>Quantity</th>
                                 <th>Revenue</th>
@@ -235,7 +253,7 @@
                             <tr>
                                 <td>#{{ $demand->demand_id }}</td>
                                 <td>{{ $demand->tujuan_pengiriman }}</td>
-                                <td>{{ $demand->need_day }} days</td>
+                                <td>Day {{ $demand->need_day }}</td>
                                 <td>{{ $demand->item->item_name }}</td>
                                 <td>{{ number_format($demand->quantity) }}</td>
                                 <td>${{ number_format($demand->revenue, 2) }}</td>
@@ -254,6 +272,7 @@
         const roomId = "{{ $room->room_id }}";
         const playerUsername = "{{ $player->player_username }}";
         // Initialize DataTable with enhanced features
+
         $('#demandTable').DataTable({
             pageLength: 10,
             order: [

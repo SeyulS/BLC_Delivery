@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('air_history', function (Blueprint $table) {
+        Schema::create('history_revenue', function (Blueprint $table) {
             $table->id();
             $table->string('room_id');
-            $table->string('player_username');
             $table->integer('day');
-            $table->string('destination');
-            $table->string('demand_id');
-            $table->double('delivery_cost');
-            $table->double('revenue');
-            $table->double('late_early_charge');
+            $table->string('player_username');
+            $table->string('transaction_description');
+            $table->double('revenue_before');
+            $table->double('revenue_after');
+            $table->double('value');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('air_history');
+        Schema::dropIfExists('history_revenue');
     }
 };

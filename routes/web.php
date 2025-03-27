@@ -93,6 +93,7 @@ Route::get('/lobby/{room_id}/settingPinjaman', [SettingPinjamanController::class
 Route::get('/lobby/{room_id}/settingBahanBaku', [SettingBahanBaku::class,'index'])->middleware('auth.administrator');
 Route::get('/lobby/{room_id}/demandInformation', [DemandController::class,'demandDeliveredInformation'])->middleware('auth.administrator');
 Route::get('/lobby/{room_id}/playerScore', [PlayerScoreController::class,'index'])->middleware('auth.administrator');
+Route::get('/lobby/{room_id}/player_transaction', [RoomControllerAdmin::class,'playerTransaction'])->middleware('auth.administrator');
 Route::post('/setting_bahan_baku', [SettingBahanBaku::class,'setting']);
 
 Route::post('/setPinjaman', [SettingPinjamanController::class, 'settingPinjaman']);
@@ -113,6 +114,7 @@ Route::get('/player-lobby/{room_id}/marketIntelligence', [RoomControllerPlayer::
 Route::get('/player-lobby/{room_id}/payingOffDebt',[RoomControllerPlayer::class,'payingOffDebt'])->middleware('auth.player');
 Route::get('/player-lobby/{room_id}/deliveredDemand',[RoomControllerPlayer::class,'historyDemand'])->middleware('auth.player');
 Route::get('/player-lobby/{room_id}/purchasedRawItems',[RoomControllerPlayer::class,'purchasedRawItems'])->middleware('auth.player');
+Route::get('/player-lobby/{room_id}/transactionReceipt',[RoomControllerPlayer::class,'transactionReceipt'])->middleware('auth.player');
 
 Route::post('/updateRevenue',[RoomControllerPlayer::class,'updateRevenue']);
 Route::post('/purchaseWarehouse',[PlayerPurchaseController::class,'purchaseWarehouse']);

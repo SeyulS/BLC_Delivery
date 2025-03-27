@@ -14,6 +14,7 @@ use App\Models\FCLHistory;
 use App\Models\Items;
 use App\Models\LCLDelivery;
 use App\Models\LCLHistory;
+use App\Models\RevenueHistory;
 use App\Models\Room;
 
 class SettingPengirimanController extends Controller
@@ -128,13 +129,13 @@ class SettingPengirimanController extends Controller
         // Jika terlalu cepat
         if ($needDay < $demand->need_day){
             $earlyDayTotal = $demand->need_day - $needDay;
-            $earlyPrice = $earlyDayTotal * $room->early_delivery_charge;
+            $earlyPrice = $earlyDayTotal * $demand->quantity * $room->early_delivery_charge;
         }
 
         // Cek Keterlambatan
         if ($needDay > $demand->need_day){
             $lateDayTotal = $needDay - $demand->need_day;
-            $latePrice = $lateDayTotal * $room->late_delivery_charge;
+            $latePrice = $lateDayTotal * $demand->quantity * $room->late_delivery_charge;
         }
 
         // Cek Saldo
@@ -145,17 +146,18 @@ class SettingPengirimanController extends Controller
             ]);
         }
 
+        $revenueBefore = $player->revenue;
+        $late_early_charge = $latePrice + $earlyPrice;
+
         $playerItems[$index] = $playerItems[$index] - $demand->quantity;
         $player->items = json_encode($playerItems);
-        $player->revenue = $player->revenue + $demand->revenue - $deliveryPrice - $latePrice;
+        $player->revenue = $player->revenue + $demand->revenue - $deliveryPrice - $late_early_charge;
         $player->save();
 
         $lcl = LCLDelivery::where('room_id', $request->input('room_id'))
             ->where('destination', $demand->tujuan_pengiriman)->first();
-        
         $lcl->current_volume_capacity = $lcl->current_volume_capacity + $volume;
         $lcl->current_weight_capacity = $lcl->current_weight_capacity + $weight;
-
         $lcl->save();
         
         // History
@@ -167,10 +169,21 @@ class SettingPengirimanController extends Controller
         $history->demand_id = $demand->demand_id;
         $history->delivery_cost = $deliveryPrice;
         $history->revenue = $demand->revenue;
+        $history->late_early_charge = $late_early_charge;
         $history->save();
 
         $demand->is_delivered = true;
         $demand->save();
+
+        $revenueHistory = new RevenueHistory();
+        $revenueHistory->room_id = $room->room_id;
+        $revenueHistory->player_username = $player->player_username;
+        $revenueHistory->day = $room->recent_day;
+        $revenueHistory->transaction_description = 'LCL Delivery';
+        $revenueHistory->revenue_before = $revenueBefore;
+        $revenueHistory->revenue_after = $player->revenue;
+        $revenueHistory->value = $demand->revenue-$deliveryPrice-$late_early_charge;
+        $revenueHistory->save();
 
         UpdateRevenue::dispatch($request->input('player_username'), $request->input('room_id'));
 
@@ -223,7 +236,7 @@ class SettingPengirimanController extends Controller
         $fcl = FCLDelivery::where('room_id', $request->input('room_id'))
             ->where('destination', $request->input('destination'))->first();
         
-        $price = $fcl->price;
+        $deliveryCost = $fcl->price;
         
         $max_volume_capacity = $fcl->max_volume_capacity;
         $max_weight_capacity = $fcl->max_weight_capacity;
@@ -241,15 +254,17 @@ class SettingPengirimanController extends Controller
         foreach($demand as $d){
             $needDay = $room->recent_day + $fcl->pengiriman_duration;
             if( $needDay < $d->need_day){
-                $earlyDeliveryCost = $earlyDeliveryCost + (($d->need_day - $needDay)*$room->early_delivery_charge);
+                $earlyDeliveryCost = $earlyDeliveryCost + (($d->need_day - $needDay) * $d->quantity * $room->early_delivery_charge);
             }
             if($needDay > $d->need_day){
-                $lateDeliveryCost = $lateDeliveryCost + (($needDay - $d->need_day)*$room->late_delivery_charge);
+                $lateDeliveryCost = $lateDeliveryCost + (($needDay - $d->need_day) * $d->quantity * $room->late_delivery_charge);
             }
             $revenue = $revenue + $d->revenue;
+            $d->is_delivered = true;
+            $d->save();
         }
 
-        if($player->revenue < ($price + $lateDeliveryCost + $earlyDeliveryCost)){
+        if($player->revenue < ($deliveryCost + $lateDeliveryCost + $earlyDeliveryCost)){
             return response()->json([
                 'status' => 'fail', 
                 'message' => 'Player doesnt have enough money !'
@@ -259,7 +274,8 @@ class SettingPengirimanController extends Controller
         for($i = 0; $i < count($itemIndex); $i++){
             $playerItems[$i] = $playerItems[$i] - $itemNeeded[$i];
         }
-        $player->revenue = $player->revenue + $revenue - ($price + $lateDeliveryCost + $earlyDeliveryCost);
+        $revenueBefore = $player->revenue;
+        $player->revenue = $player->revenue + $revenue - ($deliveryCost + $lateDeliveryCost + $earlyDeliveryCost);
         $player->items = json_encode($playerItems);
         $player->save();
 
@@ -270,14 +286,20 @@ class SettingPengirimanController extends Controller
         $history->day = $room->recent_day;
         $history->destination = $request->input('destination');
         $history->list_of_demands = json_encode($request->input('demands'));
-        $history->delivery_cost = $price;
+        $history->delivery_cost = $deliveryCost;
         $history->revenue = $revenue;
+        $history->late_early_charge = $lateDeliveryCost + $earlyDeliveryCost;
         $history->save();
 
-        foreach($demand as $d){
-            $d->is_delivered = true;
-            $d->save();
-        }
+        $historyRevenue = new RevenueHistory();
+        $historyRevenue->room_id = $room->room_id;
+        $historyRevenue->player_username = $request->input('player_username');
+        $historyRevenue->day = $room->recent_day;
+        $historyRevenue->transaction_description = 'FCL Delivery';
+        $historyRevenue->revenue_before = $revenueBefore;
+        $historyRevenue->revenue_after = $player->revenue;
+        $historyRevenue->value = $revenue - ($deliveryCost + $lateDeliveryCost + $earlyDeliveryCost);
+        $historyRevenue->save();
 
         UpdateRevenue::dispatch($request->input('player_username'), $request->input('room_id'));
         
@@ -344,13 +366,13 @@ class SettingPengirimanController extends Controller
                 // Cek Saldo ( melibatkan apakah ada keterlambatan pengiriman )
         if ($needDay < $demand->need_day){
             $earlyDayTotal = $demand->need_day - $needDay;
-            $earlyPrice = $earlyDayTotal * $room->early_delivery_charge;
+            $earlyPrice = $earlyDayTotal * $demand->quantity * $room->early_delivery_charge;
         }
 
         // Cek Keterlambatan
         if ($needDay > $demand->need_day){
             $lateDayTotal = $needDay - $demand->need_day;
-            $latePrice = $lateDayTotal * $room->late_delivery_charge;
+            $latePrice = $lateDayTotal * $demand->quantity * $room->late_delivery_charge;
         }
 
         // Cek Saldo
@@ -360,6 +382,8 @@ class SettingPengirimanController extends Controller
                 'message' => 'Player doesnt have enought money !'
             ]);
         }
+        $revenueBefore = $player->revenue;
+        $late_early_charge = $latePrice + $earlyPrice;
 
         $playerItems[$index] = $playerItems[$index] - $demand->quantity;
         $player->items = json_encode($playerItems);
@@ -383,7 +407,18 @@ class SettingPengirimanController extends Controller
         $history->demand_id = $demand->demand_id;
         $history->delivery_cost = $deliveryPrice;
         $history->revenue = $demand->revenue;
+        $history->late_early_charge = $late_early_charge;
         $history->save();
+
+        $revenueHistory = new RevenueHistory();
+        $revenueHistory->room_id = $room->room_id;
+        $revenueHistory->player_username = $player->player_username;
+        $revenueHistory->day = $room->recent_day;
+        $revenueHistory->transaction_description = 'Air Delivery';
+        $revenueHistory->revenue_before = $revenueBefore;
+        $revenueHistory->revenue_after = $player->revenue;
+        $revenueHistory->value = $demand->revenue-$deliveryPrice-$late_early_charge;
+        $revenueHistory->save();
 
         $demand->is_delivered = true;
         $demand->save();
@@ -394,8 +429,6 @@ class SettingPengirimanController extends Controller
             'status' => 'success', 
             'message' => 'Delivery Success !'
         ]);
-
     }
-
 
 }

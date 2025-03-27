@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | List of Demands
+@endsection
 @section('container')
 <style>
     :root {
@@ -119,11 +121,40 @@
         box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .demand-header {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+    .demand-header-banjarmasin {
+        background: linear-gradient(135deg, #ffdd99, #ffbb66);
         color: white;
         padding: 1rem;
         text-align: center;
+    }
+
+    .demand-header-manado {
+        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .demand-header-makassar {
+        background: linear-gradient(135deg, #b8e994, #78c850);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .destination-banjarmasin {
+        background: linear-gradient(135deg, #ffdd99, #ffbb66);
+        /* Soft Yellow-Orange */
+    }
+
+    .destination-makassar {
+        background: linear-gradient(135deg, #b8e994, #78c850);
+        /* Soft Green */
+    }
+
+    .destination-manado {
+        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        /* Soft Blue */
     }
 
     .demand-id {
@@ -164,8 +195,8 @@
         border-top: 1px solid var(--border);
     }
 
-    .btn-take-demand {
-        background: var(--primary);
+    .btn-take-demand-banjarmasin {
+        background: linear-gradient(135deg, #ffdd99, #ffbb66);
         color: white;
         border: none;
         padding: 0.75rem 2rem;
@@ -174,8 +205,40 @@
         transition: all 0.3s ease;
     }
 
-    .btn-take-demand:hover {
-        background: var(--secondary);
+    .btn-take-demand-makassar {
+        background: linear-gradient(135deg, #b8e994, #78c850);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-take-demand-manado {
+        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-take-demand-banjarmasin:hover {
+        background: linear-gradient(135deg, #ffdd99, #ffbb66);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-take-demand-makassar:hover {
+        background: linear-gradient(135deg, #b8e994, #78c850);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-take-demand-manado:hover {
+        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
         transform: translateY(-2px);
         box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
     }
@@ -216,6 +279,16 @@
             grid-template-columns: 1fr;
             gap: 1rem;
         }
+    }
+
+    .destination-box {
+        display: inline-block;
+        padding: 0.15rem 0.85rem;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: white;
+        text-align: center;
     }
 </style>
 
@@ -271,14 +344,36 @@
                 data-destination="{{ $demand->tujuan_pengiriman }}"
                 data-demand-id="{{ $demand->demand_id }}"
                 data-item="{{ $demand->item->item_name }}" id="card{{$demand->demand_id}}">
-                <div class="demand-header">
+                @if($demand->tujuan_pengiriman == 'Banjarmasin')
+                <div class="demand-header-banjarmasin">
                     <h3 class="demand-id">{{ $demand->demand_id }}</h3>
                 </div>
+                @elseif($demand->tujuan_pengiriman == 'Makassar')
+                <div class="demand-header-makassar">
+                    <h3 class="demand-id">{{ $demand->demand_id }}</h3>
+                </div>
+                @elseif($demand->tujuan_pengiriman == 'Manado')
+                <div class="demand-header-manado">
+                    <h3 class="demand-id">{{ $demand->demand_id }}</h3>
+                </div>
+                @else
+                <span class="destination-box" style="background: #e2e8f0; color: #2d3436;">{{ $demand->tujuan_pengiriman }}</span>
+                @endif
                 <div class="demand-body">
                     <div class="demand-info">
                         <div class="info-row">
                             <span class="info-label">Destination:</span>
-                            <span class="info-value">{{ $demand->tujuan_pengiriman }}</span>
+                            <span class="info-value">
+                                @if($demand->tujuan_pengiriman == 'Banjarmasin')
+                                <span class="destination-box destination-banjarmasin">Banjarmasin</span>
+                                @elseif($demand->tujuan_pengiriman == 'Makassar')
+                                <span class="destination-box destination-makassar">Makassar</span>
+                                @elseif($demand->tujuan_pengiriman == 'Manado')
+                                <span class="destination-box destination-manado">Manado</span>
+                                @else
+                                <span class="destination-box" style="background: #e2e8f0; color: #2d3436;">{{ $demand->tujuan_pengiriman }}</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Need Day:</span>
@@ -307,10 +402,22 @@
                     </div>
                 </div>
                 <div class="demand-footer">
-                    <button class="btn-take-demand take-demand"
+                    @if($demand->tujuan_pengiriman == 'Banjarmasin')
+                    <button class="btn-take-demand-banjarmasin take-demand"
                         data-demand-id="{{ $demand->demand_id }}">
                         <i class="fas fa-truck me-2"></i>Take Demand
                     </button>
+                    @elseif($demand->tujuan_pengiriman == 'Makassar')
+                    <button class="btn-take-demand-makassar take-demand"
+                        data-demand-id="{{ $demand->demand_id }}">
+                        <i class="fas fa-truck me-2"></i>Take Demand
+                    </button>
+                    @elseif($demand->tujuan_pengiriman == 'Manado')
+                    <button class="btn-take-demand-manado take-demand"
+                        data-demand-id="{{ $demand->demand_id }}">
+                        <i class="fas fa-truck me-2"></i>Take Demand
+                    </button>
+                    @endif
                 </div>
             </div>
             @endif

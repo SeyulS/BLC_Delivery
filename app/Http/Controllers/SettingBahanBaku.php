@@ -8,6 +8,7 @@ use App\Models\Player;
 use App\Models\PurchaseRawItemHistory;
 use App\Models\Room;
 use App\Models\RawItem;
+use App\Models\RevenueHistory;
 use Illuminate\Http\Request;
 use Termwind\Components\Raw;
 
@@ -111,6 +112,16 @@ class SettingBahanBaku extends Controller
             $history->revenue_before = $prevRenue;
             $history->revenue_after = $query->revenue;
             $history->save();
+
+            $revenueHistory = new RevenueHistory();
+            $revenueHistory->room_id = $request->room_id;
+            $revenueHistory->day = $room->recent_day;
+            $revenueHistory->player_username = $request->player_id;
+            $revenueHistory->transaction_description = 'Raw Item Transaction';
+            $revenueHistory->revenue_before = $prevRenue;
+            $revenueHistory->revenue_after = $query->revenue;
+            $revenueHistory->value = $price * -1;
+            $revenueHistory->save();
 
             UpdateRevenue::dispatch($request->player_id, $request->room_id);
 

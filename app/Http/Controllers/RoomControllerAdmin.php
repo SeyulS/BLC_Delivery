@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Events\PlayerRemove;
 use App\Models\Loan;
 use App\Models\Player;
+use App\Models\RevenueHistory;
 
 class RoomControllerAdmin extends Controller
 {
@@ -79,5 +80,14 @@ class RoomControllerAdmin extends Controller
         PlayerRemove::dispatch($player->player_username, $roomId);
 
         return response()->json(['message' => 'Player successfully removed'], 200);
+    }
+
+    public function playerTransaction($room_id){
+        $room = Room::where('room_id', $room_id)->first();
+        return view('Admin.fitur.player_transaction', [
+            'room' => $room,
+            'history' => RevenueHistory::where('room_id', $room_id)->get(),
+            'players' => Player::where('room_id', $room_id)->get()
+        ]);
     }
 }

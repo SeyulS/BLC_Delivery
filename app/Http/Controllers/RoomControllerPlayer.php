@@ -15,6 +15,7 @@ use App\Models\Player;
 use App\Models\ProductionHistory;
 use App\Models\PurchaseRawItemHistory;
 use App\Models\RawItem;
+use App\Models\RevenueHistory;
 use App\Models\Room;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,10 +83,10 @@ class RoomControllerPlayer extends Controller
         }
 
         $playerMachineCapacity = [];
-        $playerCapacity = json_decode(Auth::guard('player')->user()->machine_capacity);
+        $playerMachineQuantity = json_decode(Auth::guard('player')->user()->machine_capacity);
 
         for ($i = 0; $i < count($machineCapacity); $i++) {
-            $playerMachineCapacity[] = $machineCapacity[$i] * $playerCapacity[$i];
+            $playerMachineCapacity[] = $machineCapacity[$i] * $playerMachineQuantity[$i];
         }
 
         $totalCapacity = 0;
@@ -98,7 +99,7 @@ class RoomControllerPlayer extends Controller
         for ($i = 0; $i < count($roomMachineIndex); $i++) {
             $queryMachine = Machine::where('id', $roomMachineIndex[$i])->first();
             $queryItem = Items::where('id', $roomItemIndex[$i])->first();
-            $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
+            $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_length*$queryItem->item_width);
         }
 
         return view('Player.fitur.warehouse_machine', [
@@ -108,6 +109,7 @@ class RoomControllerPlayer extends Controller
             'machineName' => $machineChosenName,
             'machinePrice' => $machinePrice,
             'playerMachineCapacity' => $playerMachineCapacity,
+            'playerMachineQuantity' => $playerMachineQuantity,
             'usedCapacity' => $totalCapacity
         ]);
     }
@@ -236,6 +238,7 @@ class RoomControllerPlayer extends Controller
 
         $playerMachineCapacity = [];
         $playerCapacity = json_decode(Auth::guard('player')->user()->machine_capacity);
+        $playerMachineQuantity = $playerCapacity;
 
         // Kapasitas Produksi Player
         for ($i = 0; $i < count($machineCapacity); $i++) {
@@ -261,6 +264,11 @@ class RoomControllerPlayer extends Controller
             $jatuh_tempo = $player->jatuh_tempo - $room->recent_day;
         }
 
+        $revenueData = [
+            'days' => ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10', 'Day 11', 'Day 12', '13', '14', '15', '16', '17'], // Example days
+            'revenues' => [1000, 1500, 2000, 2500, 3000, 0], // Example revenues
+        ];
+        
 
         return view('Player.fitur.player_profile', [
             'player' => $player,
@@ -273,12 +281,14 @@ class RoomControllerPlayer extends Controller
             'playerItemQty' => json_decode(Auth::guard('player')->user()->items),
             'roomMachine' => $machineChosen,
             'roomMachineName' => $machineChosenName,
+            'playerMachineQuantity' => $playerMachineQuantity,
             'playerMachineCapacity' => $playerMachineCapacity,
             'usedCapacity' => $totalCapacity,
             'demands' => Demand::where('room_id', $room->room_id)
                 ->where('player_username', $player->player_username)
                 ->where('is_delivered', false)
                 ->get(),
+            'revenueData' => $revenueData
         ]);
     }
 
@@ -621,6 +631,22 @@ class RoomControllerPlayer extends Controller
             'player' => Auth::guard('player')->user(),
             'room' => Room::where('room_id', $roomCode)->first(),
             'purchaseHistory' => $purchaseHistoryData
+        ]);
+    }
+
+    public function transactionReceipt($roomCode)
+    {
+        if (Auth::guard('player')->user() == null) {
+            return redirect('/loginPlayer');
+        }
+
+        $room = Room::where('room_id', $roomCode)->first();
+        return view('Player.fitur.transaction_receipt', [
+            'player' => Auth::guard('player')->user(),
+            'room' => Room::where('room_id', $roomCode)->first(),
+            'history' => RevenueHistory::where('room_id', $roomCode)
+                ->where('player_username', Auth::guard('player')->user()->player_username)
+                ->get()
         ]);
     }
 }

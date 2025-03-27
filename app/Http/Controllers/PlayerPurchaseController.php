@@ -7,6 +7,7 @@ use App\Events\UpdateWarehouse;
 use App\Models\Items;
 use App\Models\Machine;
 use App\Models\Player;
+use App\Models\RevenueHistory;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class PlayerPurchaseController extends Controller
     {
         $room = Room::where('room_id', $request->input('room_id'))->first();
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
-
+        $prevRevenue = $player->revenue;
         if ($room->status == 0){
             return response()->json([
                 'success' => false,
@@ -47,6 +48,16 @@ class PlayerPurchaseController extends Controller
             $totalCapacity = $totalCapacity + ($currentMachineCapacity[$i] * $queryMachine->machine_size) + ($currentItemCapacity[$i] * $queryItem->item_size);
         }
 
+        $revenueHistory = new RevenueHistory();
+        $revenueHistory->room_id = $room->room_id;
+        $revenueHistory->day = $room->recent_day;
+        $revenueHistory->player_username = $player->player_username;
+        $revenueHistory->transaction_description = 'Warehouse Purchase';
+        $revenueHistory->revenue_before = $prevRevenue;
+        $revenueHistory->revenue_after = $player->revenue;
+        $revenueHistory->value = $request->input('quantityPurchase') * $room->warehouse_price * -1;
+        $revenueHistory->save();
+
         UpdateRevenue::dispatch($player->player_username, $room->room_id);
 
         $player->save();
@@ -73,6 +84,7 @@ class PlayerPurchaseController extends Controller
         $machine = Machine::where('id', $request->input('machineType'))->first();
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
 
+        $prevRevenue = $player->revenue;
         $price = $machine->machine_price;
         $capacity = $machine->machine_size;
 
@@ -126,12 +138,23 @@ class PlayerPurchaseController extends Controller
         $player->machine_capacity = json_encode($currentMachineCapacity);
         $player->save();
 
+        $revenueHistory = new RevenueHistory();
+        $revenueHistory->room_id = $room->room_id;
+        $revenueHistory->day = $room->recent_day;
+        $revenueHistory->player_username = $player->player_username;
+        $revenueHistory->transaction_description = '['. $machine->machine_name . ']' . '    Purchase';
+        $revenueHistory->revenue_before = $prevRevenue;
+        $revenueHistory->revenue_after = $player->revenue;
+        $revenueHistory->value = $price * -1;
+        $revenueHistory->save();
+
         UpdateRevenue::dispatch($player->player_username, $room->room_id);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Machine Purchase Success !!',
             'machineName' => $machineName,
+            'machineQuantity' => $currentMachineCapacity,
             'currentCapacity' => $currentProductionCapacity,
             'revenue' => $player->revenue
         ]);

@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | Lobby
+@endsection
 @section('container')
 <style>
     .toast-success {

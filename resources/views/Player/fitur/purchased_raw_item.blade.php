@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | Purchased Raw Item
+@endsection
 @section('container')
 <style>
     :root {

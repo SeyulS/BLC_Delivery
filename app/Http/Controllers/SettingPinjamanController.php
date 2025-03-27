@@ -7,6 +7,7 @@ use App\Models\Loan;
 use App\Models\LoanHistory;
 use App\Models\Player;
 use App\Models\Pinjaman;
+use App\Models\RevenueHistory;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,18 @@ class SettingPinjamanController extends Controller
             $loanHistory->after_loan = $player->revenue;
             $loanHistory->save();
 
+            $historyRevenue = new RevenueHistory();
+            $historyRevenue->room_id = $room->room_id;
+            $historyRevenue->day = $room->recent_day;
+            $historyRevenue->player_username = $request->input('player_username');
+            $historyRevenue->transaction_description = 'Loan';
+            $historyRevenue->revenue_before = $beforeLoanRevenue;
+            $historyRevenue->revenue_after = $player->revenue;
+            $historyRevenue->value = $request->input('loanAmount');
+            $historyRevenue->save();
+
             UpdateRevenue::dispatch($player->player_username, $room->room_id);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Pinjaman Success',
@@ -73,7 +85,9 @@ class SettingPinjamanController extends Controller
     public function payDebt(Request $request)
     {
         $player = Player::where('player_username', Auth::guard('player')->user()->player_username)->first();
+        $room = Room::where('room_id', $request->input('roomId'))->first();
 
+        $prevRevenue = $player->revenue;
         if($player->revenue < $request->input('paymentAmount')){
             return response()->json([
                 'status' => 'fail',
@@ -88,12 +102,34 @@ class SettingPinjamanController extends Controller
                 $player->jatuh_tempo = null;
                 $player->revenue = $player->revenue - $request->input('paymentAmount');
                 $player->save();
+
+                $historyRevenue = new RevenueHistory();
+                $historyRevenue->room_id = $player->room_id;
+                $historyRevenue->day = $room->recent_day;
+                $historyRevenue->player_username = $player->player_username;
+                $historyRevenue->transaction_description = 'Debt Payment';
+                $historyRevenue->revenue_before = $prevRevenue;
+                $historyRevenue->revenue_after = $player->revenue;
+                $historyRevenue->value = $request->input('paymentAmount') * -1;
+                $historyRevenue->save();
+
                 UpdateRevenue::dispatch($player->player_username, $player->room_id);
             }
             else{
                 $player->debt = $player->debt - $request->input('paymentAmount');
                 $player->revenue = $player->revenue - $request->input('paymentAmount');
                 $player->save();
+
+                $historyRevenue = new RevenueHistory();
+                $historyRevenue->room_id = $player->room_id;
+                $historyRevenue->day = $room->recent_day;
+                $historyRevenue->player_username = $player->player_username;
+                $historyRevenue->transaction_description = 'Debt Payment';
+                $historyRevenue->revenue_before = $prevRevenue;
+                $historyRevenue->revenue_after = $player->revenue;
+                $historyRevenue->value = $request->input('paymentAmount') * -1;
+                $historyRevenue->save();
+
                 UpdateRevenue::dispatch($player->player_username, $player->room_id);    
             }
             return response()->json([

@@ -1,5 +1,7 @@
 @extends('layout.player_room')
-
+@section('title')
+BLC Delivery | Purchase
+@endsection
 @section('container')
 <style>
     :root {
@@ -265,8 +267,12 @@
                     <div class="machine-card">
                         <h6>{{ $machineName[$index] }}</h6>
                         <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Owned:</span>
+                            <span class="fw-bold">{{ $playerMachineQuantity[$index] }} Units</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Production Capacity:</span>
-                            <span class="fw-bold">{{ $capacity }} Units</span>
+                            <span class="fw-bold">{{ $capacity }} Units / day</span>
                         </div>
                     </div>
                     @endforeach
@@ -393,6 +399,10 @@
                                 for (let i = 0; i < response.currentCapacity.length; i++) {
                                     machineCapacityHtml += `<div class="machine-card">
                                                                 <h6 class="mb-2">${response.machineName[i]}</h6>
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="text-muted">Owned:</span>
+                                                                <span class="fw-bold">${response.machineQuantity[i]} Units</span>
+                                                            </div>
                                                                 <div class="d-flex justify-content-between align-items-center">
                                                                     <span class="text-muted">Current Production Capacity:</span>
                                                                     <span class="fw-bold">${response.currentCapacity[i]} Units</span>

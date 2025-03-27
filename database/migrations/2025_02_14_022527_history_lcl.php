@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('demand_id');
             $table->double('delivery_cost');
             $table->double('revenue');
+            $table->double('late_early_charge');
             $table->timestamps();
         });
     }

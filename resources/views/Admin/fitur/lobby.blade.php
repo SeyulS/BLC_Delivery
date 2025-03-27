@@ -86,6 +86,41 @@
         background-color: #b91c1c;
         border-color: #b91c1c;
     }
+
+    
+    .day-display {
+        background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
+        color: white;
+        padding: 1.25rem 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .day-label {
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.9;
+    }
+
+    .day-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .lobby-header {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
 </style>
 
 <div class="container py-4">
@@ -116,11 +151,8 @@
                 <div class="card-body p-0">
                     <div class="p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">
-                                <i class="fas fa-users me-2 text-primary"></i>Players in Room
-                            </h5>
                             <span class="badge bg-light text-dark px-3 py-2" id="player-count">
-                                Loading players...
+                                <strong>Current Day : {{ $room->recent_day }}</strong>
                             </span>
                         </div>
                         <table class="table table-hover mb-0" id="player-datatable">
