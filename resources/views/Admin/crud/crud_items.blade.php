@@ -74,6 +74,42 @@
         max-height: 300px;
         overflow-y: auto;
     }
+
+    .bom-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .bom-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: #f0f9ff;
+        border: 1px solid #e0f2fe;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        color: #0369a1;
+    }
+
+    .bom-quantity {
+        font-weight: 600;
+        background: #0ea5e9;
+        color: white;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+
+    .bom-empty {
+        color: #94a3b8;
+        font-style: italic;
+        padding: 0.5rem 0;
+    }
 </style>
 <div class="container py-5">
     <!-- Header Section -->
@@ -176,7 +212,7 @@
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save me-2"></i>Save Item
+                                <i class="fas fa-save me-2"></i>Create
                             </button>
                         </div>
                     </form>
@@ -196,18 +232,36 @@
                                 <th class="px-4 py-3">Dimensions (L×W×H)</th>
                                 <th class="px-4 py-3">Weight</th>
                                 <th class="px-4 py-3">Price</th>
+                                <th class="px-4 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($items as $item)
                             <tr>
                                 <td class="px-4">{{ $item->item_name }}</td>
-                                <td class="px-4">{{ $item->BOM }}</td>
                                 <td class="px-4">
-                                    {{ $item->item_length }}×{{ $item->item_width }}×{{ $item->item_height }} cm
+                                    @if(!empty($item->bom))
+                                    <div class="bom-list">
+                                        @foreach($item->bom as $bomItem)
+                                        <div class="bom-item">
+                                            <span class="bom-quantity">{{ explode('x', $bomItem)[0] }}×</span>
+                                            <span>{{ trim(explode('x', $bomItem)[1]) }}</span>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                    @else
+                                    <div class="bom-empty">No materials required</div>
+                                    @endif
+                                </td>
+                                <td class="px-4">
+                                    {{ $item->item_length }}m × {{ $item->item_width }}m × {{ $item->item_height }}m
                                 </td>
                                 <td class="px-4">{{ $item->item_weight }} kg</td>
                                 <td class="px-4">Rp {{ number_format($item->item_price) }}</td>
+                                <td class="px-4">
+                                    
+                                </td>
+
                             </tr>
                             @endforeach
                         </tbody>

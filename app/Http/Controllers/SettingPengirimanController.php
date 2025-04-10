@@ -146,6 +146,13 @@ class SettingPengirimanController extends Controller
             ]);
         }
 
+        if($lcl->current_volume_capacity + $volume > $lcl->max_volume_capacity || $lcl->current_weight_capacity + $weight > $lcl->max_weight_capacity){
+            return response()->json([
+                'status' => 'fail', 
+                'message' => 'Over Capacity !'
+            ]);
+        }
+
         $revenueBefore = $player->revenue;
         $late_early_charge = $latePrice + $earlyPrice;
 
@@ -351,13 +358,13 @@ class SettingPengirimanController extends Controller
         else{
             $used = $weight;
         }
-        $lcl = AirplaneDelivery::where('room_id', $request->input('room_id'))
+        $air = AirplaneDelivery::where('room_id', $request->input('room_id'))
             ->where('destination', $demand->tujuan_pengiriman)->first();
-        $price = $lcl->price;
+        $price = $air->price;
         
         $deliveryPrice = $used * $price;
 
-        $needDay = $room->recent_day + $lcl->pengiriman_duration;
+        $needDay = $room->recent_day + $air->pengiriman_duration;
 
         $latePrice = 0; // Default e 0
         $earlyPrice = 0;
@@ -380,6 +387,13 @@ class SettingPengirimanController extends Controller
             return response()->json([
                 'status' => 'fail', 
                 'message' => 'Player doesnt have enought money !'
+            ]);
+        }
+
+        if($air->current_volume_capacity + $volume > $air->max_volume_capacity || $air->current_weight_capacity + $weight > $air->max_weight_capacity){
+            return response()->json([
+                'status' => 'fail', 
+                'message' => 'Over Capacity !'
             ]);
         }
         $revenueBefore = $player->revenue;

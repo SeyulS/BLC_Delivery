@@ -98,7 +98,7 @@
                                 <th class="px-4 py-3">Specifications</th>
                                 <th class="px-4 py-3">Price</th>
                                 <th class="px-4 py-3">Production Item</th>
-                                <th class="px-4 py-3 text-end">Actions</th>
+                                <!-- <th class="px-4 py-3 text-end">Actions</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -119,14 +119,14 @@
                                         {{ $machine->item->item_name }}
                                     </span>
                                 </td>
-                                <td class="px-4 text-end">
+                                <!-- <td class="px-4 text-end">
                                     <button class="btn btn-action btn-edit editMachine" data-id="{{ $machine->id }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-action btn-delete deleteMachine" data-id="{{ $machine->id }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                                </td>
+                                </td> -->
                             </tr>
                             @endforeach
                         </tbody>

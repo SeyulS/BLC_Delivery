@@ -19,6 +19,7 @@ class AdminHomeController extends Controller
         });
 
         return view('Admin.home', [
+            'administrator' => auth()->guard('administrator')->user(),
             'rooms' => $rooms,
             'items' => Items::all(),
         ]);

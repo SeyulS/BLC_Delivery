@@ -10,17 +10,18 @@ class Items extends Model
     use HasFactory;
     protected $table = 'items';
 
+
     public function getBOMAttribute()
     {
         $bom = [];
 
-        $rawItemIds = json_decode($this->raw_item_needed, true); // Mengonversi dari JSON ke array
-        $quantities = json_decode($this->raw_quantity_needed, true); // Mengonversi dari JSON ke array
+        $rawItemIds = json_decode($this->raw_item_needed, true); // Convert JSON to array
+        $quantities = json_decode($this->raw_quantity_needed, true); // Convert JSON to array
 
-        // Periksa jika data tidak null atau kosong
+        // Check if data is not null or empty
         if (is_array($rawItemIds) && is_array($quantities)) {
             foreach ($rawItemIds as $index => $rawItemId) {
-                $rawItem = RawItem::find($rawItemId); // Cari data raw item berdasarkan ID
+                $rawItem = RawItem::find($rawItemId); // Find raw item by ID
 
                 if ($rawItem) {
                     $bom[] = $quantities[$index] . 'x ' . $rawItem->raw_item_name;
@@ -28,13 +29,11 @@ class Items extends Model
             }
         }
 
-        return implode(', ', $bom); // Menggabungkan semua item menjadi string
+        return $bom; // Return as an array
     }
 
     public function raw_items()
     {
         return $this->hasMany(RawItem::class, 'id', 'raw_item_id');
     }
-
-
 }

@@ -6,12 +6,14 @@ use App\Models\Administrator;
 use App\Models\Player;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegistPlayerController extends Controller
 {
     public function index()
     {
         return view('Admin.manage_account', [
+            'administrator'=>Auth::guard('administrator')->user(),
             'players' => Player::all()
         ]);
     }

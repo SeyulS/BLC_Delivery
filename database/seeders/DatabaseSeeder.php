@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
     {
         Administrator::create([
             'admin_username' => 'samuel',
+            'super_admin' => '1',
             'password' => bcrypt('12345')
         ]);
 

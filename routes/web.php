@@ -51,8 +51,9 @@ Route::post('/logoutAdmin',[LoginPlayerController::class,'logout']);
 Route::get('/homeAdmin',[AdminHomeController::class,'index'])->middleware('auth.administrator');
 Route::get('/manageData',[ManageDataController::class, 'index'])->middleware('auth.administrator');
 Route::get('/manageAccount',[RegistPlayerController::class,'index'])->middleware('auth.administrator');
+Route::get('/manageAdmin',[RegistAdminController::class,'index'])->middleware('auth.administrator');
 Route::post('/deletePlayer', [RegistPlayerController::class, 'destroy'])->middleware('auth.administrator');
-
+Route::post('/deleteAdmin', [RegistAdminController::class, 'destroy'])->middleware('auth.administrator');
 
 
 // CRUD Raw Item

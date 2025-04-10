@@ -6,7 +6,7 @@
         <div class="sidebar-logo">
             <a href="#" class="mt-3">BLC Delivery</a>
         </div>
-    </div>  
+    </div>
     <ul class="sidebar-nav">
         <!-- <li class="sidebar-item">
             <a href="/lol" class="sidebar-link">
@@ -15,10 +15,18 @@
             </a>    
         </li> -->
         <li class="sidebar-item">
+            <a href="/manageAdmin" class="sidebar-link">
+                <i class="lni lni-user"></i>
+                <span>Manage Admin</span>
+            </a>
+        </li>
+        
+
+        <li class="sidebar-item">
             <a href="/manageAccount" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Manage Account</span>
-            </a>    
+            </a>
         </li>
         <li class="sidebar-item">
             <a href="/homeAdmin" class="sidebar-link">

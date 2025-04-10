@@ -408,6 +408,7 @@
                 <table id="roomsTable" class="display">
                     <thead>
                         <tr>
+                            <th>Created</th>
                             <th>Room ID</th>
                             <th>Room Description</th>
                             <th>Day</th>
@@ -419,6 +420,7 @@
                     <tbody>
                         @foreach($rooms as $room)
                         <tr>
+                            <td>{{ $room->created_at }}</td>
                             <td>{{ $room->room_id }}</td>
                             <td>{{ $room->room_name }}</td>
                             <td>{{ $room->recent_day }}</td>
