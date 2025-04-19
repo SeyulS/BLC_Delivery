@@ -2,10 +2,6 @@
 @section('container')
 
 <div class="container py-5">
-    <div class="mb-5">
-        <h1 class="fw-bold text-dark mb-2">Dashboard</h1>
-        <p class="text-muted">Manage your data</p>
-    </div>
 
     <div class="row g-4">
         <!-- Raw Items Card -->
@@ -18,7 +14,7 @@
                         </div>
                         <div>
                             <h5 class="card-title text-dark mb-1">Raw Items</h5>
-                            <p class="card-text text-muted mb-0 small">Raw materials inventory</p>
+                            <p class="card-text text-muted mb-0 small">Raw materials</p>
                         </div>
                         <i class="fas fa-chevron-right ms-auto text-muted"></i>
                     </div>

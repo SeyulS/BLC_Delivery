@@ -154,6 +154,9 @@
                             <span class="badge bg-light text-dark px-3 py-2" id="player-count">
                                 <strong>Current Day : {{ $room->recent_day }}</strong>
                             </span>
+                            <span class="badge bg-light text-dark px-3 py-2" id="player-count">
+                                <strong>Simulation Duration : {{ $room->max_day }}</strong>
+                            </span>
                         </div>
                         <table class="table table-hover mb-0" id="player-datatable">
                             <thead class="bg-light">

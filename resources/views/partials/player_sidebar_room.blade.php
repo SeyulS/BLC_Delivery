@@ -86,7 +86,7 @@
         <li class="sidebar-header">Production Warehouse</li>
         <li class="sidebar-item sidebar-subitem">
             <a href="/player-lobby/{{ $room->room_id }}/playerProfile"
-                class="sidebar-link
+                class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
                {{ Request::is('player-lobby/'.$room->room_id.'/playerProfile') ? 'active' : '' }}">
                 <i class="bi bi-box"></i>
                 <span>Financial & Inventory</span>
