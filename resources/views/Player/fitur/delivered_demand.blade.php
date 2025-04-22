@@ -276,6 +276,135 @@
 </div>
 <script>
     $(document).ready(function() {
+
+        const roomId = "{{ $room->room_id }}";
+        const playerUsername = "{{ $player->player_username }}";
+
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+        };
+
+
+        window.Echo.channel('pause-simulation')
+            .listen('.PauseSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was paused',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('resume-simulation')
+            .listen('.ResumeSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'The simulation was resumed',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('next-day')
+            .listen('.NextDaySimulationEvent', (event) => {
+                console.log(event.roomId, roomId);
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Loading...',
+                        text: 'Moving to the next day. Please wait.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = `/player-lobby/${roomId}`;
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('end-simulation')
+            .listen('.EndSimulationEvent', (event) => {
+                if (event.roomId == roomId) {
+                    Swal.fire({
+                        title: 'Simulation Ended',
+                        text: 'The simulation has ended',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        timer: 5000,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    setTimeout(() => {
+                        window.location.href = '/homePlayer';
+                    }, 5000);
+                }
+            });
+
+        window.Echo.channel('update-revenue')
+            .listen('.UpdateRevenueEvent', (event) => {
+                if (event.playerUsername == playerUsername && event.roomId == roomId) {
+
+                    $.ajax({
+                        url: '/updateRevenue',
+                        method: 'POST',
+                        data: {
+                            player_id: playerUsername,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.revenue !== undefined) {
+                                const formatCurrency = (number) => {
+                                    return new Intl.NumberFormat('ID-id', {
+                                        style: 'currency',
+                                        currency: 'IDR'
+                                    }).format(number);
+                                };
+                                $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
+                                $('#sidebar_revenue').html(formatCurrency(response.revenue));
+                                $('#debt').html(`: ${formatCurrency(response.debt)}`);
+                                $('#jatuh_tempo').html(`: ${response.jatuh_tempo} days`);
+                            }
+                        },
+                        error: (xhr) => {
+                            toastr.error('Failed to fetch revenue:', xhr.responseText);
+                        }
+                    })
+                }
+            });
         // Initialize DataTable
         const table = $('#demandsTable').DataTable({
             pageLength: 10,
@@ -326,6 +455,8 @@
             // Clear DataTable filters
             table.search('').columns().search('').draw();
         });
+
+
     });
 </script>
 @endsection

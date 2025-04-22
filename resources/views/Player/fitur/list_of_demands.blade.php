@@ -296,9 +296,9 @@ BLC Delivery | List of Demands
     <div class="container">
 
         <!-- Filters -->
-        <div class="filters-container">
+        <!-- <div class="filters-container">
             <div class="row g-4">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="filter-group">
                         <label class="filter-label">
                             <i class="fas fa-map-marker-alt me-2"></i>Destination
@@ -311,7 +311,7 @@ BLC Delivery | List of Demands
                         </select>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="filter-group">
                         <label class="filter-label">
                             <i class="fas fa-hashtag me-2"></i>Demand ID
@@ -319,8 +319,8 @@ BLC Delivery | List of Demands
                         <input type="text" id="demand-id-filter" class="filter-select"
                             placeholder="Search by ID...">
                     </div>
-                </div>
-                <div class="col-md-4">
+                </div> -->
+        <!-- <div class="col-md-4">
                     <div class="filter-group">
                         <label class="filter-label">
                             <i class="fas fa-box me-2"></i>Item Type
@@ -332,9 +332,9 @@ BLC Delivery | List of Demands
                             @endforeach
                         </select>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div> -->
+        <!-- </div>
+        </div> -->
 
         <!-- Demands Grid -->
         <div class="demands-grid" id="demand-container">
@@ -389,7 +389,7 @@ BLC Delivery | List of Demands
                         </div>
                         <div class="info-row">
                             <span class="info-label">Revenue:</span>
-                            <span class="info-value">${{ number_format($demand->revenue, 2) }}</span>
+                            <span class="info-value">Rp {{ number_format($demand->revenue, 2) }}</span>
                         </div>
                     </div>
                     <div class="text-center mb-3">
@@ -503,9 +503,9 @@ BLC Delivery | List of Demands
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -518,7 +518,6 @@ BLC Delivery | List of Demands
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
 

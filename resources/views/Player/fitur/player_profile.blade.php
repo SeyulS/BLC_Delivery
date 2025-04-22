@@ -114,11 +114,11 @@ BLC Delivery | Financial & Inventory
                 </div>
                 <div class="mb-3">
                     <div class="stat-label">Cash On Hand</div>
-                    <div class="stat-value text-success" id="revenue">${{ number_format($player->revenue, 2) }}</div>
+                    <div class="stat-value text-success" id="revenue">Rp {{ number_format($player->revenue, 2) }}</div>
                 </div>
                 <div class="mb-3">
                     <div class="stat-label">Current Debt</div>
-                    <div class="stat-value text-danger" id="debt">${{ number_format($player->debt, 2) }}</div>
+                    <div class="stat-value text-danger" id="debt">Rp {{ number_format($player->debt, 2) }}</div>
                 </div>
                 <div>
                     <div class="stat-label">Due Date</div>
@@ -256,7 +256,7 @@ BLC Delivery | Financial & Inventory
                                 <td>Day {{ $demand->need_day }}</td>
                                 <td>{{ $demand->item->item_name }}</td>
                                 <td>{{ number_format($demand->quantity) }}</td>
-                                <td>${{ number_format($demand->revenue, 2) }}</td>
+                                <td>Rp {{ number_format($demand->revenue, 2) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -302,9 +302,9 @@ BLC Delivery | Financial & Inventory
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -317,7 +317,6 @@ BLC Delivery | Financial & Inventory
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
 

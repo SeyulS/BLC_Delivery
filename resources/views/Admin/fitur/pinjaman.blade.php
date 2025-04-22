@@ -123,6 +123,26 @@
         font-size: 0.85rem;
         letter-spacing: 0.5px;
     }
+
+    .revenue-before {
+        color: #64748b;
+        text-decoration: line-through;
+        font-size: 0.85rem;
+    }
+
+    .revenue-after {
+        color:rgb(34, 204, 4);
+        font-weight: 600;
+    }
+
+    .revenue-decrease {
+        background: rgba(239, 68, 68, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 </style>
 
 <div class="dashboard-container">
@@ -158,7 +178,7 @@
                                     data-value="{{ $loan->loan_value }}"
                                     data-interest="{{ $loan->loan_interest }}"
                                     data-due="{{ $loan->loan_due }}">
-                                    ${{ number_format($loan->loan_value) }} - {{ $loan->loan_interest }}% - {{ $loan->loan_due }} Days
+                                    Rp {{ number_format($loan->loan_value) }} - {{ $loan->loan_interest }}% - {{ $loan->loan_due }} Days
                                 </option>
                                 @endforeach
                             </select>
@@ -179,7 +199,7 @@
                             <div class="col-md-5">
                                 <div class="loan-stat bg-light">
                                     <small class="d-block text-muted mb-1">Value</small>
-                                    <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
+                                    <span class="loan-value">Rp {{ number_format($loan->loan_value) }}</span>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -213,8 +233,7 @@
                                     <th>Amount</th>
                                     <th>Interest</th>
                                     <th>Duration</th>
-                                    <th>Revenue Before</th>
-                                    <th>Revenue After</th>
+                                    <th>Revenue Change</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -222,11 +241,16 @@
                                 <tr>
                                     <td>{{ $h->player_username }}</td>
                                     <td>{{ $h->day }}</td>
-                                    <td>{{ $h->loan_value }}</td>
+                                    <td>Rp {{ number_format($h->loan_value) }}</td>
                                     <td>{{ $h->loan_interest }}%</td>
                                     <td>{{ $h->loan_due }} days</td>
-                                    <td>{{ $h->before_loan }}</td>
-                                    <td>{{ $h->after_loan }}</td>
+                                    <td>
+                                        <div class="revenue-decrease">
+                                            <span class="revenue-before">Rp {{ number_format($h->before_loan, 0, ',', '.') }}</span>
+                                            <i class="bi bi-arrow-right revenue-arrow"></i>
+                                            <span class="revenue-after">Rp {{ number_format($h->after_loan, 0, ',', '.') }}</span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -262,7 +286,7 @@
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Search Player"
-            }
+            },
         });
 
         toastr.options = {
@@ -288,7 +312,7 @@
                 html: `
                 <div class="text-center">
                     <p><i class="fas fa-user me-2"></i><strong>Player:</strong> ${selectedPlayer}</p>
-                    <p><i class="fas fa-money-bill me-2"></i><strong>Amount:</strong> $${loanValue.toLocaleString()}</p>
+                    <p><i class="fas fa-money-bill me-2"></i><strong>Amount:</strong> Rp ${loanValue.toLocaleString()}</p>
                     <p><i class="fas fa-percentage me-2"></i><strong>Interest:</strong> ${loanInterest}%</p>
                     <p><i class="fas fa-calendar me-2"></i><strong>Duration:</strong> ${loanDue} Days</p>
                 </div>

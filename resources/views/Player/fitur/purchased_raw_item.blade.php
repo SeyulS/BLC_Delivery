@@ -275,7 +275,7 @@ BLC Delivery | Purchased Raw Item
 
             });
 
-        window.Echo.channel('update-revenue')
+            window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
@@ -289,9 +289,9 @@ BLC Delivery | Purchased Raw Item
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -304,7 +304,6 @@ BLC Delivery | Purchased Raw Item
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
 

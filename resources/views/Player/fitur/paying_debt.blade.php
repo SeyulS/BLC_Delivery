@@ -125,9 +125,9 @@ BLC Delivery | Pay Debt
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -140,7 +140,6 @@ BLC Delivery | Pay Debt
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
 

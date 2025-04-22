@@ -481,12 +481,12 @@
                                     @endforeach
                                 </div>
                             </td>
-                            <td>${{ number_format($history['total_cost'], 2) }}</td>
+                            <td>Rp {{ number_format($history['total_cost'], 2) }}</td>
                             <td>
                                 <div class="revenue-decrease">
-                                    <span class="revenue-before">${{ number_format($history['revenue_before'], 2) }}</span>
+                                    <span class="revenue-before">Rp {{ number_format($history['revenue_before'], 2) }}</span>
                                     <i class="bi bi-arrow-right revenue-arrow"></i>
-                                    <span class="revenue-after">${{ number_format($history['revenue_after'], 2) }}</span>
+                                    <span class="revenue-after">Rp {{ number_format($history['revenue_after'], 2) }}</span>
                                 </div>
                             </td>
                         </tr>

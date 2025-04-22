@@ -429,7 +429,7 @@ BLC Delivery | Transaction Receipt
                 }
             });
 
-        window.Echo.channel('update-revenue')
+            window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
@@ -443,9 +443,9 @@ BLC Delivery | Transaction Receipt
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -458,11 +458,8 @@ BLC Delivery | Transaction Receipt
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
-
-
     });
 </script>
 @endsection

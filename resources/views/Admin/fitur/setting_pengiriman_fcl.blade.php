@@ -169,13 +169,80 @@
                                     <td>{{ $h->destination }}</td>
                                     <td>{{ $h->player_username }}</td>
                                     <td>{{ $h->list_of_demands }}</td>
-                                    <td>{{ $h->delivery_cost }}</td>
-                                    <td>{{ $h->revenue }}</td>
-                                    <td>{{ $h->late_early_charge }}</td>
+                                    <td>Rp {{ number_format($h->delivery_cost), 0, ',','.'  }}</td>
+                                    <td>Rp {{ number_format($h->revenue), 0, ',','.' }}</td>
+                                    <td>Rp {{ number_format($h->late_early_charge), 0, ',','.'  }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <!-- Banjarmasin Card -->
+            <div class="col-md-4">
+                <div class="card p-4">
+                    <h6>{{ $bjm->destination }}</h6>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Volume Capacity : </strong></label>
+                        <p class="mb-0">{{ $bjm->max_volume_capacity }} m3</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Weight Capacity : </strong></label>
+                        <p class="mb-0">{{ $bjm->max_weight_capacity }} ton</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Price</strong></label>
+                        <p class="mb-0">{{ $bjm->price }} / m3</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repeat similar card structure for Manado and Makassar -->
+            <!-- Manado Card -->
+            <div class="col-md-4">
+                <div class="card p-4">
+                    <h6>{{ $mnd->destination }}</h6>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Volume Capacity : </strong></label>
+                        <p class="mb-0">{{ $mnd->max_volume_capacity }} m3</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Weight Capacity : </strong></label>
+                        <p class="mb-0">{{ $mnd->max_weight_capacity }} ton</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Price</strong></label>
+                        <p class="mb-0">{{ $mnd->price }} / m3</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Makassar Card -->
+            <div class="col-md-4">
+                <div class="card p-4">
+                    <h6>{{ $mks->destination }}</h6>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Volume Capacity : </strong></label>
+                        <p class="mb-0">{{ $mks->max_volume_capacity }} m3</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Weight Capacity : </strong></label>
+                        <p class="mb-0">{{ $mks->max_weight_capacity }} ton</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Price</strong></label>
+                        <p class="mb-0">{{ $mks->price }} / m3</p>
                     </div>
                 </div>
             </div>

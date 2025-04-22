@@ -279,19 +279,19 @@ BLC Delivery | Market Intelligence
         <div class="stats-grid">
             <div class="stat-card">
                 <h6>Warehouse Price</h6>
-                <div class="stat-value">${{ number_format($warehousePrice) }}/{{ $warehouseSize }}m²</div>
+                <div class="stat-value">Rp {{ number_format($warehousePrice) }}/{{ $warehouseSize }}m²</div>
             </div>
             <div class="stat-card">
                 <h6>Early Delivery Charge</h6>
-                <div class="stat-value">${{ number_format($earlyDeliveryCharge) }}/day</div>
+                <div class="stat-value">Rp {{ number_format($earlyDeliveryCharge) }}/day</div>
             </div>
             <div class="stat-card">
                 <h6>Late Delivery Charge</h6>
-                <div class="stat-value">${{ number_format($lateDeliveryCharge) }}/day</div>
+                <div class="stat-value">Rp {{ number_format($lateDeliveryCharge) }}/day</div>
             </div>
             <div class="stat-card">
                 <h6>Inventory Cost</h6>
-                <div class="stat-value">${{ number_format($inventoryCost) }}/unit</div>
+                <div class="stat-value">Rp {{ number_format($inventoryCost) }}/unit</div>
             </div>
         </div>
 
@@ -306,7 +306,7 @@ BLC Delivery | Market Intelligence
                 <div class="loan-info">
                     <div class="loan-detail">
                         <span class="loan-label">Amount</span>
-                        <span class="loan-value">${{ number_format($loan->loan_value) }}</span>
+                        <span class="loan-value">Rp {{ number_format($loan->loan_value) }}</span>
                     </div>
                     <div class="loan-detail">
                         <span class="loan-label">Interest Rate</span>
@@ -353,7 +353,7 @@ BLC Delivery | Market Intelligence
                             <td>{{ isset($item->current_weight_capacity) ? 
                                           "{$item->current_weight_capacity} / {$item->max_weight_capacity}" : 
                                           $item->max_weight_capacity }}</td>
-                            <td>${{ number_format($item->price) }}/m³</td>
+                            <td>Rp {{ number_format($item->price) }}/m³</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -425,7 +425,7 @@ BLC Delivery | Market Intelligence
                                 @foreach($rawItems as $item)
                                 <tr>
                                     <td>{{ $item->raw_item_name }}</td>
-                                    <td>${{ number_format($item->raw_item_price) }}/pc</td>
+                                    <td>Rp {{ number_format($item->raw_item_price) }}/pcs</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -446,16 +446,16 @@ BLC Delivery | Market Intelligence
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Size</th>
-                                    <th>Capacity</th>
+                                    <th>Production Capacity</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($machines as $machine)
                                 <tr>
                                     <td>{{ $machine->machine_name }}</td>
-                                    <td>${{ number_format($machine->machine_price) }}</td>
+                                    <td>Rp {{ number_format($machine->machine_price) }}</td>
                                     <td>{{ $machine->machine_size }}m²</td>
-                                    <td>{{ $machine->production_capacity }}/day</td>
+                                    <td>{{ $machine->production_capacity }} units/day</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -502,7 +502,7 @@ BLC Delivery | Market Intelligence
                 }
             });
 
-        window.Echo.channel('update-revenue')
+            window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
@@ -516,9 +516,9 @@ BLC Delivery | Market Intelligence
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -531,7 +531,6 @@ BLC Delivery | Market Intelligence
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
 

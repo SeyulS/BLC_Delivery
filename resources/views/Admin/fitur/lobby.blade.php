@@ -87,7 +87,7 @@
         border-color: #b91c1c;
     }
 
-    
+
     .day-display {
         background: linear-gradient(135deg, var(--primary-color), #1d4ed8);
         color: white;
@@ -233,11 +233,21 @@
                 },
                 {
                     data: 'revenue',
-                    name: 'revenue'
+                    name: 'revenue',
+                    render: (data) => {
+                        console.log('Revenue Data:', data); // Debugging
+                        const value = parseFloat(data);
+                        return isNaN(value) || value === 0 ? '-' : `Rp ${value.toLocaleString('id-ID')}`;
+                    }
                 },
                 {
                     data: 'debt',
-                    name: 'debt'
+                    name: 'debt',
+                    render: (data) => {
+                        console.log('Revenue Data:', data); // Debugging
+                        const value = parseFloat(data);
+                        return isNaN(value) || value === 0 ? '-' : `Rp ${value.toLocaleString('id-ID')}`;
+                    }
                 },
                 {
                     data: 'player_username',

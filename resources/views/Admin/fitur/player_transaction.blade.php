@@ -177,14 +177,14 @@
                             </td>
                             <td>
                                 <span class="{{ $transaction->value > 0 ? 'text-success' : 'text-danger' }} fw-bold">
-                                    ${{ number_format(abs($transaction->value), 2) }}
+                                    Rp {{ number_format(abs($transaction->value), 2) }}
                                 </span>
                             </td>
                             <td>
                                 <div class="revenue-change">
-                                    <span class="old-value">${{ number_format($transaction->revenue_before, 2) }}</span>
+                                    <span class="old-value">Rp {{ number_format($transaction->revenue_before, 2) }}</span>
                                     <i class="bi bi-arrow-right arrow-icon"></i>
-                                    <span class="new-value">${{ number_format($transaction->revenue_after, 2) }}</span>
+                                    <span class="new-value">Rp {{ number_format($transaction->revenue_after, 2) }}</span>
                                 </div>
                             </td>
                         </tr>

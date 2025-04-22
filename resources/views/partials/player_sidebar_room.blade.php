@@ -32,7 +32,7 @@
                 <i class="bi bi-cash-stack"></i>
                 <div>
                     <span class="label">Cash</span>
-                    <span class="value" id="sidebar_revenue">${{ number_format($player->revenue, 2, ',', '.') }}</span>
+                    <span class="value" id="sidebar_revenue">Rp {{ number_format($player->revenue, 2, ',', '.') }}</span>
                 </div>
             </div>
         </div>
@@ -130,6 +130,12 @@
                 <span>Transaction Receipt</span>
             </a>
         </li>
-
     </ul>
+
+    <div class="sidebar-footer">
+        <a href="/logoutPlayer" class="sidebar-link">
+            <i class="lni lni-exit"></i>
+            <span>Logout</span>
+        </a>
+    </div>
 </aside>

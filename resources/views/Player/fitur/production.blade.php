@@ -465,7 +465,7 @@ BLC Delivery | Production
                 }
             });
 
-        window.Echo.channel('update-revenue')
+            window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
@@ -479,9 +479,9 @@ BLC Delivery | Production
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -494,10 +494,9 @@ BLC Delivery | Production
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
-
+            
         window.Echo.channel('next-day')
             .listen('.NextDaySimulationEvent', (event) => {
                 console.log(event.roomId, roomId);

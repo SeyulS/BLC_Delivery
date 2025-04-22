@@ -44,11 +44,21 @@ class SettingPengirimanController extends Controller
     {
         $room = Room::where('room_id', $room_id)->first();
 
+        $mnd = LCLDelivery::where('room_id', $room_id)
+            ->where('destination', 'Manado')->first();
+        $bjm = LCLDelivery::where('room_id', $room_id)
+            ->where('destination', 'Banjarmasin')->first();
+        $mks = LCLDelivery::where('room_id', $room_id)
+            ->where('destination', 'Makassar')->first();
+
         return view('Admin.fitur.setting_pengiriman_fcl', [
             'room' => $room,
             'players' => Player::where('room_id', $room_id)->get(),
             'destination' => ['Manado', 'Banjarmasin', 'Makassar'],
-            'history' => FCLHistory::where('room_id', $room->room_id)->get()
+            'history' => FCLHistory::where('room_id', $room->room_id)->get(),
+            'mnd' => $mnd,
+            'bjm' => $bjm, 
+            'mks' => $mks,
         ]);
     }
 

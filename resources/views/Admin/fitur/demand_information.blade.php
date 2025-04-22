@@ -267,7 +267,7 @@
                             </div>
                         </td>
                         <td>Day {{ $demand->need_day }}</td>
-                        <td>${{ number_format($demand->revenue, 2) }}</td>
+                        <td>Rp {{ number_format($demand->revenue, 2) }}</td>
                         <td>{{ $demand->player_username }}</td>
                     </tr>
                     @endforeach

@@ -108,7 +108,7 @@
     <div class="container">
         <div class="row">
             <!-- Air Delivery Form -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card p-4 h-100">
                     <h4 class="mb-3">Air Delivery</h4>
                     <hr>
@@ -143,7 +143,7 @@
             </div>
 
             <!-- History Table -->
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="card p-4">
                     <h4 class="mb-3">Air Delivery History</h4>
                     <hr>
@@ -167,9 +167,9 @@
                                     <td>{{ $h->destination }}</td>
                                     <td>{{ $h->player_username }}</td>
                                     <td>{{ $h->demand_id }}</td>
-                                    <td>{{ $h->delivery_cost }}</td>
-                                    <td>{{ $h->revenue }}</td>
-                                    <td>{{ $h->late_early_charge }}</td>
+                                    <td>Rp {{ number_format($h->delivery_cost), 0, ',','.'  }}</td>
+                                    <td>Rp {{ number_format($h->revenue), 0, ',','.' }}</td>
+                                    <td>Rp {{ number_format($h->late_early_charge), 0, ',','.'  }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

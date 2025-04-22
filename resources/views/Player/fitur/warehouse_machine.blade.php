@@ -222,7 +222,7 @@ BLC Delivery | Purchase
                         <div class="stat-label">Used Capacity</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-value">${{ number_format($room->warehouse_price) }}</div>
+                        <div class="stat-value">Rp {{ number_format($room->warehouse_price) }}</div>
                         <div class="stat-label">Price per {{ $room->warehouse_size }}m²</div>
                     </div>
                 </div>
@@ -287,7 +287,7 @@ BLC Delivery | Purchase
                                 <option value="" disabled selected>Select Machine Type</option>
                                 @foreach($machine as $index => $type)
                                 <option value="{{ $type }}" data-machine-name="{{ $machineName[$index] }}">
-                                    {{ $machineName[$index] }} - ${{ number_format($machinePrice[$index]) }}
+                                    {{ $machineName[$index] }} - Rp {{ number_format($machinePrice[$index]) }}
                                 </option>
                                 @endforeach
                             </select>
@@ -327,11 +327,11 @@ BLC Delivery | Purchase
 
             Swal.fire({
                 title: 'Warehouse Purchase Confirmation',
-                text: `You sure you want to buy warehouse with size ${quantity * warehouseSize} m² and price $${quantity * warehousePrice}?`,
+                text: `You sure you want to buy warehouse with size ${quantity * warehouseSize} m² and price Rp ${quantity * warehousePrice}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, BUY!',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log("Tombol Purchase ditekan");
@@ -372,12 +372,12 @@ BLC Delivery | Purchase
             const machineName = $('#machineType option:selected').data('machine-name');
 
             Swal.fire({
-                title: 'Konfirmasi Pembelian Mesin',
+                title: 'Purchase Machine Confirmation',
                 html: `You sure you want to buy this <strong>${machineName}</strong>?`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, beli!',
-                cancelButtonText: 'Batal',
+                confirmButtonText: 'Yes, BUY!',
+                cancelButtonText: 'Cancel',
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -509,7 +509,7 @@ BLC Delivery | Purchase
                 }
             });
 
-        window.Echo.channel('update-revenue')
+            window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
@@ -523,9 +523,9 @@ BLC Delivery | Purchase
                         success: function(response) {
                             if (response.revenue !== undefined) {
                                 const formatCurrency = (number) => {
-                                    return new Intl.NumberFormat('en-US', {
+                                    return new Intl.NumberFormat('ID-id', {
                                         style: 'currency',
-                                        currency: 'USD'
+                                        currency: 'IDR'
                                     }).format(number);
                                 };
                                 $('#revenue').html(`: ${formatCurrency(response.revenue)}`);
@@ -538,7 +538,6 @@ BLC Delivery | Purchase
                             toastr.error('Failed to fetch revenue:', xhr.responseText);
                         }
                     })
-
                 }
             });
     });
