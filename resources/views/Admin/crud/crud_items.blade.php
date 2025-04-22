@@ -196,7 +196,7 @@
                             <div class="input-group">
                                 <input type="number" class="form-control" id="itemWeight"
                                     name="item_weight" required min="0" step="0.01">
-                                <span class="input-group-text bg-light">kg</span>
+                                <span class="input-group-text bg-light">ton</span>
                             </div>
                         </div>
 
@@ -232,14 +232,13 @@
                                 <th class="px-4 py-3">Dimensions (L×W×H)</th>
                                 <th class="px-4 py-3">Weight</th>
                                 <th class="px-4 py-3">Price</th>
-                                <th class="px-4 py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td class="px-4">{{ $item->item_name }}</td>
-                                <td class="px-4">
+                                <td class="px-2">{{ $item->item_name }}</td>
+                                <td class="px-6">
                                     @if(!empty($item->bom))
                                     <div class="bom-list">
                                         @foreach($item->bom as $bomItem)
@@ -253,15 +252,11 @@
                                     <div class="bom-empty">No materials required</div>
                                     @endif
                                 </td>
-                                <td class="px-4">
+                                <td class="px-3">
                                     {{ $item->item_length }}m × {{ $item->item_width }}m × {{ $item->item_height }}m
                                 </td>
-                                <td class="px-4">{{ $item->item_weight }} kg</td>
-                                <td class="px-4">Rp {{ number_format($item->item_price) }}</td>
-                                <td class="px-4">
-                                    
-                                </td>
-
+                                <td class="px-3">{{ $item->item_weight }} ton</td>
+                                <td class="px-6">Rp {{ number_format($item->item_price) }}</td>
                             </tr>
                             @endforeach
                         </tbody>

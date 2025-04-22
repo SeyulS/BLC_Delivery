@@ -51,7 +51,7 @@
                     <div class="mb-3">
                         <label for="rawItemPrice" class="form-label text-dark fw-medium">Price</label>
                         <div class="input-group input-group-lg">
-                            <span class="input-group-text bg-light">$</span>
+                            <span class="input-group-text bg-light">Rp </span>
                             <input type="number" class="form-control" id="rawItemPrice" name="raw_item_price" required>
                         </div>
                     </div>
@@ -155,7 +155,7 @@ $(document).ready(function() {
                 data: 'raw_item_price',
                 name: 'raw_item_price',
                 render: function(data) {
-                    return `$${parseFloat(data).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+                    return `Rp ${parseFloat(data).toLocaleString('ID-id')} / pcs`;
                 }
             },
             {

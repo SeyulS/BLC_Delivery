@@ -47,7 +47,7 @@
                                         <input type="number" class="form-control"
                                             id="production_capacity" name="production_capacity"
                                             required min="1"
-                                            placeholder="Capacity">
+                                            placeholder="Production Capacity">
                                         <span class="input-group-text bg-light">units/hr</span>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                         <div class="mb-4">
                             <label for="machine_price" class="form-label fw-medium">Machine Price</label>
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-light">$</span>
+                                <span class="input-group-text bg-light">Rp</span>
                                 <input type="number" class="form-control"
                                     id="machine_price" name="machine_price"
                                     required min="0" step="0.01"
@@ -112,7 +112,7 @@
                                     <div class="small text-muted">Capacity: {{ $machine->production_capacity }} units/hr</div>
                                 </td>
                                 <td class="px-4">
-                                    ${{ number_format($machine->machine_price, 2) }}
+                                    Rp {{ number_format($machine->machine_price) }}
                                 </td>
                                 <td class="px-4">
                                     <span class="badge bg-light text-dark">
