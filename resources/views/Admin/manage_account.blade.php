@@ -138,6 +138,17 @@
 
 <div class="account-dashboard">
     <div class="container">
+        @if(session('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+        @endif
+
+        @if(session('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+        @endif
         <!-- Create Player Card -->
         <div class="dashboard-card">
             <div class="card-header">

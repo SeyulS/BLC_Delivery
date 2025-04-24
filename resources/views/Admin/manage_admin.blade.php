@@ -201,7 +201,6 @@
     }
 
 </style>
-</style>
 
 <div class="admin-dashboard">
     <div class="container">

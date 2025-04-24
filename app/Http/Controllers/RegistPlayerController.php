@@ -13,29 +13,41 @@ class RegistPlayerController extends Controller
     public function index()
     {
         return view('Admin.manage_account', [
-            'administrator'=>Auth::guard('administrator')->user(),
+            'administrator' => Auth::guard('administrator')->user(),
             'players' => Player::all()
         ]);
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'player_username' => ['required', 'min:3', 'max:255', 'unique:players'],
             'password' => ['required', 'min:5', 'max:255'],
             'confirmation_password' => ['required', 'same:password']
+        ], [
+            'player_username.required' => 'Username is required',
+            'player_username.unique' => 'Username already exists',
+            'password.required' => 'Password is required',
+            'confirmation_password.same' => 'Passwords do not match'
         ]);
-        
 
+        if ($validator->fails()) {
+            return redirect('/manageAccount')
+                ->withErrors($validator) 
+                ->withInput()
+                ->with('error', 'Validation failed. Please check your input.');
+        }
+
+        $validatedData = $validator->validated();
         $validatedData['password'] = bcrypt($validatedData['password']);
         Player::create($validatedData);
 
-        return redirect('/manageAccount')->with('success', 'Registration Successfull!! Please Login');
+        return redirect('/manageAccount')->with('success', 'Registration Successful!! Please Login');
     }
 
     public function destroy(Request $request)
     {
-        $player = Player::where('player_username',$request->input('player_username'))->first();
+        $player = Player::where('player_username', $request->input('player_username'))->first();
 
         if (!$player) {
             return response()->json(['success' => false, 'message' => 'Player not found'], 404);
