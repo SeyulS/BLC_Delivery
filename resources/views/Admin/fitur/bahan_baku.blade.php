@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Raw Items | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     .container-custom {

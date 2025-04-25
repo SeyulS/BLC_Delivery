@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('jatuh_tempo')->nullable();
             $table->double('debt')->nullable();
             $table->integer('produce')->nullable();
+            $table->integer('purchased')->nullable();
             $table->timestamps();
         });
     }

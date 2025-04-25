@@ -1,5 +1,5 @@
 @extends('layout.admin_home')
-
+@section('title', 'Room Management')
 @section('container')
 <style>
     a{

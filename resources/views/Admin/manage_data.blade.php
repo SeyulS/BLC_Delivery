@@ -1,4 +1,5 @@
 @extends('layout.admin_home')
+@section('title', 'Data Management')
 @section('container')
 
 <div class="container py-5">

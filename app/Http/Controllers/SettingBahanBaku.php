@@ -83,10 +83,16 @@ class SettingBahanBaku extends Controller
 
         $query = Player::where('player_username', $request->player_id)->first();
         $room = Room::where('room_id', $request->room_id)->first();
+        if($query->purchased == 0){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Player can only purchased once !!!'
+            ]);
+        }
         if ($query->revenue < $price) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Saldo Player Tidak Mencukupi !!!'
+                'message' => 'Not enough cash !!!'
             ]);
         } else {
 
@@ -101,6 +107,7 @@ class SettingBahanBaku extends Controller
             // Potong saldo
             $prevRenue = $query->revenue;
             $query->revenue = $query->revenue - $price;
+            $query->purchased = 0;
             $query->save();
 
             $history = new PurchaseRawItemHistory();

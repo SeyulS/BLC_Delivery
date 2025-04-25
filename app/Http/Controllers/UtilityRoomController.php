@@ -94,6 +94,7 @@ class UtilityRoomController extends Controller
                     'jatuh_tempo' => null,
                     'debt' => null,
                     'produce' => 1,
+                    'purchased' => 1,
                 ]);
 
             StartSimulation::dispatch($room->room_id);
@@ -192,6 +193,7 @@ class UtilityRoomController extends Controller
                 $prevRevenue = $player->revenue;
                 $player->revenue = $player->revenue - $inventoryDebt;
                 $player->produce = 1;
+                $player->purchased = 1;
                 $player->save();
 
                 if ($inventoryDebt != 0) {

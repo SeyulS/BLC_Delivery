@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Delivered Demand History | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     :root {

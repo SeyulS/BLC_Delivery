@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Player Score Leaderboard | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     :root {

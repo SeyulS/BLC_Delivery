@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+    Lobby {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     .table-warning {

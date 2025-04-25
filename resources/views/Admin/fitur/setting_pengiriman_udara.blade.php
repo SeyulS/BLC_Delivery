@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Air Delivery | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     :root {

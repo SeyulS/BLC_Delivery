@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Full Container Load | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     :root {

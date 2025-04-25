@@ -1,5 +1,7 @@
 @extends('layout.admin_room')
-
+@section('title')
+Loan Management | Room {{ $room->room_id }}
+@endsection
 @section('container')
 <style>
     :root {
@@ -131,7 +133,7 @@
     }
 
     .revenue-after {
-        color:rgb(34, 204, 4);
+        color: rgb(34, 204, 4);
         font-weight: 600;
     }
 

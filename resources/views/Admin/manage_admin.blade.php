@@ -1,5 +1,5 @@
 @extends('layout.admin_home')
-
+@section('title', 'Admin Management')
 @section('container')
 <style>
     .admin-dashboard {

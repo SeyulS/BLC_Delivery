@@ -620,9 +620,23 @@ BLC Delivery | List of Demands
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, Take It!',
-                cancelButtonText: 'Cancel'
+                cancelButtonText: 'Cancel',
+                allowOutsideClick: false // Prevent closing by clicking outside
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Show a loading dialog while processing
+                    Swal.fire({
+                        title: 'Processing...',
+                        text: 'Please wait while we take the demand.',
+                        icon: 'info',
+                        allowOutsideClick: false, // Prevent closing by clicking outside
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Make the AJAX request
                     $.ajax({
                         url: '/take-demand/',
                         method: 'POST',
@@ -632,34 +646,26 @@ BLC Delivery | List of Demands
                             player_id: playerId,
                             _token: '{{ csrf_token() }}',
                         },
-                        beforeSend: function() {
-                            Swal.fire({
-                                title: 'Processing...',
-                                text: 'Please wait while we take the demand.',
-                                icon: 'info',
-                                allowOutsideClick: false,
-                                showConfirmButton: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-
-                        },
                         success: function(response) {
                             if (response.status === 'success') {
                                 Swal.fire({
                                     title: 'Success!',
                                     text: response.message,
                                     icon: 'success',
-                                    timer: 3000,
-                                    showConfirmButton: false
+                                    allowOutsideClick: false, // Prevent closing by clicking outside
+                                    showConfirmButton: false, // No confirm button during the timer
+                                    timer: 2000,
+                                    didClose: () => {
+                                        card.remove(); // Remove the card after success
+                                    }
                                 });
-                                card.remove();
                             } else {
                                 Swal.fire({
                                     title: 'Error!',
                                     text: response.message,
                                     icon: 'error',
+                                    allowOutsideClick: false, // Prevent closing by clicking outside
+                                    showConfirmButton: true // Show confirm button for errors
                                 });
                             }
                         },
@@ -668,6 +674,8 @@ BLC Delivery | List of Demands
                                 title: 'Error!',
                                 text: 'Something went wrong. Please try again.',
                                 icon: 'error',
+                                allowOutsideClick: false, // Prevent closing by clicking outside
+                                showConfirmButton: true // Show confirm button for errors
                             });
                         }
                     });
