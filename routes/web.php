@@ -79,6 +79,7 @@ Route::get('/api/players/{room_id}', [RoomControllerAdmin::class, 'getPlayers'])
 Route::post('/lobby/kick-player', [RoomControllerAdmin::class, 'kickPlayer'])->name('kick.player');
 Route::post('/joinRoom', [RoomControllerPlayer::class,'join'])->middleware('auth.player');
 Route::post('/createRoom', [CreateRoomController::class,'createRoom'])->middleware('auth.administrator');
+Route::delete('/deleteRoom/{room}', [CreateRoomController::class, 'destroy']);
 Route::post('/startSimulation', [UtilityRoomController::class, 'start']);
 Route::post('/pauseSimulation', [UtilityRoomController::class, 'pause']);
 Route::post('/resumeSimulation', [UtilityRoomController::class, 'resume']);

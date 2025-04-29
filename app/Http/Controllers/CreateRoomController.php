@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AirHistory;
 use App\Models\AirplaneDelivery;
 use App\Models\DeckDemand;
 use App\Models\Decks;
 use App\Models\Demand;
 use App\Models\FCLDelivery;
+use App\Models\FCLHistory;
 use App\Models\Items;
 use App\Models\LCLDelivery;
+use App\Models\LCLHistory;
 use App\Models\Loan;
+use App\Models\LoanHistory;
 use App\Models\Machine;
 use App\Models\Player;
+use App\Models\ProductionHistory;
+use App\Models\PurchaseRawItemHistory;
 use App\Models\RawItem;
+use App\Models\RevenueHistory;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Room;
+use App\Models\SimulationResult;
 use Illuminate\Http\Request;
 
 class CreateRoomController extends Controller
@@ -263,7 +271,7 @@ class CreateRoomController extends Controller
         for ($i = 0; $i < $num_demands; $i++) {
             $city  = $cities[$i % $city_count];
             $city_demand_count[$city] += 1;
-            $rand = mt_rand(0,count($items)-1);
+            $rand = mt_rand(0, count($items) - 1);
             $chosenItem = Items::where('id', $items[$rand])->first();
 
             if (in_array($day, $specialDays)) {
@@ -285,8 +293,8 @@ class CreateRoomController extends Controller
             if ($route && is_array($route)) {
                 $lead_time = $route['lead_time'];
                 $shipping_price = $route['price'];
-                $randomDueDate = [-1,0,1,2];
-                $due_date = $day + $lead_time + $randomDueDate[mt_rand(0,count($randomDueDate)-1)];
+                $randomDueDate = [-1, 0, 1, 2];
+                $due_date = $day + $lead_time + $randomDueDate[mt_rand(0, count($randomDueDate) - 1)];
                 $city_due_dates[$city][] = $due_date;
 
                 $randomPercentage = [1, 0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95];
@@ -294,13 +302,13 @@ class CreateRoomController extends Controller
                 $used = 0;
                 $volume = $chosenItem->item_width * $chosenItem->item_height * $chosenItem->item_length * $quantity;
                 $weight = $chosenItem->item_weight * $quantity;
-                if($volume > $weight){
+                if ($volume > $weight) {
                     $used = $volume;
                 } else {
                     $used = $weight;
                 }
 
-                $value = ($chosenItem->item_price * $quantity * $randomPercentage[mt_rand(0,count($randomPercentage)-1)]) + ($used * $shipping_price);
+                $value = ($chosenItem->item_price * $quantity * $randomPercentage[mt_rand(0, count($randomPercentage) - 1)]) + ($used * $shipping_price);
                 $total_shippin_cost = $used * $quantity;
 
                 $total_hpp = $hpp[$rand] * $quantity + $total_shippin_cost;
@@ -405,5 +413,47 @@ class CreateRoomController extends Controller
         ];
 
         $this->generateDemand(111, 1, $numDays, 100, $ekspedisi, $items, $hpp, $price, $specialDays);
+    }
+
+    public function destroy($roomCode)
+    {
+        $room = Room::find($roomCode);
+
+        if (!$room) {
+            return response()->json(['status' => 'error', 'message' => 'Room not found.'], 404);
+        }
+
+        Loan::where('room_id', $roomCode)->delete();
+        LoanHistory::where('room_id', $roomCode)->delete();
+        Demand::where('room_id', $roomCode)->delete();
+        LCLDelivery::where('room_id', $roomCode)->delete();
+        LCLHistory::where('room_id', $roomCode)->delete();
+        FCLDelivery::where('room_id', $roomCode)->delete();
+        FCLHistory::where('room_id', $roomCode)->delete();
+        AirplaneDelivery::where('room_id', $roomCode)->delete();
+        AirHistory::where('room_id', $roomCode)->delete();
+        PurchaseRawItemHistory::where('room_id', $roomCode)->delete();
+        SimulationResult::where('room_id', $roomCode)->delete();
+        RevenueHistory::where('room_id', $roomCode)->delete();
+        ProductionHistory::where('room_id', $roomCode)->delete();
+
+        $player = Player::where('room_id', $roomCode)->get();
+        foreach ($player as $p) {
+            $p->room_id = null;
+            $p->inventory = null;
+            $p->raw_items = null;
+            $p->items = null;
+            $p->machine_capacity = null;
+            $p->revenue = null;
+            $p->jatuh_tempo = null;
+            $p->debt = null;
+            $p->produce = null;
+            $p->purchased = 1;
+            $p->save();
+        }
+
+        $room->delete();        
+
+        return response()->json(['status' => 'success', 'message' => 'Room deleted successfully.']);
     }
 }

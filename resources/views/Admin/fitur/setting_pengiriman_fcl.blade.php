@@ -199,7 +199,7 @@ Full Container Load | Room {{ $room->room_id }}
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><strong>Price</strong></label>
-                        <p class="mb-0">{{ $bjm->price }} / m3</p>
+                        <p class="mb-0">{{ $bjm->price }} / container</p>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,7 @@ Full Container Load | Room {{ $room->room_id }}
 
                     <div class="mb-3">
                         <label class="form-label"><strong>Price</strong></label>
-                        <p class="mb-0">{{ $mnd->price }} / m3</p>
+                        <p class="mb-0">{{ $mnd->price }} / container</p>
                     </div>
                 </div>
             </div>
@@ -244,7 +244,7 @@ Full Container Load | Room {{ $room->room_id }}
 
                     <div class="mb-3">
                         <label class="form-label"><strong>Price</strong></label>
-                        <p class="mb-0">{{ $mks->price }} / m3</p>
+                        <p class="mb-0">{{ $mks->price }} / container</p>
                     </div>
                 </div>
             </div>

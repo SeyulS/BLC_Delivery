@@ -2,7 +2,7 @@
 @section('title', 'Room Management')
 @section('container')
 <style>
-    a{
+    a {
         text-decoration: none;
     }
 </style>
@@ -432,11 +432,9 @@
                                         <i class="bi bi-eye"></i>
                                     </button>
                                 </a>
-                                <a href="/lobby/{{ $room->room_id }}">
-                                    <button class="btn btn-danger" type="button">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </a>
+                                <button class="btn btn-danger delete-room" type="button" data-room-id="{{ $room->room_id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         @endforeach
@@ -451,6 +449,75 @@
 <script>
     $(document).ready(function() {
         $('#roomsTable').DataTable(); // Initialize DataTable
+    });
+
+    $(document).on('click', '.delete-room', function() {
+        var roomId = $(this).data('room-id'); // Get the room ID from the button
+
+        console.log(roomId);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show a loading dialog
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait while the room is being deleted.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Make the AJAX request
+                $.ajax({
+                    url: '/deleteRoom/' + roomId,
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            // Remove the room row from the table
+                            $('button[data-room-id="' + roomId + '"]').closest('tr').remove();
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message,
+                                icon: 'error',
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong. Please try again.',
+                            icon: 'error',
+                            showConfirmButton: true
+                        });
+                    }
+                });
+            }
+        });
     });
 
     document.addEventListener('DOMContentLoaded', function() {

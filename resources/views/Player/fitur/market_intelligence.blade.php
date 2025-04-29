@@ -279,19 +279,19 @@ BLC Delivery | Market Intelligence
         <div class="stats-grid">
             <div class="stat-card">
                 <h6>Warehouse Price</h6>
-                <div class="stat-value">Rp {{ number_format($warehousePrice) }}/{{ $warehouseSize }}m²</div>
+                <div class="stat-value">Rp {{ number_format($warehousePrice) }} / {{ $warehouseSize }}m²</div>
             </div>
             <div class="stat-card">
                 <h6>Early Delivery Charge</h6>
-                <div class="stat-value">Rp {{ number_format($earlyDeliveryCharge) }}/day</div>
+                <div class="stat-value">Rp {{ number_format($earlyDeliveryCharge) }} / quantity / day</div>
             </div>
             <div class="stat-card">
                 <h6>Late Delivery Charge</h6>
-                <div class="stat-value">Rp {{ number_format($lateDeliveryCharge) }}/day</div>
+                <div class="stat-value">Rp {{ number_format($lateDeliveryCharge) }} / quantity / day</div>
             </div>
             <div class="stat-card">
                 <h6>Inventory Cost</h6>
-                <div class="stat-value">Rp {{ number_format($inventoryCost) }}/unit</div>
+                <div class="stat-value">Rp {{ number_format($inventoryCost) }} / quantity</div>
             </div>
         </div>
 
@@ -348,12 +348,19 @@ BLC Delivery | Market Intelligence
                             <td>{{ $item->destination }}</td>
                             <td>{{ $item->pengiriman_duration }} days</td>
                             <td>{{ isset($item->current_volume_capacity) ? 
-                                          "{$item->current_volume_capacity} / {$item->max_volume_capacity}" : 
-                                          $item->max_volume_capacity }}</td>
+                                      "{$item->current_volume_capacity} / {$item->max_volume_capacity}" : 
+                                      $item->max_volume_capacity }}</td>
                             <td>{{ isset($item->current_weight_capacity) ? 
-                                          "{$item->current_weight_capacity} / {$item->max_weight_capacity}" : 
-                                          $item->max_weight_capacity }}</td>
-                            <td>Rp {{ number_format($item->price) }}/m³</td>
+                                      "{$item->current_weight_capacity} / {$item->max_weight_capacity}" : 
+                                      $item->max_weight_capacity }}</td>
+                            <td>
+                                Rp {{ number_format($item->price) }}
+                                @if($shipping['title'] === 'Full Container Load')
+                                / container
+                                @else
+                                / m³
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -502,7 +509,7 @@ BLC Delivery | Market Intelligence
                 }
             });
 
-            window.Echo.channel('update-revenue')
+        window.Echo.channel('update-revenue')
             .listen('.UpdateRevenueEvent', (event) => {
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
