@@ -122,38 +122,38 @@ BLC Delivery | List of Demands
     }
 
     .demand-header-banjarmasin {
-        background: linear-gradient(135deg, #ffdd99, #ffbb66);
+        background: linear-gradient(135deg,rgb(255, 170, 0),rgb(230, 193, 151));
         color: white;
         padding: 1rem;
         text-align: center;
     }
 
     .demand-header-manado {
-        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        background: linear-gradient(135deg,rgb(0, 0, 0),rgb(66, 66, 66));
         color: white;
         padding: 1rem;
         text-align: center;
     }
 
     .demand-header-makassar {
-        background: linear-gradient(135deg, #b8e994, #78c850);
+        background: linear-gradient(135deg,rgb(255, 0, 0),rgb(235, 90, 90));
         color: white;
         padding: 1rem;
         text-align: center;
     }
 
     .destination-banjarmasin {
-        background: linear-gradient(135deg, #ffdd99, #ffbb66);
+        background: linear-gradient(135deg,rgb(255, 170, 0),rgb(230, 193, 151));
         /* Soft Yellow-Orange */
     }
 
     .destination-makassar {
-        background: linear-gradient(135deg, #b8e994, #78c850);
+        background: linear-gradient(135deg,rgb(255, 0, 0),rgb(235, 90, 90));
         /* Soft Green */
     }
 
     .destination-manado {
-        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        background: linear-gradient(135deg,rgb(0, 0, 0),rgb(66, 66, 66));
         /* Soft Blue */
     }
 
@@ -196,7 +196,7 @@ BLC Delivery | List of Demands
     }
 
     .btn-take-demand-banjarmasin {
-        background: linear-gradient(135deg, #ffdd99, #ffbb66);
+        background: linear-gradient(135deg,rgb(255, 170, 0),rgb(230, 193, 151));
         color: white;
         border: none;
         padding: 0.75rem 2rem;
@@ -206,7 +206,7 @@ BLC Delivery | List of Demands
     }
 
     .btn-take-demand-makassar {
-        background: linear-gradient(135deg, #b8e994, #78c850);
+        background: linear-gradient(135deg,rgb(255, 0, 0),rgb(235, 90, 90));
         color: white;
         border: none;
         padding: 0.75rem 2rem;
@@ -216,7 +216,7 @@ BLC Delivery | List of Demands
     }
 
     .btn-take-demand-manado {
-        background: linear-gradient(135deg, #a3d8f4, #6bb9f0);
+        background: linear-gradient(135deg,rgb(0, 0, 0),rgb(66, 66, 66));
         color: white;
         border: none;
         padding: 0.75rem 2rem;
