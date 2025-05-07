@@ -192,3 +192,30 @@ body {
 #sidebar:not(.expand) .sidebar-item:hover .sidebar-dropdown {
     display: block !important;
 }
+
+/* Add these styles */
+.dropdown-toggle::after {
+    margin-left: 0.5em;
+}
+
+.dropdown-toggle {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-toggle:hover {
+    background-color: #e9ecef;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item.text-danger:hover {
+    background-color: #fee2e2;
+}

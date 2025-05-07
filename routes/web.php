@@ -45,7 +45,7 @@ Route::get('/loginAdmin', [LoginAdminController::class,'index']);
 Route::post('/loginAdmin', [LoginAdminController::class,'authenticate']);
 Route::get('/registAdmin', [RegistAdminController::class,'index']);
 Route::post('/registAdmin', [RegistAdminController::class,'store']);
-Route::post('/logoutAdmin',[LoginPlayerController::class,'logout']);
+Route::get('/logoutAdmin',[LoginAdminController::class,'logout']);
 
 // Home Admin
 Route::get('/homeAdmin',[AdminHomeController::class,'index'])->middleware('auth.administrator');
