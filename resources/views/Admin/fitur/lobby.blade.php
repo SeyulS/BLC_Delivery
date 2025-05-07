@@ -1,6 +1,6 @@
 @extends('layout.admin_room')
 @section('title')
-    Lobby {{ $room->room_id }}
+Lobby {{ $room->room_id }}
 @endsection
 @section('container')
 <style>
@@ -237,16 +237,18 @@
                     data: 'revenue',
                     name: 'revenue',
                     render: (data) => {
-                        console.log('Revenue Data:', data); // Debugging
+                        console.log('Revenue Data:', parseFloat(data)); // Debugging
                         const value = parseFloat(data);
                         return isNaN(value) || value === 0 ? '-' : `Rp ${value.toLocaleString('id-ID')}`;
+                    },
+                    sort: function(data) {
+                        return parseFloat(data);
                     }
                 },
                 {
                     data: 'debt',
                     name: 'debt',
                     render: (data) => {
-                        console.log('Revenue Data:', data); // Debugging
                         const value = parseFloat(data);
                         return isNaN(value) || value === 0 ? '-' : `Rp ${value.toLocaleString('id-ID')}`;
                     }

@@ -32,21 +32,24 @@ class RoomControllerAdmin extends Controller
 
     public function getPlayers($room_id)
     {
-        $query = Player::where('room_id', $room_id);
+        $query = Player::where('room_id', $room_id)
+            ->orderBy('revenue', 'desc'); // Urutkan berdasarkan revenue secara descending
 
+        // Filter pencarian jika ada
         if ($search = request('search')['value']) {
             $query->where('player_username', 'like', '%' . $search . '%');
         }
 
+        // Hitung total data dan data yang difilter
         $totalRecords = Player::where('room_id', $room_id)->count();
-
         $totalFiltered = $query->count();
 
+        // Pagination
         $start = request('start', 0);
         $length = request('length', 10);
         $players = $query->skip($start)->take($length)->get();
 
-
+        // Kembalikan data dalam format JSON
         return response()->json([
             'data' => $players,
             'recordsTotal' => $totalRecords,
@@ -82,7 +85,8 @@ class RoomControllerAdmin extends Controller
         return response()->json(['message' => 'Player successfully removed'], 200);
     }
 
-    public function playerTransaction($room_id){
+    public function playerTransaction($room_id)
+    {
         $room = Room::where('room_id', $room_id)->first();
         return view('Admin.fitur.player_transaction', [
             'room' => $room,
