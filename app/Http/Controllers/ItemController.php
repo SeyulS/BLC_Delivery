@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Items;
 use App\Models\RawItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -15,6 +16,7 @@ class ItemController extends Controller
     public function index()
     {
         return view('Admin.crud.crud_items', [
+            'administrator' => Auth::guard('administrator')->user(),
             'rawItems' => RawItem::all(),
             'items' => Items::all()
         ]);

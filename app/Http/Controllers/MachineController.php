@@ -7,6 +7,7 @@ use App\Http\Requests\StoreMachineRequest;
 use App\Http\Requests\UpdateMachineRequest;
 use App\Models\Items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MachineController extends Controller
 {
@@ -19,6 +20,7 @@ class MachineController extends Controller
         }
         
         return view('Admin.crud.crud_machine',[
+            'administrator' => Auth::guard('administrator')->user(),
             'items' => Items::whereNotIn('id', $listOfUsedItems)->get(),
             'machines' => $machines
         ]);
