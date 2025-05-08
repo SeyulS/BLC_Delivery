@@ -277,8 +277,6 @@ class SettingPengirimanController extends Controller
                 $lateDeliveryCost = $lateDeliveryCost + (($needDay - $d->need_day) * $d->quantity * $room->late_delivery_charge);
             }
             $revenue = $revenue + $d->revenue;
-            $d->is_delivered = true;
-            $d->save();
         }
 
         if($player->revenue < ($deliveryCost + $lateDeliveryCost + $earlyDeliveryCost)){
@@ -286,6 +284,11 @@ class SettingPengirimanController extends Controller
                 'status' => 'fail', 
                 'message' => 'Player doesnt have enough money !'
             ]);
+        }
+
+        foreach($demand as $d){
+            $d->is_delivered = true;
+            $d->save();
         }
 
         for($i = 0; $i < count($itemIndex); $i++){
