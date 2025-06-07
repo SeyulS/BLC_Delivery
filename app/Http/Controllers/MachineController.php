@@ -47,5 +47,29 @@ class MachineController extends Controller
         ]); 
     }
 
-    
+public function destroy($id)
+    {
+        $machine = Machine::find($id);
+
+        if (!$machine) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Machine not found!'
+            ]);
+        }
+
+        try {
+            $machine->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Machine deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete machine. Please try again!'
+            ]);
+        }
+    }
 }

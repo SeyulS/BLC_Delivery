@@ -254,6 +254,14 @@ $(document).ready(function() {
                     method: 'GET',
                     success: function(response) {
                         table.ajax.reload();
+                        if (response.status === 'error') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message
+                            });
+                            return;
+                        }
                         Swal.fire({
                             icon: 'success',
                             title: 'Deleted!',

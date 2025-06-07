@@ -110,6 +110,17 @@
         font-style: italic;
         padding: 0.5rem 0;
     }
+
+    .btn-delete {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: none;
+    }
+
+    .btn-delete:hover {
+        background-color: #d32f2f;
+        color: white;
+    }
 </style>
 <div class="container py-5">
     <!-- Header Section -->
@@ -232,6 +243,7 @@
                                 <th class="px-4 py-3">Dimensions (L×W×H)</th>
                                 <th class="px-4 py-3">Weight</th>
                                 <th class="px-4 py-3">Price</th>
+                                <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -257,6 +269,11 @@
                                 </td>
                                 <td class="px-3">{{ $item->item_weight }} ton</td>
                                 <td class="px-6">Rp {{ number_format($item->item_price) }}</td>
+                                <td class="px-3">
+                                    <button class="btn btn-action btn-delete delete-item" data-id="{{ $item->id }}}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -358,6 +375,57 @@
                     });
                 }
             });
+        });
+    });
+
+    $(document).on('click', '.delete-item', function() {
+        const itemId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/deleteItem/${itemId}`,
+                    method: 'DELETE',
+                    data: {
+                        itemId: itemId,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong! Please try again.'
+                        });
+                    }
+                });
+            }
         });
     });
 </script>

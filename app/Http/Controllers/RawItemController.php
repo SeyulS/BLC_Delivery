@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Items;
 use App\Models\RawItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ class RawItemController extends Controller
      */
     public function index()
     {
-        return view('Admin.crud.crud_raw_items',[
+        return view('Admin.crud.crud_raw_items', [
             'administrator' => Auth::guard('administrator')->user(),
         ]);
     }
@@ -107,8 +108,23 @@ class RawItemController extends Controller
     {
         $rawItem = RawItem::findOrFail($id);
         $rawItemName = $rawItem->raw_item_name;
+
+        // Check if any item contains the raw_item_id in the raw_item_needed JSON column
+        $itemExists = Items::whereJsonContains('raw_item_needed', $id)->exists();
+
+        if ($itemExists) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Cannot delete $rawItemName because it is used in one or more items."
+            ]);
+        }
+
+        // Proceed with deletion if no item contains the raw_item_id
         $rawItem->delete();
 
-        return response()->json(['message' => `$rawItemName has been deleted`]);
+        return response()->json([
+            'status' => 'success',
+            'message' => "$rawItemName has been deleted successfully."
+        ]);
     }
 }

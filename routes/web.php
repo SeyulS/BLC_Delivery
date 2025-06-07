@@ -68,10 +68,12 @@ Route::get('raw-items/delete/{id}', [RawItemController::class, 'destroy'])->midd
 // CRUD Items
 Route::get('items', [ItemController::class, 'index'])->middleware('auth.administrator');
 Route::post('/createItem', [ItemController::class, 'create']);
+Route::delete('/deleteItem/{id}', [ItemController::class, 'destroy'])->name('deleteItem');
 
 // CRUD Machines
 Route::get('machine', [MachineController::class, 'index'])->middleware('auth.administrator');
 Route::post('/createMachine', [MachineController::class, 'create']);
+Route::delete('/deleteMachine/{id}', [MachineController::class, 'destroy'])->name('deleteMachine');
 
 Route::get('/api/players/{room_id}', [RoomControllerAdmin::class, 'getPlayers']);
 

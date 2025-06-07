@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Items;
+use App\Models\Machine;
 use App\Models\RawItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,11 +37,12 @@ class ItemController extends Controller
             }
         }
 
-        if($foundDuplicate){
+        if ($foundDuplicate) {
             return response([
                 'status' => 'fail',
                 'message' => 'There are same raw items'
-            ]);        }
+            ]);
+        }
 
         $item = new Items();
         $item->item_name = $request->input('item_name');
@@ -57,5 +59,38 @@ class ItemController extends Controller
             'status' => 'success',
             'message' => 'Item Berhasil Ditambahkan'
         ]);
+    }
+
+    public function destroy($id)
+    {
+        $item = Items::find($id);
+
+        $machine =  Machine::where('machine_item_index', $id)->first();
+        if ($machine) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Item cannot be deleted because it is used by a machine!'
+            ]);
+        }
+        if (!$item) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Item not found!'
+            ]);
+        }
+
+        try {
+            $item->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Item deleted successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete item. Please try again!'
+            ]);
+        }
     }
 }

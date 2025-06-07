@@ -98,6 +98,7 @@
                                 <th class="px-4 py-3">Specifications</th>
                                 <th class="px-4 py-3">Price</th>
                                 <th class="px-4 py-3">Production Item</th>
+                                <th class="px-4 py-3">Action</th>
                                 <!-- <th class="px-4 py-3 text-end">Actions</th> -->
                             </tr>
                         </thead>
@@ -118,6 +119,11 @@
                                     <span class="badge bg-light text-dark">
                                         {{ $machine->item->item_name }}
                                     </span>
+                                </td>
+                                <td class="px-4">
+                                    <button class="btn btn-action btn-delete delete-machine" data-id="{{ $machine->id }}}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                                 <!-- <td class="px-4 text-end">
                                     <button class="btn btn-action btn-edit editMachine" data-id="{{ $machine->id }}">
@@ -280,6 +286,57 @@
                     });
                 }
             });
+        });
+    });
+
+    $(document).on('click', '.delete-machine', function() {
+        const machineId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/deleteMachine/${machineId}`,
+                    method: 'DELETE',
+                    data: {
+                        machineId: machineId,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong! Please try again.'
+                        });
+                    }
+                });
+            }
         });
     });
 </script>
