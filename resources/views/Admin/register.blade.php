@@ -29,7 +29,7 @@
                 @endif
 
                 <h1 class="h3 mb-3 fw-normal text-center">Admin Regist in</h1>
-                <form action='/registAdmin' method="post">
+                <form action='/blc-delivery/registAdmin' method="post">
                 @csrf
                     <div class="form-floating">
                         <input type="text" class="form-control" id="admin_username" name="admin_username" required>

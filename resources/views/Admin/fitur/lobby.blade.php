@@ -225,7 +225,7 @@ Lobby {{ $room->room_id }}
             processing: true,
             serverSide: true,
             ajax: {
-                url: `/api/players/${roomId}`,
+                url: `/blc-delivery/api/players/${roomId}`,
                 type: 'GET',
                 dataSrc: 'data',
             },
@@ -261,7 +261,7 @@ Lobby {{ $room->room_id }}
                     render: (data) => {
                         return `
                 <div class="text-end">
-                    <form action='kick-player' method='POST' class='form-delete'>
+                    <form action='/blc-delivery/kick-player' method='POST' class='form-delete'>
                         @csrf
                         <button type="submit" class="btn kick-btn" data-username="${data}">
                             <i class="bi bi-x-circle"></i>
@@ -309,7 +309,7 @@ Lobby {{ $room->room_id }}
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/lobby/kick-player',
+                        url: '/blc-delivery/lobby/kick-player',
                         type: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -359,11 +359,11 @@ Lobby {{ $room->room_id }}
             });
         };
 
-        $('#start-btn').click(() => confirmAction('Start Simulation?', 'This will begin the simulation.', '/startSimulation'));
-        $('#pause-btn').click(() => confirmAction('Pause Simulation?', 'The simulation will be paused.', '/pauseSimulation'));
-        $('#resume-btn').click(() => confirmAction('Resume Simulation?', 'The simulation will continue.', '/resumeSimulation'));
-        $('#next-day-btn').click(() => confirmAction('Next Day?', 'Proceed to the next day in simulation.', '/nextDaySimulation'));
-        $('#end-btn').click(() => confirmAction('End Simulation?', 'This will permanently end the simulation.', '/endSimulation'));
+        $('#start-btn').click(() => confirmAction('Start Simulation?', 'This will begin the simulation.', '/blc-delivery/startSimulation'));
+        $('#pause-btn').click(() => confirmAction('Pause Simulation?', 'The simulation will be paused.', '/blc-delivery/pauseSimulation'));
+        $('#resume-btn').click(() => confirmAction('Resume Simulation?', 'The simulation will continue.', '/blc-delivery/resumeSimulation'));
+        $('#next-day-btn').click(() => confirmAction('Next Day?', 'Proceed to the next day in simulation.', '/blc-delivery/nextDaySimulation'));
+        $('#end-btn').click(() => confirmAction('End Simulation?', 'This will permanently end the simulation.', '/blc-delivery/endSimulation'));
 
     });
 </script>

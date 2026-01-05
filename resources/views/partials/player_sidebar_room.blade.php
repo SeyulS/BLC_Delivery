@@ -42,21 +42,21 @@
         <!-- Information Group -->
         <li class="sidebar-header">Information</li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}"
                 class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id) ? 'active' : '' }}">
                 <i class="bi bi-door-closed"></i>
                 <span>Room Profile</span>
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/calendar"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/calendar"
                 class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id.'/calendar') ? 'active' : '' }}">
                 <i class="bi bi-calendar"></i>
                 <span>Calendar</span>
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/marketIntelligence"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/marketIntelligence"
                 class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id.'/marketIntelligence') ? 'active' : '' }}">
                 <i class="bi bi-book"></i>
                 <span>Market Intelligence</span>
@@ -66,7 +66,7 @@
         <!-- Finance Group -->
         <li class="sidebar-header">Finance</li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/payingOffDebt"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/payingOffDebt"
                 class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                {{ Request::is('player-lobby/'.$room->room_id.'/payingOffDebt') ? 'active' : '' }}">
                 <i class="bi bi-file-text"></i>
@@ -74,7 +74,7 @@
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/listOfDemands"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/listOfDemands"
                 class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                {{ Request::is('player-lobby/'.$room->room_id.'/listOfDemands') ? 'active' : '' }}">
                 <i class="bi bi-file-text"></i>
@@ -85,7 +85,7 @@
         <!-- Production Warehouse Group -->
         <li class="sidebar-header">Production Warehouse</li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/playerProfile"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/playerProfile"
                 class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
                {{ Request::is('player-lobby/'.$room->room_id.'/playerProfile') ? 'active' : '' }}">
                 <i class="bi bi-box"></i>
@@ -93,7 +93,7 @@
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/warehouseMachine"
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/warehouseMachine"
                 class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
                {{ Request::is('player-lobby/'.$room->room_id.'/warehouseMachine') ? 'active' : '' }}">
                 <i class="bi bi-cart"></i>
@@ -101,7 +101,7 @@
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/production" class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/production" class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }}
             {{ Request::is('player-lobby/'.$room->room_id.'/production') ? 'active' : '' }}">
                 <i class="bi bi-hammer"></i>
                 <span>Production</span>
@@ -110,21 +110,21 @@
 
         <li class="sidebar-header">History</li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/deliveredDemand" class="sidebar-link
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/deliveredDemand" class="sidebar-link
             {{ Request::is('player-lobby/'.$room->room_id.'/deliveredDemand') ? 'active' : '' }}">
                 <i class="bi bi-journal-text"></i>
                 <span>Delivered Demand</span>
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/purchasedRawItems" class="sidebar-link 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/purchasedRawItems" class="sidebar-link 
             {{ Request::is('player-lobby/'.$room->room_id.'/purchasedRawItems') ? 'active' : '' }}">
                 <i class="bi bi-list-nested"></i>
                 <span>Purchased Raw Item</span>
             </a>
         </li>
         <li class="sidebar-item sidebar-subitem">
-            <a href="/player-lobby/{{ $room->room_id }}/transactionReceipt" class="sidebar-link
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/transactionReceipt" class="sidebar-link
             {{ Request::is('player-lobby/'.$room->room_id.'/transactionReceipt') ? 'active' : '' }}">
                 <i class="bi bi-receipt"></i>
                 <span>Transaction Receipt</span>
@@ -133,7 +133,7 @@
     </ul>
 
     <div class="sidebar-footer">
-        <a href="/logoutPlayer" class="sidebar-link">
+        <a href="/blc-delivery/logoutPlayer" class="sidebar-link">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>

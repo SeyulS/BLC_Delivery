@@ -25,7 +25,7 @@
         }
 
         body {
-            background: url('assets/background_login_admin.png');
+            background-image: url('assets/background_login_admin.png');
             background-size: cover;
             background-position: center;
             min-height: 100vh;
@@ -227,7 +227,7 @@
             </div>
             @endif
 
-            <form action="/loginAdmin" method="post">
+            <form action="/blc-delivery/loginAdmin" method="post">
                 @csrf
                 <div class="form-floating">
                     <input type="text" class="form-control" id="admin_username" name="admin_username"
@@ -252,7 +252,7 @@
             </form>
 
             <div class="admin-link">
-                <a href="/loginPlayer">
+                <a href="/blc-delivery/loginPlayer">
                     <i class="bi bi-person"></i>
                     Player?
                 </a>

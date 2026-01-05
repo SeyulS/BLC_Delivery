@@ -32,7 +32,7 @@ class RegistPlayerController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('/manageAccount')
+            return redirect('/blc-delivery/manageAccount')
                 ->withErrors($validator) 
                 ->withInput()
                 ->with('error', 'Validation failed. Please check your input.');
@@ -42,7 +42,7 @@ class RegistPlayerController extends Controller
         $validatedData['password'] = bcrypt($validatedData['password']);
         Player::create($validatedData);
 
-        return redirect('/manageAccount')->with('success', 'Registration Successful!! Please Login');
+        return redirect('/blc-delivery/manageAccount')->with('success', 'Registration Successful!! Please Login');
     }
 
     public function destroy(Request $request)

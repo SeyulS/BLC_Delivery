@@ -28,7 +28,7 @@
                 @endif
 
                 <h1 class="h3 mb-3 fw-normal text-center">Player Regist in</h1>
-                <form action='/registPlayer' method="POST">
+                <form action='/blc-delivery/registPlayer' method="POST">
                 @csrf
                     <div class="form-floating">
                         <input type="text" class="form-control" id="player_username" name="player_username" required>

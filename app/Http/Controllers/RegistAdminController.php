@@ -20,7 +20,7 @@ class RegistAdminController extends Controller
     {
 
         if (Auth::guard('administrator')->user()->super_admin == 0) {
-            return redirect('/manageAdmin')->with('error', 'You are not allowed to do this action !!');
+            return redirect('/blc-delivery/manageAdmin')->with('error', 'You are not allowed to do this action !!');
         }
 
         $validator = \Validator::make($request->all(), [
@@ -36,7 +36,7 @@ class RegistAdminController extends Controller
     
         // Check if validation fails
         if ($validator->fails()) {
-            return redirect('/manageAdmin')
+            return redirect('/blc-delivery/manageAdmin')
                 ->withErrors($validator) // Pass validation errors
                 ->withInput() // Retain old input values
                 ->with('error', 'Registration failed. Please check your input.'); // Custom error message
@@ -54,7 +54,7 @@ class RegistAdminController extends Controller
             $admin->super_admin = 1;
         }
         $admin->save();
-        return redirect('/manageAdmin')->with('success', 'Registration Successful!!');
+        return redirect('/blc-delivery/manageAdmin')->with('success', 'Registration Successful!!');
     
     }
 

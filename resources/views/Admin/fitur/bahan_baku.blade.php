@@ -390,7 +390,7 @@ Raw Items | Room {{ $room->room_id }}
         <div class="tab-pane fade show active" id="shop" role="tabpanel">
             <div class="container-custom">
                 <!-- Existing form content... -->
-                <form id="bahan-baku-form" action="/setting_bahan_baku" method="POST">
+                <form id="bahan-baku-form" action="/blc-delivery/setting_bahan_baku" method="POST">
                     @csrf
                     <input type="hidden" name="room_id" value="{{ $room->room_id }}">
 
@@ -655,7 +655,7 @@ Raw Items | Room {{ $room->room_id }}
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/setting_bahan_baku',
+                        url: '/blc-delivery/setting_bahan_baku',
                         type: 'POST',
                         data: {
                             player_id: playerId,

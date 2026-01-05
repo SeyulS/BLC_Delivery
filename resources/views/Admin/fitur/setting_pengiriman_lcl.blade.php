@@ -334,7 +334,7 @@ Less Container Load | Room {{ $room->room_id }}
             var playerUsername = $(this).val();
             if (playerUsername) {
                 $.ajax({
-                    url: '/getDemands',
+                    url: '/blc-delivery/getDemands',
                     method: 'POST',
                     data: {
                         player_username: playerUsername,
@@ -385,7 +385,7 @@ Less Container Load | Room {{ $room->room_id }}
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/kirimLCL',
+                        url: '/blc-delivery/kirimLCL',
                         method: 'POST',
                         data: {
                             player_username: playerUsername,

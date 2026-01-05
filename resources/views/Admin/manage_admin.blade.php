@@ -225,7 +225,7 @@
                 <h4 class="card-title">Create New Admin</h4>
             </div>
 
-            <form action="/registAdmin" method="POST">
+            <form action="/blc-delivery/registAdmin" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-4">
@@ -353,7 +353,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/deleteAdmin',
+                        url: '/blc-delivery/deleteAdmin',
                         type: 'POST',
                         data: {
                             admin_username: username,

@@ -267,7 +267,7 @@ BLC Delivery | Purchased Raw Item
         window.Echo.channel('player-remove')
             .listen('.PlayerRemoveEvent', (event) => {
                 if (event.playerUsername == playerUsername) {
-                    window.location.href = '/homePlayer'
+                    window.location.href = '/blc-delivery/homePlayer';
                 }
                 if (event.roomId == roomId) {
                     datatable.ajax.reload();
@@ -280,7 +280,7 @@ BLC Delivery | Purchased Raw Item
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
                     $.ajax({
-                        url: '/updateRevenue',
+                        url: '/blc-delivery/updateRevenue',
                         method: 'POST',
                         data: {
                             player_id: playerUsername,
@@ -323,7 +323,7 @@ BLC Delivery | Purchased Raw Item
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -344,7 +344,7 @@ BLC Delivery | Purchased Raw Item
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -366,7 +366,7 @@ BLC Delivery | Purchased Raw Item
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -387,7 +387,7 @@ BLC Delivery | Purchased Raw Item
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/homePlayer';
+                        window.location.href = '/blc-delivery/homePlayer';;
                     }, 5000);
                 }
             });

@@ -214,7 +214,7 @@
             const formData = new FormData(this);
 
             $.ajax({
-                url: '/createMachine',
+                url: '/blc-delivery/createMachine',
                 method: 'POST',
                 data: formData,
                 processData: false, // Tambahkan ini
@@ -268,7 +268,7 @@
                 if (result.isConfirmed) {
                     // Add your delete logic here
                     $.ajax({
-                        url: `/deleteMachine/${machineId}`,
+                        url: `/blc-delivery/deleteMachine/${machineId}`,
                         method: 'DELETE',
                         success: function(response) {
                             if (response.status === 'success') {
@@ -303,7 +303,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/deleteMachine/${machineId}`,
+                    url: `/blc-delivery/deleteMachine/${machineId}`,
                     method: 'DELETE',
                     data: {
                         machineId: machineId,

@@ -11,7 +11,7 @@
     <div id="createRoomForm" class="form-box shadow-sm p-4 rounded mb-4" style="display: none;">
         <h5>Create Room Form</h5>
         <hr>
-        <form action="/createRoom" method="POST">
+        <form action="/blc-delivery/createRoom" method="POST">
             @csrf
             <!-- Room Number and Room Description (Row 1) -->
             <div class="form-group mt-2">
@@ -422,7 +422,7 @@
                             <td>{{ $room->start == 0 ? 'Not Yet Started' : 'Ongoing' }}</td>
                             <td>{{ $room->total_players }}</td>
                             <td class="text-center">
-                                <a href="/lobby/{{ $room->room_id }}">
+                            <a href="/blc-delivery/lobby/{{ $room->room_id }}">
                                     <button class="btn btn-secondary" type="button">
                                         <i class="bi bi-eye"></i>
                                     </button>
@@ -476,7 +476,7 @@
 
                 // Make the AJAX request
                 $.ajax({
-                    url: '/deleteRoom/' + roomId,
+                    url: '/blc-delivery/deleteRoom/' + roomId,
                     method: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}'

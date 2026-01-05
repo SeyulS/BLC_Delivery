@@ -147,7 +147,7 @@ $(document).ready(function() {
     var table = $('#rawItemsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: '/raw-items/data',
+        ajax: '/blc-delivery/raw-items/data',
         columns: [
             { data: 'id', name: 'id' },
             { data: 'raw_item_name', name: 'raw_item_name' },
@@ -194,7 +194,7 @@ $(document).ready(function() {
     // Edit Raw Item
     $(document).on('click', '.editRawItem', function() {
         var id = $(this).data('id');
-        $.get('/raw-items/' + id + '/edit', function(data) {
+        $.get('/blc-delivery/raw-items/' + id + '/edit', function(data) {
             $('#rawItemModal').modal('show');
             $('#rawItemModalLabel').text('Edit Raw Item');
             $('#rawItemId').val(data.id);
@@ -207,7 +207,7 @@ $(document).ready(function() {
     $('#rawItemForm').on('submit', function(e) {
         e.preventDefault();
         var id = $('#rawItemId').val();
-        var url = id ? '/raw-items/' + id : '/raw-items';
+        var url = id ? '/blc-delivery/raw-items/' + id : '/blc-delivery/raw-items/';
         var method = id ? 'PUT' : 'POST';
 
         $.ajax({
@@ -250,7 +250,7 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/raw-items/delete/' + id,
+                    url: '/blc-delivery/raw-items/delete/' + id,
                     method: 'GET',
                     success: function(response) {
                         table.ajax.reload();

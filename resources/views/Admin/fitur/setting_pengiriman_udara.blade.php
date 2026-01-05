@@ -316,7 +316,7 @@ Air Delivery | Room {{ $room->room_id }}
             var playerUsername = $(this).val();
             if (playerUsername) {
                 $.ajax({
-                    url: '/getDemands',
+                    url: '/blc-delivery/getDemands',
                     method: 'POST',
                     data: {
                         player_username: playerUsername,
@@ -370,7 +370,7 @@ Air Delivery | Room {{ $room->room_id }}
                     console.log(playerUsername, demandId);
 
                     $.ajax({
-                        url: '/kirimUdara',
+                        url: '/blc-delivery/kirimUdara',
                         method: 'POST',
                         data: {
                             player_username: playerUsername,

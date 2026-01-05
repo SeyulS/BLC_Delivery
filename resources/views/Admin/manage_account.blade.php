@@ -158,7 +158,7 @@
                 <h4 class="card-title">Create New Player</h4>
             </div>
 
-            <form action="/registPlayer" method="POST">
+            <form action="/blc-delivery/registPlayer" method="POST">
                 @csrf
                 <div class="row">
                     <div class="col-md-4">
@@ -262,7 +262,7 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '/deletePlayer',
+                    url: '/blc-delivery/deletePlayer',
                     type: 'POST',
                     data: {
                         player_username: username,

@@ -32,25 +32,25 @@
     <!-- Navigation Menu -->
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="/manageAdmin" class="sidebar-link">
+            <a href="/blc-delivery/manageAdmin" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Manage Admin</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="/manageAccount" class="sidebar-link">
+            <a href="/blc-delivery/manageAccount" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Manage Account</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="/homeAdmin" class="sidebar-link">
+            <a href="/blc-delivery/homeAdmin" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
                 <span>Manage Room</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="/manageData" class="sidebar-link">
+            <a href="/blc-delivery/manageData" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
                 <span>Manage Data</span>
             </a>
@@ -59,7 +59,7 @@
 
     <!-- Sidebar Footer -->
     <div class="sidebar-footer">
-        <a href="/logoutAdmin" class="sidebar-link">
+        <a href="/blc-delivery/logoutAdmin" class="sidebar-link">
             <i class="lni lni-exit"></i>
             <span>Logout</span>
         </a>

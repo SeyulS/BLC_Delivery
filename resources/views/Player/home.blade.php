@@ -26,7 +26,7 @@
             </div>
         @endif
 
-        <form action="/joinRoom" method="POST" id="joinForm">
+        <form action="/blc-delivery/joinRoom" method="POST" id="joinForm">
             @csrf
             <div class="room-code-group">
                 <label for="roomCode">Enter Room Code</label>

@@ -240,7 +240,7 @@
             </div>
             @endif
 
-            <form action="/loginPlayer" method="post">
+            <form action="/blc-delivery/loginPlayer" method="post">
                 @csrf
                 <div class="form-floating">
                     <input type="text" class="form-control" id="player_username" name="player_username"
@@ -266,7 +266,7 @@
             </form>
 
             <div class="admin-link">
-                <a href="/loginAdmin">
+                <a href="/blc-delivery/loginAdmin">
                     <i class="bi bi-person"></i>
                     BLC Administrator?
                 </a>

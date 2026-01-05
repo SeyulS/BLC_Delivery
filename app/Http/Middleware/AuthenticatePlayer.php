@@ -18,7 +18,7 @@ class AuthenticatePlayer
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::guard('player')->check()){
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
         return $next($request);
     }

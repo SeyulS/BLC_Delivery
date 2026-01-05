@@ -1,12 +1,12 @@
 function setupSimulationEvents(roomId) {
     window.Echo.channel('start-simulation')
         .listen('StartSimulation', () => {
-            window.location.href = `/player-lobby/${roomId}`;
+            window.location.href = `/blc-delivery/player-lobby/${roomId}`;
         });
 
     window.Echo.channel('pause-simulation')
         .listen('PauseSimulation', () => {
-            window.location.href = `/player-lobby/${roomId}`;
+            window.location.href = `/blc-delivery/player-lobby/${roomId}`;
         });
 
     window.Echo.channel('next-day')
@@ -25,7 +25,7 @@ function setupSimulationEvents(roomId) {
 
             // Redirect after 5 seconds (same duration as SweetAlert timer)
             setTimeout(() => {
-                window.location.href = `/player-lobby/${roomId}`;
+                window.location.href = `/blc-delivery/player-lobby/${roomId}`;
             }, 5000);
         });
 }

@@ -296,7 +296,7 @@ Full Container Load | Room {{ $room->room_id }}
 
             if (playerUsername && destination) {
                 $.ajax({
-                    url: '/getDemandsFCL',
+                    url: '/blc-delivery/getDemandsFCL',
                     method: 'POST',
                     data: {
                         player_username: playerUsername,
@@ -376,7 +376,7 @@ Full Container Load | Room {{ $room->room_id }}
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/kirimFCL',
+                        url: '/blc-delivery/kirimFCL',
                         method: 'POST',
                         data: {
                             player_username: selectedPlayer,

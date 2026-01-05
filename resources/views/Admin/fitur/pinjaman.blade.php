@@ -328,7 +328,7 @@ Loan Management | Room {{ $room->room_id }}
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/setPinjaman',
+                        url: '/blc-delivery/setPinjaman',
                         method: 'POST',
                         data: {
                             player_username: selectedPlayer,

@@ -393,10 +393,10 @@ BLC Delivery | List of Demands
                         </div>
                     </div>
                     <div class="text-center mb-3">
-                        <img src="{{ asset('assets/BLCLogoCircle.png') }}" alt="BLC Delivery Logo"
+                        <img src="/blc-delivery/assets/BLCLogoCircle.png" alt="BLC Delivery Logo"
                             style="width: 30%; height: auto;">
                         <p class="text-muted mt-2" style="font-size: 0.875rem;">
-                            Managed by <img src="{{ asset('assets/BLCSentence.png') }}" alt="BLC Delivery Logo"
+                            Managed by <img src="/blc-delivery/assets/BLCSentence.png" alt="BLC Delivery Logo"
                                 style="width: 20%;">
                         </p>
                     </div>
@@ -481,7 +481,7 @@ BLC Delivery | List of Demands
         window.Echo.channel('player-remove')
             .listen('.PlayerRemoveEvent', (event) => {
                 if (event.playerUsername == playerUsername) {
-                    window.location.href = '/homePlayer'
+                    window.location.href = '/blc-delivery/homePlayer';
                 }
                 if (event.roomId == roomId) {
                     datatable.ajax.reload();
@@ -494,7 +494,7 @@ BLC Delivery | List of Demands
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
                     $.ajax({
-                        url: '/updateRevenue',
+                        url: '/blc-delivery/updateRevenue',
                         method: 'POST',
                         data: {
                             player_id: playerUsername,
@@ -537,7 +537,7 @@ BLC Delivery | List of Demands
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -558,7 +558,7 @@ BLC Delivery | List of Demands
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -580,7 +580,7 @@ BLC Delivery | List of Demands
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -601,7 +601,7 @@ BLC Delivery | List of Demands
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/homePlayer';
+                        window.location.href = '/blc-delivery/homePlayer';;
                     }, 5000);
                 }
             });
@@ -638,7 +638,7 @@ BLC Delivery | List of Demands
 
                     // Make the AJAX request
                     $.ajax({
-                        url: '/take-demand/',
+                        url: '/blc-delivery/take-demand/',
                         method: 'POST',
                         data: {
                             demand_id: demandId,

@@ -236,7 +236,7 @@ BLC Delivery | Production
         <!-- Production Form -->
         <div class="machine-card">
             <div class="machine-content">
-                <form action="/produceItem" method="POST">
+                <form action="/blc-delivery/produceItem" method="POST">
                     @csrf
                     <div class="row g-4 mb-4">
                         @for ($i = 0; $i < count($roomMachine); $i++)
@@ -363,7 +363,7 @@ BLC Delivery | Production
         };
 
         // Form submission handling
-        $("form[action='/produceItem']").on("submit", function(e) {
+        $("form[action='/blc-delivery/produceItem']").on("submit", function(e) {
             e.preventDefault();
 
             let hasProduction = false;
@@ -439,7 +439,7 @@ BLC Delivery | Production
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -460,7 +460,7 @@ BLC Delivery | Production
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -470,7 +470,7 @@ BLC Delivery | Production
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
                     $.ajax({
-                        url: '/updateRevenue',
+                        url: '/blc-delivery/updateRevenue',
                         method: 'POST',
                         data: {
                             player_id: playerUsername,
@@ -514,7 +514,7 @@ BLC Delivery | Production
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -535,7 +535,7 @@ BLC Delivery | Production
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/homePlayer';
+                        window.location.href = '/blc-delivery/homePlayer';
                     }, 5000);
                 }
             });

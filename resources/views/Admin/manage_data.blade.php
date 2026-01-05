@@ -7,7 +7,7 @@
     <div class="row g-4">
         <!-- Raw Items Card -->
         <div class="col-md-4">
-            <a href="/raw-items" class="text-decoration-none">
+            <a href="/blc-delivery/raw-items" class="text-decoration-none">
                 <div class="card h-100 border-0 shadow-sm hover-card">
                     <div class="card-body d-flex align-items-center p-4">
                         <div class="icon-wrapper bg-primary bg-opacity-10 rounded-3 me-3">
@@ -25,7 +25,7 @@
 
         <!-- Items Card -->
         <div class="col-md-4">
-            <a href="/items" class="text-decoration-none">
+            <a href="/blc-delivery/items" class="text-decoration-none">
                 <div class="card h-100 border-0 shadow-sm hover-card">
                     <div class="card-body d-flex align-items-center p-4">
                         <div class="icon-wrapper bg-success bg-opacity-10 rounded-3 me-3">
@@ -43,7 +43,7 @@
 
         <!-- Machine Card -->
         <div class="col-md-4">
-            <a href="/machine" class="text-decoration-none">
+            <a href="/blc-delivery/machine" class="text-decoration-none">
                 <div class="card h-100 border-0 shadow-sm hover-card">
                     <div class="card-body d-flex align-items-center p-4">
                         <div class="icon-wrapper bg-warning bg-opacity-10 rounded-3 me-3">

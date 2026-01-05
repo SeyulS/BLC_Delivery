@@ -4,7 +4,7 @@
         <button class="toggle-btn" type="button" aria-label="Toggle Sidebar">
             <i class="bi bi-chevron-left"></i>
         </button>
-        <a href="/">BLC Delivery</a>
+        <a href="/blc-delivery">BLC Delivery</a>
     </div>
 
     {{-- Player Profile Section --}}
@@ -26,7 +26,7 @@
     {{-- Navigation Menu --}}
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}" 
                class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id) ? 'active' : '' }}">
                 <i class="bi bi-door-closed"></i>
                 <span>Room Profile</span>
@@ -34,7 +34,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/calendar" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/calendar" 
                class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id.'/calendar') ? 'active' : '' }}">
                 <i class="bi bi-calendar"></i>
                 <span>Calendar</span>
@@ -42,7 +42,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/playerProfile" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/playerProfile" 
                class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                               {{ Request::is('player-lobby/'.$room->room_id.'/playerProfile') ? 'active' : '' }}">
                 <i class="bi bi-box"></i>
@@ -51,7 +51,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/warehouseMachine" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/warehouseMachine" 
                class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                               {{ Request::is('player-lobby/'.$room->room_id.'/warehouseMachine') ? 'active' : '' }}">
                 <i class="bi bi-cart"></i>
@@ -60,7 +60,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/production" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/production" 
                class="sidebar-link {{ ($room->status == 1 && $player->produce == 1) ? 'able' : 'disabled' }} 
                               {{ Request::is('player-lobby/'.$room->room_id.'/production') ? 'active' : '' }}">
                 <i class="bi bi-hammer"></i>
@@ -69,7 +69,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/marketIntelligence" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/marketIntelligence" 
                class="sidebar-link {{ Request::is('player-lobby/'.$room->room_id.'/marketIntelligence') ? 'active' : '' }}">
                 <i class="bi bi-book"></i>
                 <span>Market Intelligence</span>
@@ -77,7 +77,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/listOfDemands" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/listOfDemands" 
                class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                               {{ Request::is('player-lobby/'.$room->room_id.'/listOfDemands') ? 'active' : '' }}">
                 <i class="bi bi-file-text"></i>
@@ -86,7 +86,7 @@
         </li>
 
         <li class="sidebar-item">
-            <a href="/player-lobby/{{ $room->room_id }}/payingOffDebt" 
+            <a href="/blc-delivery/player-lobby/{{ $room->room_id }}/payingOffDebt" 
                class="sidebar-link {{ $room->status == 1 ? 'able' : 'disabled' }} 
                               {{ Request::is('player-lobby/'.$room->room_id.'/payingOffDebt') ? 'active' : '' }}">
                 <i class="bi bi-credit-card"></i>

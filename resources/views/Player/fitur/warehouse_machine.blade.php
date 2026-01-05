@@ -278,7 +278,7 @@ BLC Delivery | Purchase
                     @endforeach
                 </div>
 
-                <form id="purchaseMachine" action="/purchaseMachine" method="POST">
+                <form id="purchaseMachine" action="/blc-delivery/purchaseMachine" method="POST">
                     @csrf
                     <input type="hidden" name="room_id" value="{{ $room->room_id }}">
                     <div class="row g-3 align-items-center">
@@ -339,7 +339,7 @@ BLC Delivery | Purchase
                     console.log("Quantity", quantity);
 
                     $.ajax({
-                        url: '/purchaseWarehouse',
+                        url: '/blc-delivery/purchaseWarehouse',
                         method: 'POST',
                         data: {
                             quantityPurchase: quantity,
@@ -365,7 +365,7 @@ BLC Delivery | Purchase
             });
         });
         // Event listener untuk pembelian mesin
-        $("form[action='/purchaseMachine']").on("submit", function(event) {
+        $("form[action='/blc-delivery/purchaseMachine']").on("submit", function(event) {
             event.preventDefault(); // Menghentikan default behavior form submit
 
             const machineType = $('#machineType').val();
@@ -381,7 +381,7 @@ BLC Delivery | Purchase
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/purchaseMachine',
+                        url: '/blc-delivery/purchaseMachine',
                         method: 'POST',
                         data: {
                             room_id: roomId,
@@ -440,7 +440,7 @@ BLC Delivery | Purchase
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -461,7 +461,7 @@ BLC Delivery | Purchase
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -483,7 +483,7 @@ BLC Delivery | Purchase
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -504,7 +504,7 @@ BLC Delivery | Purchase
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/homePlayer';
+                        window.location.href = '/blc-delivery/homePlayer';
                     }, 5000);
                 }
             });
@@ -514,7 +514,7 @@ BLC Delivery | Purchase
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
                     $.ajax({
-                        url: '/updateRevenue',
+                        url: '/blc-delivery/updateRevenue',
                         method: 'POST',
                         data: {
                             player_id: playerUsername,

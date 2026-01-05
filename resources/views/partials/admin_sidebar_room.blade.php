@@ -9,13 +9,13 @@
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}" class="sidebar-link">
                 <i class="lni lni-user"></i>
                 <span>Manage Player</span>
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}/settingPinjaman" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}/settingPinjaman" class="sidebar-link">
                 <i class="bi bi-credit-card"></i>
                 <span>Loan</span>
             </a>
@@ -27,47 +27,47 @@
             </a>
             <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center"><i class="bi bi-water"></i>Less Container Load</a>
+                    <a href="/blc-delivery/lobby/{{ $room->room_id }}/settingPengirimanLCL" class="sidebar-link" style="text-align: center"><i class="bi bi-water"></i>Less Container Load</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center"><i class="bi bi-box-fill"></i>Full Container Load</a>
+                    <a href="/blc-delivery/lobby/{{ $room->room_id }}/settingPengirimanFCL" class="sidebar-link" style="text-align: center"><i class="bi bi-box-fill"></i>Full Container Load</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="/lobby/{{ $room->room_id }}/settingPengirimanUdara" class="sidebar-link" style="text-align: center"><i class="bi bi-airplane-engines"></i>Air Delivery</a>
+                    <a href="/blc-delivery/lobby/{{ $room->room_id }}/settingPengirimanUdara" class="sidebar-link" style="text-align: center"><i class="bi bi-airplane-engines"></i>Air Delivery</a>
                 </li>
             </ul>
         </li>
 
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}/settingBahanBaku" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}/settingBahanBaku" class="sidebar-link">
                 <i class="bi bi-capsule"></i>
                 <span>Raw Items</span>
             </a>
         </li>
 
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}/demandInformation" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}/demandInformation" class="sidebar-link">
                 <i class="bi bi-box-seam"></i>
                 <span>Demand Information</span>
             </a>
         </li>
     
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}/player_transaction" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}/player_transaction" class="sidebar-link">
                 <i class="bi bi-receipt"></i>
                 <span>Player Transaction</span>
             </a>
         </li>
         
         <li class="sidebar-item">
-            <a href="/lobby/{{ $room->room_id }}/playerScore" class="sidebar-link">
+            <a href="/blc-delivery/lobby/{{ $room->room_id }}/playerScore" class="sidebar-link">
                 <i class="lni lni-cog"></i>
                 <span>Result</span>
             </a>
         </li>
     </ul>
     <div class="sidebar-footer">
-        <a href="/homeAdmin" class="sidebar-link">
+        <a href="/blc-delivery/homeAdmin" class="sidebar-link">
             <i class="lni lni-exit"></i>
             <span>Exit Room</span>
         </a>

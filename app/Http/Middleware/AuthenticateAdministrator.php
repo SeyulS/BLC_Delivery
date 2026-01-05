@@ -17,7 +17,7 @@ class AuthenticateAdministrator
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::guard('administrator')->check()){
-            return redirect('/loginAdmin');
+            return redirect('/blc-delivery/loginAdmin');
         }
         return $next($request);
     }

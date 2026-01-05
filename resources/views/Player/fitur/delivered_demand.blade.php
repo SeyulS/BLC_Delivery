@@ -305,7 +305,7 @@
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -326,7 +326,7 @@
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -348,7 +348,7 @@
                     });
 
                     setTimeout(() => {
-                        window.location.href = `/player-lobby/${roomId}`;
+                        window.location.href = `/blc-delivery/player-lobby/${roomId}`;
                     }, 5000);
                 }
             });
@@ -369,7 +369,7 @@
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/homePlayer';
+                        window.location.href = '/blc-delivery/homePlayer';
                     }, 5000);
                 }
             });
@@ -379,7 +379,7 @@
                 if (event.playerUsername == playerUsername && event.roomId == roomId) {
 
                     $.ajax({
-                        url: '/updateRevenue',
+                        url: '/blc-delivery/updateRevenue',
                         method: 'POST',
                         data: {
                             player_id: playerUsername,

@@ -343,7 +343,7 @@
             const formData = new FormData(this);
 
             $.ajax({
-                url: '/createItem',
+                url: '/blc-delivery/createItem',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -392,7 +392,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `/deleteItem/${itemId}`,
+                    url: `/blc-delivery/deleteItem/${itemId}`,
                     method: 'DELETE',
                     data: {
                         itemId: itemId,

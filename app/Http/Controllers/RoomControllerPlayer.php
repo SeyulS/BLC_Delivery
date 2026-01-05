@@ -28,7 +28,7 @@ class RoomControllerPlayer extends Controller
     {
         $room = Room::where('room_id', $roomCode)->first();
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -37,7 +37,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}");
         }
 
         if ($room->finished == 1) {
@@ -54,7 +54,7 @@ class RoomControllerPlayer extends Controller
     public function warehouseMachine($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -63,7 +63,7 @@ class RoomControllerPlayer extends Controller
         
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/warehouseMachine");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/warehouseMachine");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -125,7 +125,7 @@ class RoomControllerPlayer extends Controller
     public function join(Request $request)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
         $room = Room::where('room_id', $request->roomCode)->first();
 
@@ -160,7 +160,7 @@ class RoomControllerPlayer extends Controller
     public function calendar($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -169,7 +169,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/calendar");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/calendar");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -189,7 +189,7 @@ class RoomControllerPlayer extends Controller
     public function profile($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -198,7 +198,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/playerProfile");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/playerProfile");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -308,7 +308,7 @@ class RoomControllerPlayer extends Controller
     public function production($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -317,7 +317,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/production");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/production");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -415,7 +415,7 @@ class RoomControllerPlayer extends Controller
     public function showDemand($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -424,7 +424,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/listOfDemands");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/listOfDemands");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -465,7 +465,7 @@ class RoomControllerPlayer extends Controller
     public function marketIntelligence($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -474,7 +474,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/marketIntelligence");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/marketIntelligence");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -573,7 +573,7 @@ class RoomControllerPlayer extends Controller
     public function payingOffDebt($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -582,7 +582,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/payingOffDebt");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/payingOffDebt");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -595,7 +595,7 @@ class RoomControllerPlayer extends Controller
     public function historyDemand($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -604,7 +604,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/deliveredDemand");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/deliveredDemand");
         }
 
         return view('Player.fitur.delivered_demand', [
@@ -620,7 +620,7 @@ class RoomControllerPlayer extends Controller
     public function purchasedRawItems($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -629,7 +629,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/purchasedRawItems");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/purchasedRawItems");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
@@ -689,7 +689,7 @@ class RoomControllerPlayer extends Controller
     public function transactionReceipt($roomCode)
     {
         if (Auth::guard('player')->user() == null) {
-            return redirect('/loginPlayer');
+            return redirect('/blc-delivery/loginPlayer');
         }
 
         if (Auth::guard('player')->user()->room_id == null) {
@@ -698,7 +698,7 @@ class RoomControllerPlayer extends Controller
 
         if (Auth::guard('player')->user()->room_id != $roomCode){
             $roomCode = Auth::guard('player')->user()->room_id;
-            return redirect("/player-lobby/{$roomCode}/transactionReceipt");
+            return redirect("/blc-delivery/player-lobby/{$roomCode}/transactionReceipt");
         }
 
         $room = Room::where('room_id', $roomCode)->first();
