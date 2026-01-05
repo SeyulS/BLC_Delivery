@@ -1,64 +1,39 @@
 FROM php:8.2-fpm
 
-# Install system dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nodejs \
-    npm \
-    nginx
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip \
+    supervisor nodejs npm && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory
-COPY . .
+# Copy files
+COPY . /var/www
 
-# Set npm permissions and install dependencies
-RUN mkdir -p /var/www/.npm && \
-    chown -R www-data:www-data /var/www/.npm && \
-    npm install -g vite && \
-    npm install
+# Create required directories BEFORE installing dependencies
+RUN mkdir -p /var/www/storage/framework/{sessions,views,cache} && \
+    mkdir -p /var/www/storage/logs && \
+    mkdir -p /var/www/bootstrap/cache
 
-# Install PHP dependencies
-RUN composer install
+# Install dependencies
+RUN composer install --no-interaction --no-dev --optimize-autoloader && \
+    npm install && npm run build
 
-# Generate key
-RUN php artisan key:generate
-
-# Create nginx logs directory
-RUN mkdir -p /var/log/nginx
-
-# Set permissions for Laravel and Node
+# Set permissions AFTER everything is created
 RUN chown -R www-data:www-data /var/www && \
-    find /var/www -type f -exec chmod 644 {} \; && \
-    find /var/www -type d -exec chmod 755 {} \; && \
-    chmod -R 777 /var/www/storage && \
-    chmod -R 777 /var/www/bootstrap/cache && \
-    chmod -R 777 /var/www/node_modules && \
-    chown -R www-data:www-data /var/www/storage && \
-    chown -R www-data:www-data /var/www/bootstrap/cache && \
-    chown -R www-data:www-data /var/www/node_modules
+    chmod -R 775 /var/www/storage && \
+    chmod -R 775 /var/www/bootstrap/cache
 
-COPY start.sh /var/www/start.sh
-RUN chmod +x /var/www/start.sh
+# Create supervisor config directory
+RUN mkdir -p /var/log/supervisor
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 8000 5173
-
-CMD ["sh", "/var/www/start.sh"]
+# Copy supervisor config
+COPY docker/supervisor/reverb.conf /etc/supervisor/conf.d/reverb.conf
+EXPOSE 9000 8084
+CMD supervisord -n -c /etc/supervisor/supervisord.conf
