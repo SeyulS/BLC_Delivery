@@ -32,6 +32,6 @@ class LoginAdminController extends Controller
         
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/blc-delivery/loginPlayer');
+        return redirect('/blc-delivery');
     }
 }
